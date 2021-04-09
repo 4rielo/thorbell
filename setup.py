@@ -34,7 +34,7 @@ setup(
     include_package_data=True,
     scripts = [
         Executable_Esky(
-            "__main__.py",
+            "CSB_MercurioR1.__main__.py",
             #gui_only = True,
             #icon = XPTO  # Use an icon if you want.
             ),
@@ -42,7 +42,7 @@ setup(
     #executables = [Executable('boneca.py',base='Win32GUI')]
     entry_points={
         "console_scripts": [
-            "thorbell=CSB-MercurioR1.__main__:main",
+            "thorbell=CSB_MercurioR1.__main__:main",
         ]
     },
     )

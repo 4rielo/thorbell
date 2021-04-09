@@ -7,6 +7,7 @@ from CSB_MercurioR1 import Fprincipal
 
 import esky
 if hasattr(sys,"frozen"):
+    print("Updating firmware")
     app = esky.Esky(sys.executable,"https://github.com/4rielo/thorbell.git")
     app.auto_update()
 
