@@ -12,6 +12,6 @@ setup (
     author_email="ombas.gm@gmail.com",
     packages=['CSB_MercurioR1'],
     package_dir={'CSB_MercurioR1':'CSB_MercurioR1'},
-    package_data={'CSB_MercurioR1': ['icons/.png']},
+    package_data={'CSB_MercurioR1': ['icons/*.png']},
     include_package_data=True,
 )
