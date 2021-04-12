@@ -24,7 +24,7 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
         import requests
 
         path=__file__
-        path=path.replace("auto_update.py","")
+        path=path.replace("Fconfig.py","")
         """f = open(path+"autoupdate.txt", "r")        #abre archivo que indica si se desea realizar un auto-update
 
         if(f.read(4)=="true"):                              #si el archivo comienza con la palabra "true",
