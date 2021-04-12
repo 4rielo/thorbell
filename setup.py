@@ -10,6 +10,6 @@ setup (
     url="https://github.com/4rielo/thorbell.git",
     author="Ariel Scarafia",
     author_email="ombas.gm@gmail.com",
-    packages=['./'],
+    packages=['CSB_MercurioR1','data','docs','fonts','icons','images'],
     include_package_data=True
 )
