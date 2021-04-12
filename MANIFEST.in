@@ -1,3 +1,5 @@
+graft data
+graft docs
+graft fonts
 graft icons
 graft images
-global-include *.png
