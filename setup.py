@@ -13,11 +13,7 @@ setup (
     packages=['CSB_MercurioR1'],
     package_dir={'CSB_MercurioR1':'CSB_MercurioR1'},
     package_data={
-        'CSB_MercurioR1': ['data/*'],
-        'CSB_MercurioR1': ['docs/*'],
-        'CSB_MercurioR1': ['fonts/*'],
-        'CSB_MercurioR1': ['icons/*.png'],
-        'CSB_MercurioR1': ['images/*.png'],
+        'CSB_MercurioR1': ['data/*', 'docs/*','fonts/*','icons/*.png','images/*.png'],
         },
     include_package_data=True,
 )
