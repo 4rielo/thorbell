@@ -33,7 +33,7 @@ class Ui_form(object):
         self.BACKGROUND.setGeometry(QRect(0, 0, 480, 800))
         Background_Style= """
                 QFrame{
-                	background-image: url(./images/fondo.png);
+                	background-image: url(./CSB_MercurioR1/images/fondo.png);
                 	background-repeat: no-repeat;
                 	background-position: bottom center;
                 }"""
@@ -49,12 +49,12 @@ class Ui_form(object):
         RUTINA_Button = """
                 QPushButton {
                         border-style: none; 
-                        background-image: url(./icons/routine_off.png); 
+                        background-image: url(./CSB_MercurioR1/icons/routine_off.png); 
                         background-repeat: no-repeat; 
                         background-position: center center} 
                 QPushButton:checked{
                         border-style: none; 
-                        background-image: url(./icons/routine_on.png); 
+                        background-image: url(./CSB_MercurioR1/icons/routine_on.png); 
                         background-repeat: no-repeat; 
                         background-position: center center
                 }"""
@@ -70,12 +70,12 @@ class Ui_form(object):
         ECO_Button = """
                 QPushButton {
                         border-style: none; 
-                        background-image: url(./icons/eco_off.png); 
+                        background-image: url(./CSB_MercurioR1/icons/eco_off.png); 
                         background-repeat: no-repeat; 
                         background-position: center center} 
                 QPushButton:checked{
                         border-style: none; 
-                        background-image: url(./icons/eco_on.png); 
+                        background-image: url(./CSB_MercurioR1/icons/eco_on.png); 
                         background-repeat: no-repeat; 
                         background-position: center center
                 }"""
@@ -91,12 +91,12 @@ class Ui_form(object):
         LUZ_Button = """
                 QPushButton {
                         border-style: none; 
-                        background-image: url(./icons/led_off.png); 
+                        background-image: url(./CSB_MercurioR1/icons/led_off.png); 
                         background-repeat: no-repeat; 
                         background-position: center center} 
                 QPushButton:checked{
                         border-style: none; 
-                        background-image: url(./icons/led_on.png); 
+                        background-image: url(./CSB_MercurioR1/icons/led_on.png); 
                         background-repeat: no-repeat; 
                         background-position: center center
                 }"""
@@ -112,12 +112,12 @@ class Ui_form(object):
         UV_Button = """
                 QPushButton {
                         border-style: none; 
-                        background-image: url(./icons/uv_off.png); 
+                        background-image: url(./CSB_MercurioR1/icons/uv_off.png); 
                         background-repeat: no-repeat; 
                         background-position: center center} 
                 QPushButton:checked{
                         border-style: none; 
-                        background-image: url(./icons/uv_on.png); 
+                        background-image: url(./CSB_MercurioR1/icons/uv_on.png); 
                         background-repeat: no-repeat; 
                         background-position: center center
                 }"""
@@ -132,7 +132,7 @@ class Ui_form(object):
         Config_style="""
                 QPushButton {
                         border-style: none;
-                        background-image: url(./icons/configuracion.png);
+                        background-image: url(./CSB_MercurioR1/icons/configuracion.png);
                         background-repeat: no-repeat;
                         background-position: center center;
                 }"""
@@ -147,7 +147,7 @@ class Ui_form(object):
         Alerta_style="""
                 QPushButton {
                         border-style: none;
-                        background-image: url(./icons/alerta.png);
+                        background-image: url(./CSB_MercurioR1/icons/alerta.png);
                         background-repeat: no-repeat;
                         background-position: center center;
                 }"""
@@ -162,7 +162,7 @@ class Ui_form(object):
         Reloj_style="""
                 QPushButton {
                         border-style: none;
-                        background-image: url(./icons/reloj.png);
+                        background-image: url(./CSB_MercurioR1/icons/reloj.png);
                         background-repeat: no-repeat;
                         background-position: center center;
                 }"""
@@ -178,7 +178,7 @@ class Ui_form(object):
         Calendario_style="""
                 QPushButton {
                        border-style: none;
-                	background-image: url(./icons/calendario.png);
+                	background-image: url(./CSB_MercurioR1/icons/calendario.png);
                 	background-repeat: no-repeat;
                        background-position: center center;
                 }"""
@@ -214,7 +214,7 @@ class Ui_form(object):
         self.TopProgressBar.setAutoFillBackground(True)
         TopHalf_style="""
                 QFrame{
-                	background-image: url(./images/semi_circulo_superior.png);
+                	background-image: url(./CSB_MercurioR1/images/semi_circulo_superior.png);
                 	background-repeat: no-repeat;
                 	background-position: bottom center;
                 }"""
@@ -242,7 +242,7 @@ class Ui_form(object):
         self.BottomProgressBar.setGeometry(QRect(50, 445, 380, 231))
         BottomHalf_style="""
                 QFrame{
-                	background-image: url(./images/semi_circulo_inferior.png);
+                	background-image: url(./CSB_MercurioR1/images/semi_circulo_inferior.png);
                 	background-repeat: no-repeat;
                 	background-position: bottom center;
                 }"""
@@ -271,7 +271,7 @@ class Ui_form(object):
         self.wind_icon.setFrameShadow(QFrame.Raised)
         Wind_style="""
                 QFrame {
-                	background-image: url(./images/viento.png);
+                	background-image: url(./CSB_MercurioR1/images/viento.png);
                 	background-repeat: no-repeat;
                 }"""
         self.wind_icon.setStyleSheet(Wind_style)
@@ -290,7 +290,7 @@ class Ui_form(object):
         self.hora.setAttribute(Qt.WA_TranslucentBackground)
         Hora_style="""
                 QLabel{
-                        font-family: url(./fonts/Montserrat-Regular.ttf);
+                        font-family: url(./CSB_MercurioR1/fonts/Montserrat-Regular.ttf);
                         font-size: 13px;
                         color: white;
                 }"""
@@ -302,7 +302,7 @@ class Ui_form(object):
         self.fecha.setAttribute(Qt.WA_TranslucentBackground)
         Fecha_style="""
                 QLabel{
-                        font-family: url(./fonts/Montserrat-Regular.ttf);
+                        font-family: url(./CSB_MercurioR1/fonts/Montserrat-Regular.ttf);
                         font-size: 13px;
                         color: white;
                 }"""
@@ -317,7 +317,7 @@ class Ui_form(object):
         self.ModoEco_label.setAttribute(Qt.WA_TranslucentBackground)
         ModoECO_style="""
                 QLabel{
-                        font-family: url(./fonts/Montserrat-Regular.ttf);
+                        font-family: url(./CSB_MercurioR1/fonts/Montserrat-Regular.ttf);
                         font-size: 10px;
                         color: white;
                 }"""
@@ -329,7 +329,7 @@ class Ui_form(object):
         self.Rutina_label.setAttribute(Qt.WA_TranslucentBackground)
         Rutina_style= """
                 QLabel{
-                        font-family: url(./fonts/Montserrat-Regular.ttf);
+                        font-family: url(./CSB_MercurioR1/fonts/Montserrat-Regular.ttf);
                         font-size: 10px;
                         color: white;
                 }"""
@@ -341,7 +341,7 @@ class Ui_form(object):
         self.LED_label.setAttribute(Qt.WA_TranslucentBackground)
         LED_style= """
                 QLabel{
-                        font-family: url(./fonts/Montserrat-Regular.ttf);
+                        font-family: url(./CSB_MercurioR1/fonts/Montserrat-Regular.ttf);
                         font-size: 10px;
                         color: white;
                 }"""
@@ -353,7 +353,7 @@ class Ui_form(object):
         self.UV_label.setAttribute(Qt.WA_TranslucentBackground)
         UV_style="""
                 QLabel{
-                        font-family: url(./fonts/Montserrat-Regular.ttf);
+                        font-family: url(./CSB_MercurioR1/fonts/Montserrat-Regular.ttf);
                         font-size: 10px;
                         color: white;
                 }"""                
