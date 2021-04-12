@@ -10,5 +10,5 @@ setup (
     url="https://github.com/4rielo/thorbell.git",
     author="Ariel Scarafia",
     author_email="ombas.gm@gmail.com",
-    packages=['CSB_MercurioR1']
+    packages=['CSB_MercurioR1','data','docs','fonts','icons','images']
 )
