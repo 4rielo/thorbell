@@ -12,6 +12,7 @@ import time
 import threading
 
 from CSB_MercurioR1.Pprincipal import Ui_form
+from CSB_MercurioR1.Fconfig import ConfigWindow
 
 #import config
 #import Fluminaria_led
@@ -35,6 +36,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         #Create all sub-windows, to call on them when different buttons are clicked.
         #self.ConfigWindow = config.ConfigWindow()
         #self.LuminariaLED_Window = Fluminaria_led.WluminariaLED()
+        self.configWindow = ConfigWindow()
 
         self.horizontalSlider.valueChanged.connect(self.Dial)
         self.horizontalSlider_2.valueChanged.connect(self.Dial2)
@@ -113,7 +115,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         self.label.setText(str(counter))
 
     def Config(self):
-        #self.ConfigWindow.show()
+        self.configWindow.show()
         pass
 
     def Dial(self):
