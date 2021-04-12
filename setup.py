@@ -2,8 +2,6 @@
 import pathlib
 from setuptools import setup
 
-include_files = ['*.txt']
-
 # This call to setup() does all the work
 setup (
     name = 'thorbell',
@@ -12,5 +10,4 @@ setup (
     url="https://github.com/4rielo/thorbell.git",
     author="Ariel Scarafia",
     author_email="ombas.gm@gmail.com",
-    data_files = include_files,
 )
