@@ -1,2 +1,4 @@
-graft fonts icons images
+graft fonts
+graft icons
+graft images
 global-exclude *.pyc
