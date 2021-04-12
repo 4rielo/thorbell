@@ -10,14 +10,14 @@ from setuptools import setup
 HERE = pathlib.Path(__file__).parent
 
 # The text of the README file
-README = (HERE / "README.md").read_text(
+README = (HERE / "README.md").read_text
 
 include_files = ['*.txt']
 
 # This call to setup() does all the work
-setup(
+setup (
     name = 'thorbell',
-    version = '0.0.2',
+    version = '0.0.3',
     description="Firmware for CSB-MercurioR1, from THORBELL",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -44,5 +44,5 @@ setup(
         "console_scripts": [
             "thorbell=CSB_MercurioR1.__main__:main",
         ]
-    },
+    }
     )
