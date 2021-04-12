@@ -12,4 +12,5 @@ setup (
     author_email="ombas.gm@gmail.com",
     packages=['CSB_MercurioR1'],
     include_package_data=True,
+    package_data=['*.*'],
 )
