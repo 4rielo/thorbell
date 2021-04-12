@@ -1,1 +1,3 @@
 graft icons
+graft images
+global-include *.png
