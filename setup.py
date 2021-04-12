@@ -5,11 +5,12 @@ from setuptools import setup
 # This call to setup() does all the work
 setup (
     name = 'thorbell',
-    version = '0.0.10',
+    version = '0.0.11',
     description="Firmware for CSB-MercurioR1, from THORBELL",
     url="https://github.com/4rielo/thorbell.git",
     author="Ariel Scarafia",
     author_email="ombas.gm@gmail.com",
     packages=['CSB_MercurioR1'],
     include_package_data=True,
+    package_data={"":['*.*'],},
 )
