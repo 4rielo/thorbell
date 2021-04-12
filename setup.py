@@ -24,25 +24,5 @@ setup (
     url="https://github.com/4rielo/thorbell.git",
     author="Ariel Scarafia",
     author_email="ombas.gm@gmail.com",
-    options = {
-        'bdist_esky': {
-            'freezer_module': 'cx_freeze',
-        }
-    },
     data_files = include_files,
-    packages=["CSB-MercurioR1"],
-    include_package_data=True,
-    scripts = [
-        Executable_Esky(
-            "CSB_MercurioR1.__main__.py",
-            #gui_only = True,
-            #icon = XPTO  # Use an icon if you want.
-            ),
-    ],
-    #executables = [Executable('boneca.py',base='Win32GUI')]
-    entry_points={
-        "console_scripts": [
-            "thorbell=CSB_MercurioR1.__main__:main",
-        ]
-    }
-    )
+)
