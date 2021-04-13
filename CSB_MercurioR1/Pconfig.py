@@ -61,6 +61,18 @@ class Ui_form(object):
         self.update_Btn.setStyleSheet(UPDATE_Button)
         self.update_Btn.focusPolicy = Qt.NoFocus
         
+        self.updateLabel = QLabel(self.BACKGROUND)
+        self.updateLabel.setObjectName(u"updateLabel")
+        self.updateLabel.setGeometry(QRect(190, 300, 100, 16))
+        self.updateLabel.setAttribute(Qt.WA_TranslucentBackground)
+        update_style="""
+                QLabel{
+                        font-family: url(./CSB_MercurioR1/fonts/Montserrat-Regular.ttf);
+                        font-size: 13px;
+                        color: white;
+                }"""
+        self.updateLabel.setStyleSheet(update_style)
+
 #**********************************************************************************
 
         self.BACKGROUND.raise_()
@@ -74,5 +86,7 @@ class Ui_form(object):
     def retranslateUi(self, form):
         form.setWindowTitle(QCoreApplication.translate("form", u"form", None))
         self.update_Btn.setText("")        
+        self.updateLabel.setText(QCoreApplication.translate("form", u"Actualización", None))
+
     # retranslateUi
 

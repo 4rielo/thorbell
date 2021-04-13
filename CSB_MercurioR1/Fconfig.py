@@ -40,6 +40,7 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
             fetch=requests.get(url)
             if(fetch):
                 a=True
+                self.updateLabel.setText("Repositorio externo\nencontrado")
         except:
             print("Update repository not found")
             a=False
@@ -49,7 +50,7 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
             #if(not path):
             #    path = "./"
             #updatePath = path + "UPDATE/"
-            updatePath="/home/applica/THORBELL/"
+            updatePath="/home/applica/UPDATE/"
             print(updatePath)
             command = "python3 -m pip install --upgrade git+" + url + "@stable -t " + updatePath 
             response=subprocess.run(command,capture_output=True,text=True,shell=True)
