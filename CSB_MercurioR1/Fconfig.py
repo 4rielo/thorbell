@@ -32,7 +32,7 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
         print(url)
 
         #Obtiene la dirección del archivo de versión
-        f=open(paht+"versionURL.txt","r")
+        f=open(path+"versionURL.txt","r")
         urlVersion=f.readline()
 
         #Aquí comienza el auto update
