@@ -88,6 +88,8 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
             
             if(update):
                 """Download stable version from git"""
+                command="rm -r /home/applica/update/UPDATE"
+                subprocess.run(command)
                 time.sleep(2)
                 self.updateLabel.setText("Comienza la descarga")
                 command = "git clone " + url + " " + updatePath + " -b stable"
