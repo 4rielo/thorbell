@@ -1,16 +1,13 @@
 #Fprincipal.py
 import sys
-
 import PySide2
-
 from PySide2 import QtGui, QtWidgets
-
 from PySide2.QtUiTools import QUiLoader
 
 #import fbUpload
 import time
 import threading
-
+from datetime import datetime, date
 #from CSB_MercurioR1.Pprincipal import Ui_form
 #from CSB_MercurioR1.Fconfig import ConfigWindow
 
@@ -49,8 +46,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         #self.luz_Btn.setAutoRepeat(True)
         #self.luz_Btn.setAutoRepeatDelay(1000)
 
-        
-
         #print(callable(luz.start))
         self.luz_Btn.pressed.connect(self.pressHandler)#handler.LuminariaLED_pressed)
         #self.luz_Btn.clicked.connect(handler.LuminariaLED_released)
@@ -75,6 +70,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         #self.setFocus
         #self.show()
         self.firstKey=False
+
+        now=datetime.now()
+        currentTime=now.strftime("%H : %M : %S")
+        self.hora.setText(currentTime)
+        today=date.today().strftime("%d/%m/%Y")
+        self.fecha.setText(today)
+
 
     def pressHandler(self):
         self.luz=threading.Thread(target=self.LuminariaLED_pressed,daemon=True)
