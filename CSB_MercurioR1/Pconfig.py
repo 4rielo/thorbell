@@ -33,7 +33,7 @@ class Ui_form(object):
         self.BACKGROUND.setGeometry(QRect(0, 0, 480, 800))
         Background_Style= """
                 QFrame{
-                	background-image: url(./CSB_MercurioR1/images/fondo.png);
+                	background-image: url(./images/fondo.png);
                 	background-repeat: no-repeat;
                 	background-position: bottom center;
                 }"""
@@ -49,12 +49,12 @@ class Ui_form(object):
         UPDATE_Button = """
                 QPushButton {
                         border-style: none; 
-                        background-image: url(./CSB_MercurioR1/icons/routine_off.png); 
+                        background-image: url(./icons/routine_off.png); 
                         background-repeat: no-repeat; 
                         background-position: center center} 
                 QPushButton:checked{
                         border-style: none; 
-                        background-image: url(./CSB_MercurioR1/icons/routine_on.png); 
+                        background-image: url(./icons/routine_on.png); 
                         background-repeat: no-repeat; 
                         background-position: center center
                 }"""
@@ -67,7 +67,7 @@ class Ui_form(object):
         self.updateLabel.setAttribute(Qt.WA_TranslucentBackground)
         update_style="""
                 QLabel{
-                        font-family: url(./CSB_MercurioR1/fonts/Montserrat-Regular.ttf);
+                        font-family: url(./fonts/Montserrat-Regular.ttf);
                         font-size: 13px;
                         color: white;
                 }"""

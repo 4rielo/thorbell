@@ -11,8 +11,11 @@ from PySide2.QtUiTools import QUiLoader
 import time
 import threading
 
-from CSB_MercurioR1.Pprincipal import Ui_form
-from CSB_MercurioR1.Fconfig import ConfigWindow
+#from CSB_MercurioR1.Pprincipal import Ui_form
+#from CSB_MercurioR1.Fconfig import ConfigWindow
+
+from Pprincipal import Ui_form
+from Fconfig import ConfigWindow
 
 #import config
 #import Fluminaria_led
