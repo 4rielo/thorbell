@@ -60,7 +60,38 @@ class Ui_form(object):
                 }"""
         self.update_Btn.setStyleSheet(UPDATE_Button)
         self.update_Btn.focusPolicy = Qt.NoFocus
-        
+
+#back button
+        self.return_Btn = QPushButton(self.BACKGROUND)
+        self.return_Btn.setObjectName(u"return_Btn")
+        self.return_Btn.setGeometry(QRect(41, 700, 38, 37))
+        self.return_Btn.setCheckable(True)
+        self.return_Btn.setFlat(True)
+        return_Button = """
+                QPushButton {
+                        border-style: none; 
+                        background-image: url(/home/applica/THORBELL/CSB_MercurioR1/icons/back.png); 
+                        background-repeat: no-repeat; 
+                        background-position: center center} 
+                }"""
+        self.return_Btn.setStyleSheet(return_Button)
+        self.return_Btn.focusPolicy = Qt.NoFocus
+
+#CurrentVersion Label        
+        self.versionLabel = QLabel(self.BACKGROUND)
+        self.versionLabel.setObjectName(u"versionLabel")
+        self.versionLabel.setGeometry(QRect(10, 10, 200, 16))
+        self.versionLabel.setAttribute(Qt.WA_TranslucentBackground)
+        version_style="""
+                QLabel{
+                        font-family: url(/home/applica/THORBELL/CSB_MercurioR1/fonts/Montserrat-Regular.ttf);
+                        font-size: 13px;
+                        color: white;
+                }"""
+        self.versionLabel.setStyleSheet(version_style)
+
+
+#update Label        
         self.updateLabel = QLabel(self.BACKGROUND)
         self.updateLabel.setObjectName(u"updateLabel")
         self.updateLabel.setGeometry(QRect(190, 300, 100, 16))

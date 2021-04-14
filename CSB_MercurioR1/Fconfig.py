@@ -18,7 +18,18 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
 
         self.update_Btn.clicked.connect(self.UpdateFunction)
 
+        """Checks local version number. """
+        localPath = "/home/applica/THORBELL/"
+        currentVersion=open(localPath + "version.txt","r").readline()
+        if(currentVersion[-1]=="\n"):
+            currentVersion=currentVersion[:-1]
+        self.versionLabel.setText("Current: " + currentVersion)
+
+        self.return_Btn.clicked.connect(self.goBack)
         self.setWindowFlags(PySide2.QtCore.Qt.FramelessWindowHint) 
+
+    def goBack(self):                   #Function to go back to previous menu (close this window)
+        self.close()
 
     def UpdateFunction(self):
         import subprocess
@@ -54,6 +65,8 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
             #updatePath = path + "UPDATE/"
             updatePath="/home/applica/update/UPDATE/"
             print(updatePath)
+            command="rm -r /home/applica/update/UPDATE"
+            subprocess.run(command,shell=True)
             #command = "python3 -m pip install --upgrade git+" + url + "@stable -t " + updatePath 
             """Download file "version.txt" to update path, and open it to check on latest version number """
             command = "wget -P " + updatePath + " -c " + urlVersion #https://raw.githubusercontent.com/4rielo/thorbell/stable/version.txt
@@ -94,7 +107,7 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
                 self.updateLabel.setText("Comienza la descarga")
                 command = "git clone " + url + " " + updatePath + " -b stable"
                 response=subprocess.run(command,capture_output=True,text=True,shell=True)
-                if(response.stdout.endswith("done.")):          #response from git clone is "Done"
+                if(not response.returncode) # stdout.endswith("done.")):          #response from git clone is "Done"
                     self.updateLabel.setText("Descarga completada.\nDebe reiniciar para completar actualización")
                     time.sleep(5)
                     command="reboot"
