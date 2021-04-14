@@ -78,7 +78,6 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
             if(f[-1]=="\n"):
                 f=f[:-1]
 
-            self.updateLabel.setText("Versión remota: " + f)
             new = f.split(".")
             newVersion=(int(new[0]),int(new[1]),int(new[2]))
 
@@ -89,6 +88,7 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
                 currentVersion=currentVersion[:-1]
             curr=currentVersion.split(".")
             cVersion=(int(curr[0]),int(curr[1]),int(curr[2]))
+            self.updateLabel.setText("Versión remota: " + f + "\nLocal: " + currentVersion)
 
             update=False
             """If "Stable" version from repository is greater than current version, performs update"""

@@ -94,7 +94,7 @@ class Ui_form(object):
 #update Label        
         self.updateLabel = QLabel(self.BACKGROUND)
         self.updateLabel.setObjectName(u"updateLabel")
-        self.updateLabel.setGeometry(QRect(90, 300, 300, 16))
+        self.updateLabel.setGeometry(QRect(90, 300, 300, 32))
         self.updateLabel.setAttribute(Qt.WA_TranslucentBackground)
         update_style="""
                 QLabel{
