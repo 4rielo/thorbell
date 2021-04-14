@@ -65,7 +65,7 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
             #updatePath = path + "UPDATE/"
             updatePath="/home/applica/update/UPDATE/"
             print(updatePath)
-            command="rm -r /home/applica/update/UPDATE"
+            command="rm -rf /home/applica/update/UPDATE"
             subprocess.run(command,shell=True)
             #command = "python3 -m pip install --upgrade git+" + url + "@stable -t " + updatePath 
             """Download file "version.txt" to update path, and open it to check on latest version number """
@@ -101,8 +101,8 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
             
             if(update):
                 """Download stable version from git"""
-                command="rm -r /home/applica/update/UPDATE"
-                subprocess.run(command)
+                command="rm -rf /home/applica/update/UPDATE"
+                subprocess.run(command,shell=True)
                 time.sleep(2)
                 self.updateLabel.setText("Comienza la descarga")
                 command = "git clone " + url + " " + updatePath + " -b stable"
