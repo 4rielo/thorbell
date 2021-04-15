@@ -69,8 +69,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         # self.setCentralWidget(self.button)
         #self.setFocus
         #self.show()
+        currentTime=datetime.now().strftime("%H:%M:%S")
+        self.hora.setText(currentTime)
+        today=date.today().strftime("%d/%m/%Y")
+        self.fecha.setText(today)
         self.firstKey=False
-
+        
+        self.ms100=0
         clock = threading.Thread(target=self.timer100ms,daemon=True)
         clock.start()
 
