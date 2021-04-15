@@ -74,7 +74,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         today=date.today().strftime("%d/%m/%Y")
         self.fecha.setText(today)
         self.firstKey=False
-        
+
         self.ms100=0
         clock = threading.Thread(target=self.timer100ms,daemon=True)
         clock.start()
@@ -88,7 +88,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
                 self.hora.setText(currentTime)
                 today=date.today().strftime("%d/%m/%Y")
                 self.fecha.setText(today)
-            sleep(0.1)
+            time.sleep(0.1)
 
     """Cuando presiono el botón de luminaria, comienza un thread que cuenta el tiempo que se sostiene presionado
     utilizando la función "LuminariaLED_pressed """

@@ -286,7 +286,7 @@ class Ui_form(object):
 #************************ Here are the labels indicating some text ***************************
         self.hora = QLabel(self.BACKGROUND)
         self.hora.setObjectName(u"hora")
-        self.hora.setGeometry(QRect(118, 34, 50, 16))
+        self.hora.setGeometry(QRect(118, 34, 60, 16))
         self.hora.setAttribute(Qt.WA_TranslucentBackground)
         Hora_style="""
                 QLabel{
@@ -298,7 +298,7 @@ class Ui_form(object):
 
         self.fecha = QLabel(self.BACKGROUND)
         self.fecha.setObjectName(u"fecha")
-        self.fecha.setGeometry(QRect(118, 85, 69, 16))
+        self.fecha.setGeometry(QRect(118, 85, 75, 16))
         self.fecha.setAttribute(Qt.WA_TranslucentBackground)
         Fecha_style="""
                 QLabel{
