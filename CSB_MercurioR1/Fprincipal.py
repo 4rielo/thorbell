@@ -71,7 +71,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         #self.show()
         self.firstKey=False
 
-        clock = threading.Thread(target=timer100ms,daemon=True)
+        clock = threading.Thread(target=self.timer100ms,daemon=True)
         clock.start()
 
     def timer100ms(self):
