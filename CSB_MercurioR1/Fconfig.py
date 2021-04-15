@@ -108,7 +108,7 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
                 command = "git clone " + url + " " + updatePath + " -b stable"
                 response=subprocess.run(command,capture_output=True,text=True,shell=True)
                 if(not response.returncode): # stdout.endswith("done.")):          #response from git clone is "Done"
-                    self.updateLabel.setText("Descarga completada.\nDebe reiniciar para completar actualización")
+                    self.updateLabel.setText("Descarga completada.\nEn momentos se reiniciará para completar actualización")
                     time.sleep(5)
                     command="reboot"
                     subprocess.run(command,shell=True)

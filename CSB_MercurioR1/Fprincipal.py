@@ -71,17 +71,29 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         #self.show()
         self.firstKey=False
 
-        now=datetime.now()
-        currentTime=now.strftime("%H : %M : %S")
-        self.hora.setText(currentTime)
-        today=date.today().strftime("%d/%m/%Y")
-        self.fecha.setText(today)
+        clock = threading.Thread(target=timer100ms,daemon=True)
+        clock.start()
 
+    def timer100ms(self):
+        while(True):
+            self.ms100 += 1
+            if(self.ms100>10):
+                self.ms100=0
+                currentTime=datetime.now().strftime("%H:%M:%S")
+                self.hora.setText(currentTime)
+                today=date.today().strftime("%d/%m/%Y")
+                self.fecha.setText(today)
+            sleep(0.1)
 
+    """Cuando presiono el botón de luminaria, comienza un thread que cuenta el tiempo que se sostiene presionado
+    utilizando la función "LuminariaLED_pressed """
     def pressHandler(self):
         self.luz=threading.Thread(target=self.LuminariaLED_pressed,daemon=True)
         self.luz.start()
         
+    """Con intervalos de 0.1 seg., cuenta 25 veces, chequeando el estado del botón de luz. Si en algun momento 
+    se dejó de presionar, se interrumpe la cuenta, borrando el flag "firstKey", lo que resulta en que no se
+    abra la ventana de configuración de la intensidad de luz. """
     def LuminariaLED_pressed(self):
         self.counter=0
         #self.luz_Btn.released.connect(self.LuminariaLED_released)
@@ -109,14 +121,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         print("Light released: " + str(self.counter))
 
     def Upload(self):
-        global counter
-        fbUpload.upload()
-        counter += 1
+        #fbUpload.upload()
+        self.counter += 1
         self.label.setText(str(counter))
 
     def Decrease(self):
-        global counter
-        counter -= 1
+        self.counter -= 1
         self.label.setText(str(counter))
 
     def Config(self):
@@ -183,38 +193,3 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         style += "}"
         self.Bar_2.setStyleSheet(style)
 
-#app = QtWidgets.QApplication(sys.argv)
-
-#print("Loading Window")
-
-#window = MainWindow()   #  loader.load("mainwindow.ui", None)
-
-#window.show()
-
-#app.exec_()
-
-class lightHandler:    
-    def __init__(self):
-        #super(lightHandler,self).__init__()
-        self.firstKey=False    
-
-    def LuminariaLED_pressed(self):        
-        print("Pressed")
-        self.firstKey = True
-        time.sleep(5)
-        
-        """while(self.luz_Btn.isDown()):
-            
-            if(self.firstKey>200):
-                print("Button is " + str(self.luz_Btn.isDown()))
-                break
-                """
-        if(self.firstKey):
-            print("Open config menu here")
-            self.firstKey=False
-        else:            
-            print("Open LED Config Menu cancelled")
-
-    def LuminariaLED_released(self):
-        self.firstKey=False
-        print("Light released: " + str(self.firstKey))
