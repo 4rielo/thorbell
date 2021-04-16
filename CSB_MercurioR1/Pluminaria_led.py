@@ -12,6 +12,7 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
+import main
 
 class Ui_form(object):
     def setupUi(self, form):
@@ -31,12 +32,12 @@ class Ui_form(object):
         self.BACKGROUND.setObjectName(u"BACKGROUND")
         self.BACKGROUND.setFrameShape(QFrame.NoFrame)
         self.BACKGROUND.setGeometry(QRect(0, 0, 480, 800))
-        Background_Style= """
-                QFrame{
-                	background-image: url(./images/fondo.png);
-                	background-repeat: no-repeat;
-                	background-position: bottom center;
-                }"""
+        Background_Style= f"""
+                QFrame{{
+                        background-image: url({main.path}/images/fondo.png);
+                        background-repeat: no-repeat;
+                        background-position: bottom center;
+                }}"""
         self.BACKGROUND.setStyleSheet(Background_Style)
 
 #**************************************************** HERE ARE THE BUTTONS
@@ -45,14 +46,13 @@ class Ui_form(object):
         self.backButton.setObjectName(u"backButton")
         self.backButton.setGeometry(QRect(41, 700, 38, 37))
         self.backButton.setFlat(True)
-        backButton_style= """
-            QPushButton {
+        backButton_style= f"""
+                QPushButton {{
                         border-style: none; 
-                        background-image: url(./icons/back.png); 
+                        background-image: url({main.path}/icons/back.png); 
                         background-repeat: no-repeat; 
                         background-position: center center
-                        }
-        """
+                }}"""
         self.backButton.setStyleSheet(backButton_style)
         self.backButton.focusPolicy = Qt.NoFocus
 
@@ -62,18 +62,19 @@ class Ui_form(object):
         self.OnOffButton.setGeometry(QRect(195, 583, 100, 100))
         self.OnOffButton.setCheckable(True)
         self.OnOffButton.setFlat(True)
-        LUZ_Button = """
-                QPushButton {
+        LUZ_Button = f"""
+                QPushButton {{
                         border-style: none; 
-                        background-image: url(./icons/led_off.png); 
-                        background-repeat: no-repeat; 
-                        background-position: center center} 
-                QPushButton:checked{
-                        border-style: none; 
-                        background-image: url(./icons/led_on.png); 
+                        background-image: url({main.path}/icons/led_off.png); 
                         background-repeat: no-repeat; 
                         background-position: center center
-                }"""
+                }} 
+                QPushButton:checked{{
+                        border-style: none; 
+                        background-image: url({main.path}/icons/led_on.png); 
+                        background-repeat: no-repeat; 
+                        background-position: center center
+                }}"""
         self.OnOffButton.setStyleSheet(LUZ_Button)
         self.OnOffButton.focusPolicy = Qt.NoFocus
 
@@ -82,11 +83,11 @@ class Ui_form(object):
         self.title.setGeometry(QRect(160, 81, 160, 29))
         self.title.setFrameShape(QFrame.NoFrame)
         self.title.setFrameShadow(QFrame.Raised)
-        title_style="""
-                QFrame {
-                	background-image: url(./images/title.png);
+        title_style=f"""
+                QFrame {{
+                	background-image: url({main.path}/images/title.png);
                 	background-repeat: no-repeat;
-                }"""
+                }}"""
         self.title.setStyleSheet(title_style)
 
 #Down button
@@ -95,18 +96,19 @@ class Ui_form(object):
         self.downButton.setGeometry(QRect(17, 382, 57, 34))
         self.downButton.setCheckable(False)
         self.downButton.setFlat(True)
-        downButton_style = """
-                QPushButton {
+        downButton_style = f"""
+                QPushButton {{
                         border-style: none; 
-                        background-image: url(./icons/down_released.png); 
-                        background-repeat: no-repeat; 
-                        background-position: center center} """
-        """        QPushButton:checked{
-                        border-style: none; 
-                        background-image: url(./icons/down_pressed.png); 
+                        background-image: url({main.path}/icons/down_released.png); 
                         background-repeat: no-repeat; 
                         background-position: center center
-                }"""
+                }}
+                QPushButton:checked {{
+                        border-style: none; 
+                        background-image: url({main.path}/icons/down_pressed.png); 
+                        background-repeat: no-repeat; 
+                        background-position: center center
+                }}"""
         self.downButton.setStyleSheet(downButton_style)
         self.downButton.focusPolicy = Qt.NoFocus
 
@@ -116,18 +118,19 @@ class Ui_form(object):
         self.upButton.setGeometry(QRect(406, 382, 57, 34))
         self.upButton.setCheckable(False)
         self.upButton.setFlat(True)
-        upButton_style = """
-                QPushButton {
+        upButton_style = f"""
+                QPushButton {{
                         border-style: none; 
-                        background-image: url(./icons/up_released.png); 
-                        background-repeat: no-repeat; 
-                        background-position: center center} """
-        """        QPushButton:checked{
-                        border-style: none; 
-                        background-image: url(./icons/up_pressed.png); 
+                        background-image: url({main.path}/icons/up_released.png); 
                         background-repeat: no-repeat; 
                         background-position: center center
-                }"""
+                }}
+                QPushButton:checked{{
+                        border-style: none; 
+                        background-image: url({main.path}/icons/up_pressed.png); 
+                        background-repeat: no-repeat; 
+                        background-position: center center
+                }}"""
         self.upButton.setStyleSheet(upButton_style)
         self.upButton.focusPolicy = Qt.NoFocus
 
@@ -136,23 +139,23 @@ class Ui_form(object):
         self.horizontalSlider.setGeometry(QRect(100, 130, 100, 20))
         self.horizontalSlider.setOrientation(Qt.Horizontal)
 #************************************************Here are the center round progress bar indicators
-        Bar_InitialStyle="""
-                QFrame{
+        Bar_InitialStyle=f"""
+                QFrame{{
                 	background-image: url();
                 	border-radius: 92px;
                 	background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(255, 0, 0, 145), stop:0.05 rgba(255, 255, 255, 0));
-                }"""
+                }}"""
 
         self.ProgressBar = QFrame(self.BACKGROUND)
         self.ProgressBar.setObjectName(u"ProgressBar")
         self.ProgressBar.setGeometry(QRect(0, 161, 480, 479))
         self.ProgressBar.setAutoFillBackground(True)
-        ProgressBar_style="""
-                QFrame{
-                	background-image: url(./images/dial_completo.png);
+        ProgressBar_style=f"""
+                QFrame{{
+                	background-image: url({main.path}/images/dial_completo.png);
                 	background-repeat: no-repeat;
                 	background-position: bottom center;
-                }"""
+                }}"""
         self.ProgressBar.setStyleSheet(ProgressBar_style)
         self.ProgressBar.setFrameShape(QFrame.NoFrame)
         self.ProgressBar.setFrameShadow(QFrame.Plain)
@@ -166,12 +169,12 @@ class Ui_form(object):
         self.percentage_label.setObjectName(u"percentage_label")
         self.percentage_label.setGeometry(QRect(218, 220, 54, 26))
         self.percentage_label.setAttribute(Qt.WA_TranslucentBackground)
-        ProgressValue_style="""
-                QLabel{
-                        font-family: url(./fonts/Montserrat-Regular.ttf);
+        ProgressValue_style=f"""
+                QLabel{{
+                        font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 21px;
                         color: white;
-                }"""
+                }}"""
         self.percentage_label.setStyleSheet(ProgressValue_style)
         #self.label_2.setAlignment(Qt.AlignCenter)
 

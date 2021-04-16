@@ -12,6 +12,7 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
+import main
 
 class Ui_form(object):
     def setupUi(self, form):
@@ -31,12 +32,12 @@ class Ui_form(object):
         self.BACKGROUND.setObjectName(u"BACKGROUND")
         self.BACKGROUND.setFrameShape(QFrame.NoFrame)
         self.BACKGROUND.setGeometry(QRect(0, 0, 480, 800))
-        Background_Style= """
-                QFrame{
-                	background-image: url(/home/applica/THORBELL/CSB_MercurioR1/images/fondo.png);
+        Background_Style= f"""
+                QFrame{{
+                	background-image: url({main.path}/images/fondo.png);
                 	background-repeat: no-repeat;
                 	background-position: bottom center;
-                }"""
+                }}"""
         self.BACKGROUND.setStyleSheet(Background_Style)
 
 #**************************************************** HERE ARE THE BUTTONS
@@ -46,18 +47,19 @@ class Ui_form(object):
         self.rutina_Btn.setGeometry(QRect(68, 133, 100, 100))
         self.rutina_Btn.setCheckable(True)
         self.rutina_Btn.setFlat(True)
-        RUTINA_Button = """
-                QPushButton {
+        RUTINA_Button = f"""
+                QPushButton {{
                         border-style: none; 
-                        background-image: url(/home/applica/THORBELL/CSB_MercurioR1/icons/routine_off.png); 
-                        background-repeat: no-repeat; 
-                        background-position: center center} 
-                QPushButton:checked{
-                        border-style: none; 
-                        background-image: url(/home/applica/THORBELL/CSB_MercurioR1/icons/routine_on.png); 
+                        background-image: url({main.path}/icons/routine_off.png); 
                         background-repeat: no-repeat; 
                         background-position: center center
-                }"""
+                        }} 
+                QPushButton:checked{{
+                        border-style: none; 
+                        background-image: url({main.path}/icons/routine_on.png); 
+                        background-repeat: no-repeat; 
+                        background-position: center center
+                }}"""
         self.rutina_Btn.setStyleSheet(RUTINA_Button)
         self.rutina_Btn.focusPolicy = Qt.NoFocus
         
@@ -67,18 +69,19 @@ class Ui_form(object):
         self.eco_Btn.setGeometry(QRect(312, 133, 100, 100))
         self.eco_Btn.setCheckable(True)
         self.eco_Btn.setFlat(True)
-        ECO_Button = """
-                QPushButton {
+        ECO_Button = f"""
+                QPushButton {{
                         border-style: none; 
-                        background-image: url(/home/applica/THORBELL/CSB_MercurioR1/icons/eco_off.png); 
-                        background-repeat: no-repeat; 
-                        background-position: center center} 
-                QPushButton:checked{
-                        border-style: none; 
-                        background-image: url(/home/applica/THORBELL/CSB_MercurioR1/icons/eco_on.png); 
+                        background-image: url({main.path}/icons/eco_off.png); 
                         background-repeat: no-repeat; 
                         background-position: center center
-                }"""
+                }} 
+                QPushButton:checked{{
+                        border-style: none; 
+                        background-image: url({main.path}/icons/eco_on.png); 
+                        background-repeat: no-repeat; 
+                        background-position: center center
+                }}"""
         self.eco_Btn.setStyleSheet(ECO_Button)
         self.eco_Btn.focusPolicy = Qt.NoFocus
 
@@ -88,18 +91,19 @@ class Ui_form(object):
         self.luz_Btn.setGeometry(QRect(69, 640, 100, 100))
         self.luz_Btn.setCheckable(True)
         self.luz_Btn.setFlat(True)
-        LUZ_Button = """
-                QPushButton {
+        LUZ_Button = f"""
+                QPushButton {{
                         border-style: none; 
-                        background-image: url(/home/applica/THORBELL/CSB_MercurioR1/icons/led_off.png); 
-                        background-repeat: no-repeat; 
-                        background-position: center center} 
-                QPushButton:checked{
-                        border-style: none; 
-                        background-image: url(/home/applica/THORBELL/CSB_MercurioR1/icons/led_on.png); 
+                        background-image: url({main.path}/icons/led_off.png); 
                         background-repeat: no-repeat; 
                         background-position: center center
-                }"""
+                }} 
+                QPushButton:checked{{
+                        border-style: none; 
+                        background-image: url({main.path}/icons/led_on.png); 
+                        background-repeat: no-repeat; 
+                        background-position: center center
+                }}"""
         self.luz_Btn.setStyleSheet(LUZ_Button)
         self.luz_Btn.focusPolicy = Qt.NoFocus
         
@@ -109,18 +113,19 @@ class Ui_form(object):
         self.uv_Btn.setGeometry(QRect(312, 640, 100, 100))
         self.uv_Btn.setCheckable(True)
         self.uv_Btn.setFlat(True)
-        UV_Button = """
-                QPushButton {
+        UV_Button = f"""
+                QPushButton {{
                         border-style: none; 
-                        background-image: url(/home/applica/THORBELL/CSB_MercurioR1/icons/uv_off.png); 
-                        background-repeat: no-repeat; 
-                        background-position: center center} 
-                QPushButton:checked{
-                        border-style: none; 
-                        background-image: url(/home/applica/THORBELL/CSB_MercurioR1/icons/uv_on.png); 
+                        background-image: url({main.path}/icons/uv_off.png); 
                         background-repeat: no-repeat; 
                         background-position: center center
-                }"""
+                }} 
+                QPushButton:checked{{
+                        border-style: none; 
+                        background-image: url({main.path}/icons/uv_on.png); 
+                        background-repeat: no-repeat; 
+                        background-position: center center
+                }}"""
         self.uv_Btn.setStyleSheet(UV_Button)
         self.uv_Btn.focusPolicy = Qt.NoFocus
 
@@ -129,13 +134,13 @@ class Ui_form(object):
         self.config_Btn.setObjectName(u"config_Btn")
         self.config_Btn.setFlat(True)
         self.config_Btn.setGeometry(QRect(362, 23, 38, 38))
-        Config_style="""
-                QPushButton {
+        Config_style=f"""
+                QPushButton {{
                         border-style: none;
-                        background-image: url(/home/applica/THORBELL/CSB_MercurioR1/icons/configuracion.png);
+                        background-image: url({main.path}/icons/configuracion.png);
                         background-repeat: no-repeat;
                         background-position: center center;
-                }"""
+                }}"""
         self.config_Btn.setStyleSheet(Config_style)
         self.config_Btn.focusPolicy = Qt.NoFocus
 
@@ -144,13 +149,13 @@ class Ui_form(object):
         self.advertencia_Btn.setObjectName(u"advertencia_Btn")
         self.advertencia_Btn.setGeometry(QRect(362, 74, 38, 38))
         self.advertencia_Btn.setFlat(True)
-        Alerta_style="""
-                QPushButton {
+        Alerta_style=f"""
+                QPushButton {{
                         border-style: none;
-                        background-image: url(/home/applica/THORBELL/CSB_MercurioR1/icons/alerta.png);
+                        background-image: url({main.path}/icons/alerta.png);
                         background-repeat: no-repeat;
                         background-position: center center;
-                }"""
+                }}"""
         self.advertencia_Btn.setStyleSheet(Alerta_style)
         self.advertencia_Btn.focusPolicy = Qt.NoFocus
 
@@ -159,13 +164,13 @@ class Ui_form(object):
         self.reloj_Btn.setObjectName(u"reloj_Btn")
         self.reloj_Btn.setGeometry(QRect(73, 24, 34, 36))
         self.advertencia_Btn.setFlat(True)
-        Reloj_style="""
-                QPushButton {
+        Reloj_style=f"""
+                QPushButton {{
                         border-style: none;
-                        background-image: url(/home/applica/THORBELL/CSB_MercurioR1/icons/reloj.png);
+                        background-image: url({main.path}/icons/reloj.png);
                         background-repeat: no-repeat;
                         background-position: center center;
-                }"""
+                }}"""
         self.reloj_Btn.setStyleSheet(Reloj_style)
         self.reloj_Btn.focusPolicy = Qt.NoFocus
 
@@ -175,13 +180,13 @@ class Ui_form(object):
         self.calendario_Btn.setObjectName(u"calendario_Btn")
         self.calendario_Btn.setGeometry(QRect(71, 74, 39, 37))
         self.calendario_Btn.setFlat(True)
-        Calendario_style="""
-                QPushButton {
+        Calendario_style=f"""
+                QPushButton {{
                        border-style: none;
-                	background-image: url(/home/applica/THORBELL/CSB_MercurioR1/icons/calendario.png);
+                	background-image: url({main.path}/icons/calendario.png);
                 	background-repeat: no-repeat;
                        background-position: center center;
-                }"""
+                }}"""
         self.calendario_Btn.setStyleSheet(Calendario_style)
         self.calendario_Btn.focusPolicy = Qt.NoFocus
 
@@ -212,12 +217,12 @@ class Ui_form(object):
         self.TopProgressBar.setObjectName(u"TopProgressBar")
         self.TopProgressBar.setGeometry(QRect(50, 201, 380, 231))
         self.TopProgressBar.setAutoFillBackground(True)
-        TopHalf_style="""
-                QFrame{
-                	background-image: url(/home/applica/THORBELL/CSB_MercurioR1/images/semi_circulo_superior.png);
+        TopHalf_style=f"""
+                QFrame{{
+                	background-image: url({main.path}/images/semi_circulo_superior.png);
                 	background-repeat: no-repeat;
                 	background-position: bottom center;
-                }"""
+                }}"""
         self.TopProgressBar.setStyleSheet(TopHalf_style)
         self.TopProgressBar.setFrameShape(QFrame.NoFrame)
         self.TopProgressBar.setFrameShadow(QFrame.Plain)
@@ -240,12 +245,12 @@ class Ui_form(object):
         self.BottomProgressBar = QFrame(self.BACKGROUND)
         self.BottomProgressBar.setObjectName(u"BottomProgressBar")
         self.BottomProgressBar.setGeometry(QRect(50, 445, 380, 231))
-        BottomHalf_style="""
-                QFrame{
-                	background-image: url(/home/applica/THORBELL/CSB_MercurioR1/images/semi_circulo_inferior.png);
+        BottomHalf_style=f"""
+                QFrame{{
+                	background-image: url({main.path}/images/semi_circulo_inferior.png);
                 	background-repeat: no-repeat;
                 	background-position: bottom center;
-                }"""
+                }}"""
         self.BottomProgressBar.setStyleSheet(BottomHalf_style)
         self.BottomProgressBar.setFrameShape(QFrame.NoFrame)
         self.BottomProgressBar.setFrameShadow(QFrame.Raised)
@@ -269,11 +274,11 @@ class Ui_form(object):
         self.wind_icon.setGeometry(QRect(218, 180, 44, 25))
         self.wind_icon.setFrameShape(QFrame.NoFrame)
         self.wind_icon.setFrameShadow(QFrame.Raised)
-        Wind_style="""
-                QFrame {
-                	background-image: url(/home/applica/THORBELL/CSB_MercurioR1/images/viento.png);
+        Wind_style=f"""
+                QFrame {{
+                	background-image: url({main.path}/images/viento.png);
                 	background-repeat: no-repeat;
-                }"""
+                }}"""
         self.wind_icon.setStyleSheet(Wind_style)
 
         self.wind_icon2 = QFrame(self.BACKGROUND)
@@ -288,24 +293,24 @@ class Ui_form(object):
         self.hora.setObjectName(u"hora")
         self.hora.setGeometry(QRect(118, 34, 60, 16))
         self.hora.setAttribute(Qt.WA_TranslucentBackground)
-        Hora_style="""
-                QLabel{
-                        font-family: url(/home/applica/THORBELL/CSB_MercurioR1/fonts/Montserrat-Regular.ttf);
+        Hora_style=f"""
+                QLabel{{
+                        font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 13px;
                         color: white;
-                }"""
+                }}"""
         self.hora.setStyleSheet(Hora_style)
 
         self.fecha = QLabel(self.BACKGROUND)
         self.fecha.setObjectName(u"fecha")
         self.fecha.setGeometry(QRect(118, 85, 75, 16))
         self.fecha.setAttribute(Qt.WA_TranslucentBackground)
-        Fecha_style="""
-                QLabel{
-                        font-family: url(/home/applica/THORBELL/CSB_MercurioR1/fonts/Montserrat-Regular.ttf);
+        Fecha_style=f"""
+                QLabel{{
+                        font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 13px;
                         color: white;
-                }"""
+                }}"""
         self.fecha.setStyleSheet(Fecha_style)
 
 #************************ Here are the labels indicating some text ***************************
@@ -315,48 +320,48 @@ class Ui_form(object):
         self.ModoEco_label.setObjectName(u"ModoEco_label")
         self.ModoEco_label.setGeometry(QRect(337, 221, 51, 12))
         self.ModoEco_label.setAttribute(Qt.WA_TranslucentBackground)
-        ModoECO_style="""
-                QLabel{
-                        font-family: url(/home/applica/THORBELL/CSB_MercurioR1/fonts/Montserrat-Regular.ttf);
+        ModoECO_style=f"""
+                QLabel{{
+                        font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 10px;
                         color: white;
-                }"""
+                }}"""
         self.ModoEco_label.setStyleSheet(ModoECO_style)
 
         self.Rutina_label = QLabel(self.BACKGROUND)
         self.Rutina_label.setObjectName(u"Rutina_label")
         self.Rutina_label.setGeometry(QRect(101, 221, 34, 12))
         self.Rutina_label.setAttribute(Qt.WA_TranslucentBackground)
-        Rutina_style= """
-                QLabel{
-                        font-family: url(/home/applica/THORBELL/CSB_MercurioR1/fonts/Montserrat-Regular.ttf);
+        Rutina_style= f"""
+                QLabel{{
+                        font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 10px;
                         color: white;
-                }"""
+                }}"""
         self.Rutina_label.setStyleSheet(Rutina_style)
 
         self.LED_label = QLabel(self.BACKGROUND)
         self.LED_label.setObjectName(u"LED_label")
         self.LED_label.setGeometry(QRect(92, 736, 52, 17))
         self.LED_label.setAttribute(Qt.WA_TranslucentBackground)
-        LED_style= """
-                QLabel{
-                        font-family: url(/home/applica/THORBELL/CSB_MercurioR1/fonts/Montserrat-Regular.ttf);
+        LED_style= f"""
+                QLabel{{
+                        font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 10px;
                         color: white;
-                }"""
+                }}"""
         self.LED_label.setStyleSheet(LED_style)
 
         self.UV_label = QLabel(self.BACKGROUND)
         self.UV_label.setObjectName(u"UV_label")
         self.UV_label.setGeometry(QRect(336, 736, 52, 17))
         self.UV_label.setAttribute(Qt.WA_TranslucentBackground)
-        UV_style="""
-                QLabel{
-                        font-family: url(/home/applica/THORBELL/CSB_MercurioR1/fonts/Montserrat-Regular.ttf);
+        UV_style=f"""
+                QLabel{{
+                        font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 10px;
                         color: white;
-                }"""                
+                }}"""                
         self.UV_label.setStyleSheet(UV_style)
 #**********************************************************************************
 

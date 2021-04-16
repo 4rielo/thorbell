@@ -7,6 +7,9 @@ from PySide2 import QtGui, QtWidgets
 import Fprincipal
 
 lightOnOff = False
+lightPercent=100
+
+path = __file__.replace("/main.py","")
 
 def main():
     app = QtWidgets.QApplication(sys.argv)

@@ -12,6 +12,7 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
+import main
 
 class Ui_form(object):
     def setupUi(self, form):
@@ -29,14 +30,14 @@ class Ui_form(object):
 
         self.BACKGROUND = QFrame(form)
         self.BACKGROUND.setObjectName(u"BACKGROUND")
-        self.BACKGROUND.setFrameShape(QFrame.NoFrame)
+        self.BACKGR/home/applica/THORBELL/CSB_MercurioR1OUND.setFrameShape(QFrame.NoFrame)
         self.BACKGROUND.setGeometry(QRect(0, 0, 480, 800))
-        Background_Style= """
-                QFrame{
-                	background-image: url(/home/applica/THORBELL/CSB_MercurioR1/images/fondo.png);
+        Background_Style= f"""
+                QFrame{{
+                	background-image: url({main.path}/images/fondo.png);
                 	background-repeat: no-repeat;
                 	background-position: bottom center;
-                }"""
+                }}"""
         self.BACKGROUND.setStyleSheet(Background_Style)
 
 #**************************************************** HERE ARE THE BUTTONS
@@ -46,18 +47,19 @@ class Ui_form(object):
         self.update_Btn.setGeometry(QRect(190, 350, 100, 100))
         self.update_Btn.setCheckable(True)
         self.update_Btn.setFlat(True)
-        UPDATE_Button = """
-                QPushButton {
+        UPDATE_Button = f"""
+                QPushButton {{
                         border-style: none; 
-                        background-image: url(/home/applica/THORBELL/CSB_MercurioR1/icons/routine_off.png); 
-                        background-repeat: no-repeat; 
-                        background-position: center center} 
-                QPushButton:checked{
-                        border-style: none; 
-                        background-image: url(/home/applica/THORBELL/CSB_MercurioR1/icons/routine_on.png); 
+                        background-image: url({main.path}/icons/routine_off.png); 
                         background-repeat: no-repeat; 
                         background-position: center center
-                }"""
+                }} 
+                QPushButton:checked{{
+                        border-style: none; 
+                        background-image: url({main.path}/icons/routine_on.png); 
+                        background-repeat: no-repeat; 
+                        background-position: center center
+                }}"""
         self.update_Btn.setStyleSheet(UPDATE_Button)
         self.update_Btn.focusPolicy = Qt.NoFocus
 
@@ -67,13 +69,13 @@ class Ui_form(object):
         self.return_Btn.setGeometry(QRect(41, 700, 38, 37))
         self.return_Btn.setCheckable(True)
         self.return_Btn.setFlat(True)
-        return_Button = """
-                QPushButton {
+        return_Button = f"""
+                QPushButton {{
                         border-style: none; 
-                        background-image: url(/home/applica/THORBELL/CSB_MercurioR1/icons/back.png); 
+                        background-image: url({main.path}/icons/back.png); 
                         background-repeat: no-repeat; 
-                        background-position: center center} 
-                }"""
+                        background-position: center center
+                }}"""
         self.return_Btn.setStyleSheet(return_Button)
         self.return_Btn.focusPolicy = Qt.NoFocus
 
@@ -82,12 +84,12 @@ class Ui_form(object):
         self.versionLabel.setObjectName(u"versionLabel")
         self.versionLabel.setGeometry(QRect(10, 10, 200, 16))
         self.versionLabel.setAttribute(Qt.WA_TranslucentBackground)
-        version_style="""
-                QLabel{
-                        font-family: url(/home/applica/THORBELL/CSB_MercurioR1/fonts/Montserrat-Regular.ttf);
+        version_style=f"""
+                QLabel{{
+                        font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 13px;
                         color: white;
-                }"""
+                }}"""
         self.versionLabel.setStyleSheet(version_style)
 
 
@@ -96,13 +98,13 @@ class Ui_form(object):
         self.updateLabel.setObjectName(u"updateLabel")
         self.updateLabel.setGeometry(QRect(90, 300, 300, 32))
         self.updateLabel.setAttribute(Qt.WA_TranslucentBackground)
-        update_style="""
-                QLabel{
-                        font-family: url(/home/applica/THORBELL/CSB_MercurioR1/fonts/Montserrat-Regular.ttf);
+        update_style=f"""
+                QLabel{{
+                        font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 13px;
                         color: white;
                         qproperty-alignment: AlignCenter;
-                }"""
+                }}"""
         self.updateLabel.setStyleSheet(update_style)
 
 #**********************************************************************************
