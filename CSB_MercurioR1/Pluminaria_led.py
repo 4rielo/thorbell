@@ -13,7 +13,7 @@ from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
 
-class Ui_Form(object):
+class Ui_form(object):
     def setupUi(self, form):
         if not form.objectName():
             form.setObjectName(u"form")
