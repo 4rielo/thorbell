@@ -6,6 +6,8 @@ from PySide2 import QtGui, QtWidgets
 #from CSB_MercurioR1 import Fprincipal
 import Fprincipal
 
+lightOnOff = False
+
 def main():
     app = QtWidgets.QApplication(sys.argv)
     print("version 0.0.11")

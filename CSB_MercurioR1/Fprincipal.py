@@ -12,15 +12,14 @@ from datetime import datetime, date
 #from CSB_MercurioR1.Fconfig import ConfigWindow
 
 from Pprincipal import Ui_form
-from Fconfig import ConfigWindow
+from Fconfig import ConfigWindow            #Config window 
+from Fluminaria_led import LEDWindow        #Luminaria LED window (para dimerizar la luz)
 
-#import config
-#import Fluminaria_led
-#loader = QUiLoader()
+import main         #to read the lightOnOff status
 
 counter = 0
 lightPercent = 50
-lightOnOff = True
+
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_form):
@@ -48,7 +47,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
 
         #print(callable(luz.start))
         self.luz_Btn.pressed.connect(self.pressHandler)#handler.LuminariaLED_pressed)
-        #self.luz_Btn.clicked.connect(handler.LuminariaLED_released)
+        self.luz_Btn.clicked.connect(self.LuminariaLED_clicked)
         #self.upArrow.setText("Upload Reading")
 
         # icon = QtGui.QIcon("animal-penguin.png") self.centralWidget.#
@@ -61,8 +60,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
 
         self.setWindowFlags(PySide2.QtCore.Qt.FramelessWindowHint) 
 
-        global lightOnOff
-        if(lightOnOff):
+        if(main.lightOnOff):
             self.luz_Btn.setChecked=True
         else:
             self.luz_Btn.setChecked=False
@@ -79,8 +77,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         clock = threading.Thread(target=self.timer100ms,daemon=True)
         clock.start()
 
-    def timer100ms(self):
+    def timer100ms(self):           #recurrent timer - base de tiempo de 100ms para chekear estado de las cosas
         while(True):
+            #revisa el estado de la luz led, y setea el botón de acuerdo
+            self.luz_Btn.setChecked=main.lightOnOff
+
             self.ms100 += 1
             if(self.ms100>10):
                 self.ms100=0
@@ -114,16 +115,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
 
         if(self.luz_Btn.isDown() and self.firstKey):
             print("Open config menu")
-            #self.LuminariaLED_Window.show()
+            self.LEDWindow.show()
             self.firstKey=False
         else:
             print("No light menu because: Btn:" + str(self.luz_Btn.isDown()))
             print("Key is: " + str(self.firstKey))
 
-    def LuminariaLED_released(self):
+    def LuminariaLED_clicked(self):
         self.counter+=1
         self.firstKey=False
-        print("Light released: " + str(self.counter))
+        main.lightOnOff=self.luz_Btn.isChecked()
 
     def Upload(self):
         #fbUpload.upload()
