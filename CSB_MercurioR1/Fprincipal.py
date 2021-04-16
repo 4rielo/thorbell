@@ -36,6 +36,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         #self.ConfigWindow = config.ConfigWindow()
         #self.LuminariaLED_Window = Fluminaria_led.WluminariaLED()
         self.configWindow = ConfigWindow()
+        self.ledWindow = LEDWindow()
 
         self.horizontalSlider.valueChanged.connect(self.Dial)
         self.horizontalSlider_2.valueChanged.connect(self.Dial2)
@@ -115,7 +116,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
 
         if(self.luz_Btn.isDown() and self.firstKey):
             print("Open config menu")
-            self.LEDWindow.show()
+            self.ledWindow.show()
             self.firstKey=False
         else:
             print("No light menu because: Btn:" + str(self.luz_Btn.isDown()))

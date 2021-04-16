@@ -20,7 +20,11 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
 
         """Checks local version number. """
         localPath = "/home/applica/THORBELL/"
-        currentVersion=open(localPath + "version.txt","r").readline()
+        try:
+            currentVersion=open(localPath + "version.txt","r").readline()
+        except:
+            currentVersion="0.0.0"        
+        
         if(currentVersion[-1]=="\n"):
             currentVersion=currentVersion[:-1]
         self.versionLabel.setText("Current: " + currentVersion)
@@ -83,7 +87,10 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
 
             """Checks local version number. """
             localPath = "/home/applica/THORBELL/"
-            currentVersion=open(localPath + "version.txt","r").readline()
+            try:
+                currentVersion=open(localPath + "version.txt","r").readline()
+            except:
+                currentVersion="0.0.0"
             if(currentVersion[-1]=="\n"):
                 currentVersion=currentVersion[:-1]
             curr=currentVersion.split(".")

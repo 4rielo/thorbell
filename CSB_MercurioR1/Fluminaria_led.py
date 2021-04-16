@@ -21,11 +21,8 @@ class LEDWindow(QtWidgets.QMainWindow, Ui_form):
 
         self.upButton.clicked.connect(self.increase)
         self.downButton.clicked.connect(self.decrease)
-        self.update_Btn.clicked.connect(self.UpdateFunction)
-
 
         self.OnOffButton.setChecked=main.lightOnOff
-
         self.OnOffButton.clicked.connect(self.OnOff)
 
         self.backButton.clicked.connect(self.goBack)
