@@ -125,7 +125,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
     def LuminariaLED_clicked(self):
         self.counter+=1
         self.firstKey=False
-        main.lightOnOff=self.luz_Btn.isChecked()
+        if(not self.ledWindow.isActiveWindow):
+            main.lightOnOff=self.luz_Btn.isCheked()
+        else 
+            self.luz_Btn.setChecked(main.lightOnOff)
 
     def Upload(self):
         #fbUpload.upload()

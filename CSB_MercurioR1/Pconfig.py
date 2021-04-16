@@ -30,7 +30,7 @@ class Ui_form(object):
 
         self.BACKGROUND = QFrame(form)
         self.BACKGROUND.setObjectName(u"BACKGROUND")
-        self.BACKGR/home/applica/THORBELL/CSB_MercurioR1OUND.setFrameShape(QFrame.NoFrame)
+        self.BACKGROUND.setFrameShape(QFrame.NoFrame)
         self.BACKGROUND.setGeometry(QRect(0, 0, 480, 800))
         Background_Style= f"""
                 QFrame{{
