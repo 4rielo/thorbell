@@ -6,7 +6,7 @@ from PySide2.QtUiTools import QUiLoader
 
 import time
 import threading
-
+import json
 
 import main         #to read the lightOnOff status
 
@@ -19,43 +19,88 @@ class LEDWindow(QtWidgets.QMainWindow, Ui_form):
         self.setupUi(self)
         self.setWindowTitle("LED")
 
-        self.upButton.clicked.connect(self.increase)
-        self.downButton.clicked.connect(self.decrease)
+        initialPressDelay=500          #Delay inicial, antes de tomar el "autoRepeat" (en ms)
+        autoRepeatDelay=50            #Delay entre incremento cuando se mantiene presionado (en ms)
+        
+        self.upButton.setAutoRepeat(True)
+        self.upButton.setAutoRepeatDelay(initialPressDelay)
+        self.upButton.setAutoRepeatInterval(autoRepeatDelay)
+        self.upButton.clicked.connect(self.UpBtn_clicked)
 
-        self.OnOffButton.setChecked(main.lightOnOff)
-        self.OnOffButton.clicked.connect(self.OnOff)
-
-        self.backButton.clicked.connect(self.goBack)
+        self.downButton.setAutoRepeat(True)
+        self.downButton.setAutoRepeatDelay(initialPressDelay)
+        self.downButton.setAutoRepeatInterval(autoRepeatDelay)
+        self.downButton.pressed.connect(self.DownBtn_clicked)
+        
+        self.OnOffButton.clicked.connect(self.OnOff_clicked)
+        
+        self.backButton.clicked.connect(self.goBack_clicked)
+        
         self.setWindowFlags(PySide2.QtCore.Qt.FramelessWindowHint) 
 
-    def goBack(self):                   #Function to go back to previous menu (close this window)
+    def goBack_clicked(self):                   #Function to go back to previous menu (close this window)
         self.close()
 
-#Funcion para decrementar el porcentaje de iluminación
-    def decrease(self):
-        firstKey=1
-        while(self.downButton.isChecked()):
-            if(main.lightPercent>0):
-                main.lightPercent -= 1
-            self.percentage_label.setText(str(main.lightPercent) + "%")
-            if(firstKey):           
-                time.sleep(0.8)
-                firstKey=0
-            else:
-                time.sleep(0.1)
+    def DownBtn_clicked(self):
+        #print("Clicked DOWN")
+        if(main.lightPercent>0):
+            main.lightPercent -=1
+            self.dialChange(main.lightPercent)
+            #Changes Status data
+            with open(main.statusFile) as f:
+                data=json.load(f)                               #and loads json object
+            data.update( { "LEDPWM": main.lightPercent } )           #updates LED status
+            with open(main.statusFile, "w") as f:               #And saves it to status File
+                json.dump(data,f)                               #as an JSON object
 
-#Función para incrementar el porcentaje de iluminación
-    def increase(self):
-        firstKey=1
-        while(self.upButton.isChecked()):
-            if(main.lightPercent<100):
-                main.lightPercent += 1
-            self.percentage_label.setText(str(main.lightPercent) + "%")
-            if(firstKey):
-                time.sleep(0.8)
-                firstKey=0
-            else:
-                time.sleep(0.1)
+    def UpBtn_clicked(self):
+        #print("Clicked UP")
+        if(main.lightPercent<100):
+            main.lightPercent +=1
+            self.dialChange(main.lightPercent)
+            #Changes Status data
+            with open(main.statusFile) as f:
+                data=json.load(f)                               #and loads json object
+            data.update( { "LEDPWM": main.lightPercent } )           #updates LED status
+            with open(main.statusFile, "w") as f:               #And saves it to status File
+                json.dump(data,f)                               #as an JSON object
 
-    def OnOff(self):
-        main.lightOnOff=self.luz_Btn.isChecked()
+    def OnOff_clicked(self):
+        print(f"On Off -> {self.OnOffButton.isChecked()}")
+        main.lightOnOff=self.OnOffButton.isChecked()
+
+        #Changes Status data
+        with open(main.statusFile) as f:
+            data=json.load(f)                               #and loads json object
+        data.update( { "LED": main.lightOnOff } )           #updates LED status
+        with open(main.statusFile, "w") as f:               #And saves it to status File
+            json.dump(data,f)                               #as an JSON object
+
+    def dialChange(self, slider):
+        self.percentage_label.setText(str(slider) + " %")
+        stopValue= (slider)/100
+    #       print("Slider value= " + str(stopValue))
+        gradient = stopValue-0.05
+        if(gradient < 0):
+            gradient = 0
+            stopValue = 0.05
+        if(stopValue>1):
+            stopValue=1
+        if(gradient>1):
+            gradient=1
+        progressBar_style=f"""
+            QFrame{{
+                background-image: url();
+                border-radius: 92px;
+                background-color: qradialgradient(
+                                    spread:pad, 
+                                    cx:0.5, 
+                                    cy:0.5, 
+                                    radius:0.5, 
+                                    fx:0.5, 
+                                    fy:0.5, 
+                                    stop:{gradient} rgba(255, 255, 255, 145),
+                                    stop:{stopValue} rgba(255, 255, 255, 0)
+                                );
+            }}"""
+        self.Bar.setStyleSheet(progressBar_style)
