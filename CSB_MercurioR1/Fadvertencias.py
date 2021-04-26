@@ -28,7 +28,9 @@ class AdvertenciaWindow(QtWidgets.QMainWindow, Ui_form):
         advertencias=data.get("WARNINGS")
         cantidad = len(advertencias)            #Cantidad de advertencias a mostrar
         self.listLabels = list()
+        self.listLabels2 = list()
         self.listIcons = list()
+        self.listEffects = list()
 
         vertical=360
         separacion = 50
@@ -45,11 +47,32 @@ class AdvertenciaWindow(QtWidgets.QMainWindow, Ui_form):
                     }}"""
             self.listIcons[idx].setStyleSheet(Icon_style)
 
+            a=a.replace("_" , " ")
+            a=a.capitalize()
             self.listLabels.append(PySide2.QtWidgets.QLabel(self.BACKGROUND))
+            self.listLabels2.append(PySide2.QtWidgets.QLabel(self.BACKGROUND))
+
             self.listLabels[idx].setObjectName(a)
             self.listLabels[idx].setText(a)
             self.listLabels[idx].setAttribute(PySide2.QtCore.Qt.WA_TranslucentBackground, True)
-            self.listLabels[idx].setGeometry(PySide2.QtCore.QRect(211, vertical + idx * separacion , 100, 26))
+            self.listLabels[idx].setGeometry(PySide2.QtCore.QRect(208, vertical + 5 + idx * separacion , 300, 26))
+
+            self.listLabels2[idx].setObjectName(a)
+            self.listLabels2[idx].setText(a)
+            self.listLabels2[idx].setAttribute(PySide2.QtCore.Qt.WA_TranslucentBackground, True)
+            self.listLabels2[idx].setGeometry(PySide2.QtCore.QRect(211, vertical + 5 + idx * separacion , 300, 26))
+            label_style=f"""
+                QLabel{{
+                    font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
+                    font-size: 23apx;
+                    color: white;
+                }}
+            """
+            self.listLabels[idx].setStyleSheet(label_style)
+            self.listEffects=QtWidgets.QGraphicsBlurEffect()
+            self.listEffects.setBlurRadius(10)
+            self.listLabels[idx].setGraphicsEffect(self.listEffects)
+            self.listLabels2[idx].raise_()
         
         self.backButton.clicked.connect(self.goBack_clicked)
         

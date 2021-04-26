@@ -24,12 +24,10 @@ def statusTimer():              #StatusTimer, reads statuts file every XXX secon
     while(True):
         ms100 += 1
         if(ms100>10):
+            #HERE READS THE STATUS FILE AND ACTS ACCORDINGLY
             with open(statusFile) as f:
                 data = json.load(f)
-            #HERE READS THE STATUS FILE AND ACTS ACCORDINGLY
-            #print("************CURRENT STATUS")
-            #print(data)
-            #print("************Closes current status")
+            
             ms100=0
         time.sleep(0.1)
 

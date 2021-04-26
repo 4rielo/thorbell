@@ -1,1 +1,1 @@
-{"LED": false, "LEDPWM": 100, "UVLED": false, "UVLEDPWM": 100, "UVLEDTIMER": 0, "PWR": false, "WARNINGS": ["puerta_abierta"]}
+{"LED": true, "LEDPWM": 100, "UVLED": true, "UVLEDPWM": 100, "UVLEDTIMER": 0, "PWR": false, "WARNINGS": ["puerta_abierta"]}
