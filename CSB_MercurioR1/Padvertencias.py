@@ -42,20 +42,41 @@ class Ui_form(object):
                         font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 21px;
                         color: white;
+                        qproperty-alignment: AlignCenter;
                 }}"""
         self.BACKGROUND.setStyleSheet(Background_Style)
 
-        self.title = QFrame(self.BACKGROUND)
-        self.title.setObjectName(u"title")
-        self.title.setGeometry(QRect(154, 76, 173, 38))
-        self.title.setFrameShape(QFrame.NoFrame)
-        self.title.setFrameShadow(QFrame.Raised)
-        title_style=f"""
-                QFrame {{
-                	background-image: url({main.path}/images/Advertencia_title.png);
-                	background-repeat: no-repeat;
+#**************************************************** Tittle
+
+        self.tittle = QLabel(self.BACKGROUND)
+        self.tittle.setObjectName(u"tittle")
+        self.tittle.setGeometry(QRect(168, 88, 145, 22))
+        self.tittle.setAttribute(Qt.WA_TranslucentBackground)
+        tittle_style=f"""
+                QLabel{{
+                        font-family: url({main.path}/fonts/Montserrat-SemiBold.ttf);
+                        font-size: 19px;
+                        color: white;
+                        qproperty-alignment: AlignCenter;
                 }}"""
-        self.title.setStyleSheet(title_style)
+        self.tittle.setStyleSheet(tittle_style)
+
+        self.tittleGlow = QLabel(self.BACKGROUND)
+        self.tittleGlow.setObjectName(u"tittleGlow")
+        self.tittleGlow.setGeometry(QRect(168, 88, 145, 22))
+        self.tittleGlow.setAttribute(Qt.WA_TranslucentBackground)
+        tittleGlow_style=f"""
+                QLabel{{
+                        font-family: url({main.path}/fonts/Montserrat-SemiBold.ttf);
+                        font-size: 21px;
+                        color: white;
+                        qproperty-alignment: AlignCenter;
+                }}"""
+        self.tittleGlow.setStyleSheet(tittleGlow_style)
+        
+        self.Effect=QGraphicsBlurEffect()
+        self.Effect.setBlurRadius(10)
+        self.tittleGlow.setGraphicsEffect(self.Effect)
 #**************************************************** HERE ARE THE BUTTONS
     # Back Button
         self.backButton = QPushButton(self.BACKGROUND)

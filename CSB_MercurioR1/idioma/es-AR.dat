@@ -1,0 +1,8 @@
+{
+    "LEDTittle" : "Luminaria LED",
+    "configTittle" : "Configuración",
+    "warningTittle" : "Advertencia" ,
+    "puerta_abierta" : "Puerta Abierta",
+    "filtro_saturado" : "Filtro Saturado"
+
+}

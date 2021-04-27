@@ -22,6 +22,12 @@ class LEDWindow(QtWidgets.QMainWindow, Ui_form):
         initialPressDelay=500          #Delay inicial, antes de tomar el "autoRepeat" (en ms)
         autoRepeatDelay=50            #Delay entre incremento cuando se mantiene presionado (en ms)
         
+        self.OnOffButton.setChecked(main.lightOnOff)          
+        self.dialChange(main.lightPercent)
+
+        self.tittleGlow.setText(main.texto.get("LEDTittle"))
+        self.tittle.setText(main.texto.get("LEDTittle"))
+
         self.upButton.setAutoRepeat(True)
         self.upButton.setAutoRepeatDelay(initialPressDelay)
         self.upButton.setAutoRepeatInterval(autoRepeatDelay)

@@ -39,6 +39,38 @@ class Ui_form(object):
                 	background-position: bottom center;
                 }}"""
         self.BACKGROUND.setStyleSheet(Background_Style)
+#**************************************************** Tittle
+
+        self.tittle = QLabel(self.BACKGROUND)
+        self.tittle.setObjectName(u"tittle")
+        self.tittle.setGeometry(QRect(168, 88, 145, 22))
+        self.tittle.setAttribute(Qt.WA_TranslucentBackground)
+        tittle_style=f"""
+                QLabel{{
+                        font-family: url({main.path}/fonts/Montserrat-SemiBold.ttf);
+                        font-size: 19px;
+                        color: white;
+                        qproperty-alignment: AlignCenter;
+                }}"""
+        self.tittle.setStyleSheet(tittle_style)
+
+        self.tittleGlow = QLabel(self.BACKGROUND)
+        self.tittleGlow.setObjectName(u"tittleGlow")
+        self.tittleGlow.setGeometry(QRect(168, 88, 145, 22))
+        self.tittleGlow.setAttribute(Qt.WA_TranslucentBackground)
+        tittleGlow_style=f"""
+                QLabel{{
+                        font-family: url({main.path}/fonts/Montserrat-SemiBold.ttf);
+                        font-size: 21px;
+                        color: white;
+                        qproperty-alignment: AlignCenter;
+                }}"""
+        self.tittleGlow.setStyleSheet(tittleGlow_style)
+        
+        self.Effect=QGraphicsBlurEffect()
+        self.Effect.setBlurRadius(10)
+        self.tittleGlow.setGraphicsEffect(self.Effect)
+
 
 #**************************************************** HERE ARE THE BUTTONS
 #UPDATE button
@@ -89,6 +121,7 @@ class Ui_form(object):
                         font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 13px;
                         color: white;
+                        qproperty-alignment: AlignCenter;
                 }}"""
         self.versionLabel.setStyleSheet(version_style)
 
@@ -111,6 +144,7 @@ class Ui_form(object):
 
         self.BACKGROUND.raise_()
         self.update_Btn.raise_()
+        self.tittle.raise_()
     
         self.retranslateUi(form)
 

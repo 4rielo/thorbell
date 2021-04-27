@@ -6,6 +6,8 @@ from PySide2.QtUiTools import QUiLoader
 
 import time
 import threading
+import main
+import json
 
 #from CSB_MercurioR1.Pconfig import Ui_form
 from Pconfig import Ui_form
@@ -15,6 +17,14 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
         super(ConfigWindow, self).__init__()
         self.setupUi(self)
         self.setWindowTitle("CONFIG")
+
+        print("Open: " + main.texto.get("configTittle"))
+
+        #a=len(main.texto.get("configTittle"))
+        #position = 168 #- (a/4)
+        #self.tittleGlow.setGeometry(PySide2.QtCore.QRect(position, 88, 145, 22))
+        self.tittleGlow.setText(main.texto.get("configTittle"))
+        self.tittle.setText(main.texto.get("configTittle"))
 
         self.update_Btn.clicked.connect(self.UpdateFunction)
 

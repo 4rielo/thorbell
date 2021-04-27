@@ -33,13 +33,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         with open(main.statusFile) as f:
             data=json.load(f)                               #and loads json object
 
+        with open(main.path+"/idioma/" + data.get("Idioma") + ".dat") as f:
+            main.texto = json.load(f)
+
+        print("IDIOMA: ")
+        print(main.texto)
         main.lightOnOff = data.get("LED")
         main.lightPercent = data.get("LEDPWM")
         #Create all sub-windows, to call on them when different buttons are clicked.
-        #self.ConfigWindow = config.ConfigWindow()
-        self.configWindow = ConfigWindow()
-        self.ledWindow = LEDWindow()
-        
 
         self.horizontalSlider.valueChanged.connect(self.Dial)
         self.horizontalSlider_2.valueChanged.connect(self.Dial2)
@@ -77,11 +78,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
     def timer100ms(self):           #recurrent timer - base de tiempo de 100ms para chekear estado de las cosas
         while(True):
             #revisa el estado de la luz led, y setea el botón de acuerdo
-            #self.luz_Btn.setChecked=main.lightOnOff
-
-            self.ms100 += 1
             if(self.luz_Btn.isChecked() != main.lightOnOff):
                 self.luz_Btn.toggle()
+            
+            self.ms100 += 1
             if(self.ms100>10):
                 self.ms100=0
                 currentTime=datetime.now().strftime("%H:%M:%S")
@@ -117,8 +117,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
             if(main.lightOnOff != self.luz_Btn.isChecked()):
                 self.luz_Btn.toggle()
 
-            self.ledWindow.OnOffButton.setChecked(main.lightOnOff)          
-            self.ledWindow.dialChange(main.lightPercent)
+            self.ledWindow = LEDWindow()            
             self.ledWindow.show()
         
 
@@ -176,9 +175,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         self.label.setText(str(counter))
 
     def Config(self):
+        self.configWindow = ConfigWindow()
         self.configWindow.show()
-        pass
 
+
+
+
+
+
+
+#**************************************************************************************************************
     def Dial(self):
         slider= self.horizontalSlider.value()
         self.label_2.setText(str(slider) + " %")

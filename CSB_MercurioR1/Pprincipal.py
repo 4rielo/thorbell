@@ -271,7 +271,7 @@ class Ui_form(object):
 
         self.wind_icon = QFrame(self.BACKGROUND)
         self.wind_icon.setObjectName(u"wind_icon")
-        self.wind_icon.setGeometry(QRect(218, 180, 44, 25))
+        self.wind_icon.setGeometry(QRect(218, 316, 44, 25))
         self.wind_icon.setFrameShape(QFrame.NoFrame)
         self.wind_icon.setFrameShadow(QFrame.Raised)
         Wind_style=f"""

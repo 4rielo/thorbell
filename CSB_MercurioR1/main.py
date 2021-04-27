@@ -11,6 +11,7 @@ import Fprincipal
 
 lightOnOff = False
 lightPercent=100
+texto = dict()
 
 uvOnOff = False
 
@@ -33,6 +34,7 @@ def statusTimer():              #StatusTimer, reads statuts file every XXX secon
 
 def main():
     global statusFile
+    global texto
     #HERE OPENS STATUS FILE AND SETS OUTPUTS TO 0
     try:                 
         print("Trying to open status file")           
@@ -42,6 +44,7 @@ def main():
         print("Status File found, reading initial status")
     except:                             #Si no econtró el arvchivo
         data = {                        #genera un status inicial
+            "Idioma" : "es-AR",
             "LED" : False,
             "LEDPWM" : 100,
             "UVLED" : False,
@@ -56,10 +59,18 @@ def main():
         with open(statusFile, "w") as f:                   #Y lo guarda en statusFile (crea el archivo)
             json.dump(data,f)
         print("Status file not found. Creates initial (default) status file")
+    
+    print(path+"/idioma/" + data.get("Idioma") + ".dat")
 
+    with open(path+"/idioma/" + data.get("Idioma") + ".dat") as f:
+        global texto
+        texto = json.load(f)
+        
+    
 
     status = threading.Thread(target=statusTimer, daemon=True)
     status.start()
+    
     ###############################################    
     app = QtWidgets.QApplication(sys.argv)
     print("Loading Window")
