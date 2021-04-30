@@ -93,6 +93,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
             #revisa el estado de la luz led, y setea el botón de luz de acuerdo
             if(self.luz_Btn.isChecked() != main.lightOnOff):
                 self.luz_Btn.toggle()
+                #una vez por segundo, se lee el archivo "status.dat"
+                with open(main.statusFile) as st:
+                    status=json.load(st)
+                status.update("LED",main.lightOnOff)
+                with open(main.statusFile, "w") as st:
+                    json.dump(status, st)
             
             self.ms100 += 1
             if(self.ms100>10):
@@ -103,9 +109,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
                 self.fecha.setText(today)
                 #self.luz_Btn.setChecked(main.lightOnOff)
 
-                #una vez por segundo, se lee el archivo "status.dat"
-                with open(main.statusFile) as st:
-                    status=json.load(st)
+                
             
                 #La variable status contiene el estado global del equipo.
                 #TODO: actualizar el estado de las salidas en base a lo leído
