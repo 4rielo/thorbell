@@ -11,6 +11,7 @@ import json
 
 #from CSB_MercurioR1.Pconfig import Ui_form
 from Pconfig import Ui_form
+from Finfo import InfoWindow
 
 class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
     def __init__(self):
@@ -27,11 +28,13 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
         self.tittle.setText(main.texto.get("configTittle"))
 
         self.update_Btn.clicked.connect(self.UpdateFunction)
+        self.info_Btn.clicked.connect(self.showInfo)
 
         """Checks local version number. """
         localPath = "/home/applica/THORBELL/"
+        print(main.globalPath)
         try:
-            currentVersion=open(localPath + "version.txt","r").readline()
+            currentVersion=open(main.globalPath + "/version.txt","r").readline()
         except:
             currentVersion="0.0.0"        
         
@@ -44,6 +47,10 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
 
     def goBack(self):                   #Function to go back to previous menu (close this window)
         self.close()
+
+    def showInfo(self):
+        self.infoWindow = InfoWindow()
+        self.infoWindow.show()
 
     def UpdateFunction(self):
         import subprocess

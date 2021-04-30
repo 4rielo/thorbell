@@ -71,13 +71,26 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         self.fecha.setText(today)
         self.firstKey=False
 
+        self.LED_label.setText(main.texto.get("luminariaLED"))
+        self.UV_label.setText(main.texto.get("luminariaUV"))
+        self.ModoEco_label.setText(main.texto.get("modoEco"))
+        self.Rutina_label.setText(main.texto.get("rutina"))
+
+        #Thread de 100 ms, para base de tiempo de ejecución. 
+        #Corre en paralelo con la app
         self.ms100=0
         clock = threading.Thread(target=self.timer100ms,daemon=True)
         clock.start()
+    #FIN init
+
+#**********************************************************************************************
+#Timer de 100 ms. Éste timer corre en paralelo con la app principal. 
+#Aquí se lee el "status.dat", y se actualiza el estado de las salidas
+#Cada un segundo se actualiza el reloj en pantalla.
 
     def timer100ms(self):           #recurrent timer - base de tiempo de 100ms para chekear estado de las cosas
         while(True):
-            #revisa el estado de la luz led, y setea el botón de acuerdo
+            #revisa el estado de la luz led, y setea el botón de luz de acuerdo
             if(self.luz_Btn.isChecked() != main.lightOnOff):
                 self.luz_Btn.toggle()
             
@@ -89,6 +102,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
                 today=date.today().strftime("%d/%m/%Y")
                 self.fecha.setText(today)
                 #self.luz_Btn.setChecked(main.lightOnOff)
+
+                #una vez por segundo, se lee el archivo "status.dat"
+                with open(main.statusFile) as st:
+                    status=json.load(st)
+            
+                #La variable status contiene el estado global del equipo.
+                #TODO: actualizar el estado de las salidas en base a lo leído
+                #del archivo "status.dat"
             
             time.sleep(0.1)
 
@@ -158,13 +179,24 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
 #**************************************************************************************************************
 #Ventana de advertencia
     def advertenciaClicked(self):
-        self.advertenciaWindow = AdvertenciaWindow()
         print("Show Advertencia")
+        self.advertenciaWindow = AdvertenciaWindow()
         self.advertenciaWindow.show()
-        print("Now closing window")
-        #self.advertenciaWindow.close()
 
 #**************************************************************************************************************
+
+#**************************************************************************************************************
+#Ventana de configuración
+    def Config(self):
+        self.configWindow = ConfigWindow()
+        self.configWindow.show()
+
+#**************************************************************************************************************
+
+
+
+
+#OLD test stuff
     def Upload(self):
         #fbUpload.upload()
         self.counter += 1
@@ -173,16 +205,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
     def Decrease(self):
         self.counter -= 1
         self.label.setText(str(counter))
-
-    def Config(self):
-        self.configWindow = ConfigWindow()
-        self.configWindow.show()
-
-
-
-
-
-
 
 #**************************************************************************************************************
     def Dial(self):

@@ -42,35 +42,51 @@ class Ui_form(object):
                         font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 21px;
                         color: white;
+                        background: transparent;
                         qproperty-alignment: AlignCenter;
-                }}"""
+                        max-height: 26px;
+                        min-height: 26px;
+                        max-width: 200px;
+                        min-width: 200px;
+                }}
+                QPushButton {{
+                        border-style: none;
+                        background-repeat: no-repeat;
+                        background-position: center center
+                }}
+                """
         self.BACKGROUND.setStyleSheet(Background_Style)
+        """El estilo de QPushButton se aplica al BACKGROUND, y se 
+        hereda por todos los QPushButton que contiene, tanto en estado común, como 
+        en estado "checked". No es necesario volver a especificar el estilo 
+        de borde, la repetibilidad de imagen, o su posicion.
+        """
 
 #**************************************************** Tittle
 
         self.tittle = QLabel(self.BACKGROUND)
         self.tittle.setObjectName(u"tittle")
-        self.tittle.setGeometry(QRect(168, 88, 145, 22))
-        self.tittle.setAttribute(Qt.WA_TranslucentBackground)
+        self.tittle.setGeometry(QRect(0, 88, 480, 22))
+        #self.tittle.setAttribute(Qt.WA_TranslucentBackground)
         tittle_style=f"""
                 QLabel{{
                         font-family: url({main.path}/fonts/Montserrat-SemiBold.ttf);
                         font-size: 19px;
-                        color: white;
-                        qproperty-alignment: AlignCenter;
+                        max-width: 480px;
+                        min-width: 480px;
                 }}"""
         self.tittle.setStyleSheet(tittle_style)
 
         self.tittleGlow = QLabel(self.BACKGROUND)
         self.tittleGlow.setObjectName(u"tittleGlow")
-        self.tittleGlow.setGeometry(QRect(168, 88, 145, 22))
-        self.tittleGlow.setAttribute(Qt.WA_TranslucentBackground)
+        self.tittleGlow.setGeometry(QRect(0, 88, 480, 22))
+        #self.tittleGlow.setAttribute(Qt.WA_TranslucentBackground)
         tittleGlow_style=f"""
                 QLabel{{
                         font-family: url({main.path}/fonts/Montserrat-SemiBold.ttf);
                         font-size: 21px;
-                        color: white;
-                        qproperty-alignment: AlignCenter;
+                        max-width: 480px;
+                        min-width: 480px;
                 }}"""
         self.tittleGlow.setStyleSheet(tittleGlow_style)
         
@@ -78,6 +94,12 @@ class Ui_form(object):
         self.Effect.setBlurRadius(10)
         self.tittleGlow.setGraphicsEffect(self.Effect)
 #**************************************************** HERE ARE THE BUTTONS
+
+#Buttons layout
+        self.BtnsLayout = QGridLayout(self.BACKGROUND)
+        self.BtnsLayout.setGeometry(QRect(0, 120, 480, 560))
+        self.BtnsLayout.setAlignment(Qt.AlignCenter)
+
     # Back Button
         self.backButton = QPushButton(self.BACKGROUND)
         self.backButton.setObjectName(u"backButton")

@@ -1,8 +1,15 @@
 {
+    "luminariaLED" : "Luminaria\nLED",
+    "luminariaUV" : "Luminaria\nUV",
+    "rutina" : "Rutina",
+    "modoEco" : "Modo Eco",
+    "postVenta" : "Servicio Post Venta",
     "LEDTittle" : "Luminaria LED",
     "configTittle" : "Configuración",
     "warningTittle" : "Advertencia" ,
     "puerta_abierta" : "Puerta Abierta",
-    "filtro_saturado" : "Filtro Saturado"
-
+    "filtro_saturado" : "Filtro Saturado",
+    "filtro_roto" : "Filtro Roto",
+    "filtro_proximo_a_saturarse" : "Filtro próximo a saturarse",
+    "ventilador_roto" : "Ventilador Roto"
 }

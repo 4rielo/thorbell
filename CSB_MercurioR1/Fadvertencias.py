@@ -23,66 +23,66 @@ class AdvertenciaWindow(QtWidgets.QMainWindow, Ui_form):
         autoRepeatDelay=50            #Delay entre incremento cuando se mantiene presionado (en ms)
         with open(main.statusFile) as f:
             data=json.load(f)                               #and loads json object
-
-        #TODO read warnings from status.dat and add labels and icons to "advertencias"
+    
         advertencias=data.get("WARNINGS")
         cantidad = len(advertencias)            #Cantidad de advertencias a mostrar
         self.listLabels = list()
-        self.listLabels2 = list()
+        self.listLabelsGlow = list()
         self.listIcons = list()
         self.listEffects = list()
 
         vertical=360
         separacion = 50
 
-        self.Effect=QtWidgets.QGraphicsBlurEffect()
-        self.Effect.setBlurRadius(10)
+        #self.Effect=QtWidgets.QGraphicsBlurEffect()
+        #self.Effect.setBlurRadius(10)
         self.label_style=f"""
             QLabel{{
-                font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
-                font-size: 23apx;
-                color: white;
+                font-size: 23px;
             }}
         """
 
         self.tittleGlow.setText(main.texto.get("warningTittle"))
         self.tittle.setText(main.texto.get("warningTittle"))
+        print("Tittle effect: ")
+        print(self.Effect)
+        self.tittleGlow.setGraphicsEffect(self.Effect)
+
 
         for idx, a in enumerate(advertencias):
-            self.listIcons.append(PySide2.QtWidgets.QFrame(self.BACKGROUND))
-            self.listIcons[idx].setGeometry(PySide2.QtCore.QRect(157, vertical + idx * separacion, 46, 47))
+            """Por cada item en Advertencias, crea un ícono y su respectiva 
+            información, obtenida del archivo de idioma"""
+
+            #Ícono:
+            self.listIcons.insert(idx, PySide2.QtWidgets.QFrame(self.BACKGROUND))
+            self.listIcons[idx].setFixedSize(46, 47)
             self.listIcons[idx].setFrameShape(PySide2.QtWidgets.QFrame.NoFrame)
-            self.listIcons[idx].setFrameShadow(PySide2.QtWidgets.QFrame.Raised)
+            #self.listIcons[idx].setFrameShadow(PySide2.QtWidgets.QFrame.Raised)
             Icon_style=f"""
                     QFrame {{
                         background-image: url({main.path}/icons/{a}.png);
-                        background-repeat: no-repeat;
                     }}"""
             self.listIcons[idx].setStyleSheet(Icon_style)
 
-            #a=a.replace("_" , " ")
-            #a=a.capitalize()
-            self.listLabels.append(PySide2.QtWidgets.QLabel(self.BACKGROUND))
-            self.listLabels2.append(PySide2.QtWidgets.QLabel(self.BACKGROUND))
-            
-            #aux=len(a)
-            #print("Aux: " + str(aux))
-            position=211 #- round(aux/3)
+            #Texto descriptivo y su fondo de efecto glow
+            self.listLabels.insert(idx, PySide2.QtWidgets.QLabel(self.BACKGROUND))      #Crea la etiqueta
+            self.listLabelsGlow.insert(idx, PySide2.QtWidgets.QLabel(self.BACKGROUND))  
 
-            self.listLabels[idx].setObjectName(main.texto.get(a))
-            self.listLabels[idx].setText(main.texto.get(a))
-            self.listLabels[idx].setAttribute(PySide2.QtCore.Qt.WA_TranslucentBackground, True)
-            self.listLabels[idx].setGeometry(PySide2.QtCore.QRect(position, vertical + 10 + idx * separacion , 200, 26))
-            self.listLabels[idx].setStyleSheet(self.label_style)
-            self.listLabels[idx].setGraphicsEffect(self.Effect)
+            self.listEffects.append(PySide2.QtWidgets.QGraphicsBlurEffect())        #Crea el efecto borroso 
+            self.listEffects[idx].setBlurRadius(10)                                 #para la iluminosidad de fondo
 
-            self.listLabels2[idx].setObjectName(main.texto.get(a))
-            self.listLabels2[idx].setText(main.texto.get(a))
-            self.listLabels2[idx].setAttribute(PySide2.QtCore.Qt.WA_TranslucentBackground, True)
-            self.listLabels2[idx].setGeometry(PySide2.QtCore.QRect(211, vertical + 10 + idx * separacion , 200, 26))
-            
-            self.listLabels2[idx].raise_()
+            self.listLabels[idx].setText(main.texto.get(a))     #escribe la etiqueta
+            self.listLabelsGlow[idx].setText(main.texto.get(a))     #y la etiqueta de efecto luminoso
+            self.listLabelsGlow[idx].setGraphicsEffect(self.listEffects[idx])     #aplica efecto blur para simular iluminosidad
+            self.listLabels[idx].raise_()                       #"levanta" la etiqueta si efecto, para que esté por encima de la borrosa
+
+            self.BtnsLayout.addWidget(self.listIcons[idx], idx, 0)      #Agrega el ícono al layout, row= IDX, columna=0
+            self.BtnsLayout.addWidget(self.listLabels[idx], idx, 1)     #Agrega la etiqueta al layout, row= IDX, columna= 1 
+            self.BtnsLayout.addWidget(self.listLabelsGlow[idx], idx, 1) #Agrega el efecto de brillo, en la misma posicion que la etiqueta
         
+        print(self.listLabels)
+        print(self.listLabelsGlow)
+
         self.backButton.clicked.connect(self.goBack_clicked)
         
         self.setWindowFlags(PySide2.QtCore.Qt.FramelessWindowHint)

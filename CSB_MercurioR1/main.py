@@ -16,8 +16,10 @@ texto = dict()
 uvOnOff = False
 
 path = __file__.replace("/main.py","")
-dataPath=path + "../DATA"
+dataPath=path + "/../DATA"
 statusFile= path + "/status.dat"
+infoFile= path +"/info.dat"
+globalPath = path + "/.."
 
 def statusTimer():              #StatusTimer, reads statuts file every XXX seconds, and activates or deactivates outputs
     ms100=0

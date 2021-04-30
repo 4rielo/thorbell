@@ -37,9 +37,19 @@ class Ui_form(object):
                 	background-image: url({main.path}/images/fondo.png);
                 	background-repeat: no-repeat;
                 	background-position: bottom center;
-                }}"""
+                }}
+                QPushButton {{
+                        border-style: none;
+                        background-repeat: no-repeat; 
+                        background-position: center center
+                }} 
+                """
         self.BACKGROUND.setStyleSheet(Background_Style)
-
+        """El estilo de QPushButton se aplica al BACKGROUND, y se 
+        hereda por todos los QPushButton que contiene, tanto en estado común, como 
+        en estado "checked". No es necesario volver a especificar el estilo 
+        de borde, la repetibilidad de imagen, o su posicion.
+        """
 #**************************************************** HERE ARE THE BUTTONS
 #Rutina button
         self.rutina_Btn = QPushButton(self.BACKGROUND)
@@ -49,16 +59,10 @@ class Ui_form(object):
         self.rutina_Btn.setFlat(True)
         RUTINA_Button = f"""
                 QPushButton {{
-                        border-style: none; 
                         background-image: url({main.path}/icons/routine_off.png); 
-                        background-repeat: no-repeat; 
-                        background-position: center center
                         }} 
                 QPushButton:checked{{
-                        border-style: none; 
                         background-image: url({main.path}/icons/routine_on.png); 
-                        background-repeat: no-repeat; 
-                        background-position: center center
                 }}"""
         self.rutina_Btn.setStyleSheet(RUTINA_Button)
         self.rutina_Btn.focusPolicy = Qt.NoFocus
@@ -71,16 +75,10 @@ class Ui_form(object):
         self.eco_Btn.setFlat(True)
         ECO_Button = f"""
                 QPushButton {{
-                        border-style: none; 
                         background-image: url({main.path}/icons/eco_off.png); 
-                        background-repeat: no-repeat; 
-                        background-position: center center
                 }} 
                 QPushButton:checked{{
-                        border-style: none; 
                         background-image: url({main.path}/icons/eco_on.png); 
-                        background-repeat: no-repeat; 
-                        background-position: center center
                 }}"""
         self.eco_Btn.setStyleSheet(ECO_Button)
         self.eco_Btn.focusPolicy = Qt.NoFocus
@@ -88,46 +86,47 @@ class Ui_form(object):
 #LED light button
         self.luz_Btn = QPushButton(self.BACKGROUND)
         self.luz_Btn.setObjectName(u"luz_Btn")
-        self.luz_Btn.setGeometry(QRect(69, 640, 100, 100))
+        self.luz_Btn.setGeometry(QRect(68, 583, 100, 100))
         self.luz_Btn.setCheckable(True)
         self.luz_Btn.setFlat(True)
         LUZ_Button = f"""
                 QPushButton {{
-                        border-style: none; 
                         background-image: url({main.path}/icons/led_off.png); 
-                        background-repeat: no-repeat; 
-                        background-position: center center
                 }} 
                 QPushButton:checked{{
-                        border-style: none; 
                         background-image: url({main.path}/icons/led_on.png); 
-                        background-repeat: no-repeat; 
-                        background-position: center center
                 }}"""
         self.luz_Btn.setStyleSheet(LUZ_Button)
         self.luz_Btn.focusPolicy = Qt.NoFocus
         
 #UV light button
         self.uv_Btn = QPushButton(self.BACKGROUND)
-        self.uv_Btn.setObjectName(u"luz_Btn")
-        self.uv_Btn.setGeometry(QRect(312, 640, 100, 100))
+        self.uv_Btn.setObjectName(u"uv_Btn")
+        self.uv_Btn.setGeometry(QRect(312, 583, 100, 100))
         self.uv_Btn.setCheckable(True)
         self.uv_Btn.setFlat(True)
         UV_Button = f"""
                 QPushButton {{
-                        border-style: none; 
                         background-image: url({main.path}/icons/uv_off.png); 
-                        background-repeat: no-repeat; 
-                        background-position: center center
                 }} 
                 QPushButton:checked{{
-                        border-style: none; 
                         background-image: url({main.path}/icons/uv_on.png); 
-                        background-repeat: no-repeat; 
-                        background-position: center center
                 }}"""
         self.uv_Btn.setStyleSheet(UV_Button)
         self.uv_Btn.focusPolicy = Qt.NoFocus
+
+#Puerta button
+        self.door_Btn = QPushButton(self.BACKGROUND)
+        self.door_Btn.setObjectName(u"door_Btn")
+        self.door_Btn.setGeometry(QRect(190, 640, 100, 100))
+        self.door_Btn.setCheckable(True)
+        self.door_Btn.setFlat(True)
+        door_Button = f"""
+                QPushButton {{
+                        background-image: url({main.path}/icons/puerta_abierta.png); 
+                }}"""
+        self.door_Btn.setStyleSheet(door_Button)
+        self.door_Btn.focusPolicy = Qt.NoFocus        
 
 #Config Button
         self.config_Btn = QPushButton(self.BACKGROUND)
@@ -136,10 +135,7 @@ class Ui_form(object):
         self.config_Btn.setGeometry(QRect(362, 23, 38, 38))
         Config_style=f"""
                 QPushButton {{
-                        border-style: none;
                         background-image: url({main.path}/icons/configuracion.png);
-                        background-repeat: no-repeat;
-                        background-position: center center;
                 }}"""
         self.config_Btn.setStyleSheet(Config_style)
         self.config_Btn.focusPolicy = Qt.NoFocus
@@ -151,10 +147,7 @@ class Ui_form(object):
         self.advertencia_Btn.setFlat(True)
         Alerta_style=f"""
                 QPushButton {{
-                        border-style: none;
                         background-image: url({main.path}/icons/alerta.png);
-                        background-repeat: no-repeat;
-                        background-position: center center;
                 }}"""
         self.advertencia_Btn.setStyleSheet(Alerta_style)
         self.advertencia_Btn.focusPolicy = Qt.NoFocus
@@ -166,10 +159,7 @@ class Ui_form(object):
         self.advertencia_Btn.setFlat(True)
         Reloj_style=f"""
                 QPushButton {{
-                        border-style: none;
                         background-image: url({main.path}/icons/reloj.png);
-                        background-repeat: no-repeat;
-                        background-position: center center;
                 }}"""
         self.reloj_Btn.setStyleSheet(Reloj_style)
         self.reloj_Btn.focusPolicy = Qt.NoFocus
@@ -182,10 +172,7 @@ class Ui_form(object):
         self.calendario_Btn.setFlat(True)
         Calendario_style=f"""
                 QPushButton {{
-                       border-style: none;
-                	background-image: url({main.path}/icons/calendario.png);
-                	background-repeat: no-repeat;
-                       background-position: center center;
+                        background-image: url({main.path}/icons/calendario.png);
                 }}"""
         self.calendario_Btn.setStyleSheet(Calendario_style)
         self.calendario_Btn.focusPolicy = Qt.NoFocus
@@ -194,16 +181,13 @@ class Ui_form(object):
 
         self.horizontalSlider = QSlider(self.BACKGROUND)
         self.horizontalSlider.setObjectName(u"horizontalSlider")
-        self.horizontalSlider.setGeometry(QRect(100, 130, 100, 20))
+        self.horizontalSlider.setGeometry(QRect(200, 50, 100, 20))
         self.horizontalSlider.setOrientation(Qt.Horizontal)
 
         self.horizontalSlider_2 = QSlider(self.BACKGROUND)
         self.horizontalSlider_2.setObjectName(u"horizontalSlider_2")
-        self.horizontalSlider_2.setGeometry(QRect(100, 720, 100, 20))
+        self.horizontalSlider_2.setGeometry(QRect(200, 720, 100, 20))
         self.horizontalSlider_2.setOrientation(Qt.Horizontal)
-
-        icon = QIcon()
-        icon.addFile(u"Off.png", QSize(), QIcon.Normal, QIcon.Off)
 
 #************************************************Here are the center round progress bar indicators
         Bar_InitialStyle="""
@@ -215,7 +199,7 @@ class Ui_form(object):
 
         self.TopProgressBar = QFrame(self.BACKGROUND)
         self.TopProgressBar.setObjectName(u"TopProgressBar")
-        self.TopProgressBar.setGeometry(QRect(50, 201, 380, 231))
+        self.TopProgressBar.setGeometry(QRect(50, 175, 380, 231))  #y0 = 201
         self.TopProgressBar.setAutoFillBackground(True)
         TopHalf_style=f"""
                 QFrame{{
@@ -244,7 +228,7 @@ class Ui_form(object):
 
         self.BottomProgressBar = QFrame(self.BACKGROUND)
         self.BottomProgressBar.setObjectName(u"BottomProgressBar")
-        self.BottomProgressBar.setGeometry(QRect(50, 445, 380, 231))
+        self.BottomProgressBar.setGeometry(QRect(50, 420, 380, 231))               #y0 = 445
         BottomHalf_style=f"""
                 QFrame{{
                 	background-image: url({main.path}/images/semi_circulo_inferior.png);
@@ -271,15 +255,15 @@ class Ui_form(object):
 
         self.wind_icon = QFrame(self.BACKGROUND)
         self.wind_icon.setObjectName(u"wind_icon")
-        self.wind_icon.setGeometry(QRect(218, 316, 44, 25))
+        self.wind_icon.setGeometry(QRect(218, 180, 44, 25))
         self.wind_icon.setFrameShape(QFrame.NoFrame)
         self.wind_icon.setFrameShadow(QFrame.Raised)
         Wind_style=f"""
                 QFrame {{
                 	background-image: url({main.path}/images/viento.png);
-                	background-repeat: no-repeat;
                 }}"""
         self.wind_icon.setStyleSheet(Wind_style)
+        self.wind_icon.setVisible(False)
 
         self.wind_icon2 = QFrame(self.BACKGROUND)
         self.wind_icon2.setObjectName(u"wind_icon2")
@@ -287,6 +271,7 @@ class Ui_form(object):
         self.wind_icon2.setFrameShape(QFrame.NoFrame)
         self.wind_icon2.setFrameShadow(QFrame.Raised)        
         self.wind_icon2.setStyleSheet(Wind_style)
+        self.wind_icon2.setVisible(False)
 
 #************************ Here are the labels indicating some text ***************************
         self.hora = QLabel(self.BACKGROUND)
@@ -318,49 +303,53 @@ class Ui_form(object):
 
         self.ModoEco_label = QLabel(self.BACKGROUND)
         self.ModoEco_label.setObjectName(u"ModoEco_label")
-        self.ModoEco_label.setGeometry(QRect(337, 221, 51, 12))
+        self.ModoEco_label.setGeometry(QRect(312, 229, 100, 12))
         self.ModoEco_label.setAttribute(Qt.WA_TranslucentBackground)
         ModoECO_style=f"""
                 QLabel{{
                         font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 10px;
                         color: white;
+                        qproperty-alignment: AlignCenter;
                 }}"""
         self.ModoEco_label.setStyleSheet(ModoECO_style)
 
         self.Rutina_label = QLabel(self.BACKGROUND)
         self.Rutina_label.setObjectName(u"Rutina_label")
-        self.Rutina_label.setGeometry(QRect(101, 221, 34, 12))
+        self.Rutina_label.setGeometry(QRect(68, 229, 100, 12))
         self.Rutina_label.setAttribute(Qt.WA_TranslucentBackground)
         Rutina_style= f"""
                 QLabel{{
                         font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 10px;
                         color: white;
+                        qproperty-alignment: AlignCenter;
                 }}"""
         self.Rutina_label.setStyleSheet(Rutina_style)
 
         self.LED_label = QLabel(self.BACKGROUND)
         self.LED_label.setObjectName(u"LED_label")
-        self.LED_label.setGeometry(QRect(92, 736, 52, 17))
+        self.LED_label.setGeometry(QRect(68, 736, 100, 24))
         self.LED_label.setAttribute(Qt.WA_TranslucentBackground)
         LED_style= f"""
                 QLabel{{
                         font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 10px;
                         color: white;
+                        qproperty-alignment: AlignCenter;
                 }}"""
         self.LED_label.setStyleSheet(LED_style)
 
         self.UV_label = QLabel(self.BACKGROUND)
         self.UV_label.setObjectName(u"UV_label")
-        self.UV_label.setGeometry(QRect(336, 736, 52, 17))
+        self.UV_label.setGeometry(QRect(312, 736, 100, 24))
         self.UV_label.setAttribute(Qt.WA_TranslucentBackground)
         UV_style=f"""
                 QLabel{{
                         font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 10px;
                         color: white;
+                        qproperty-alignment: AlignCenter;
                 }}"""                
         self.UV_label.setStyleSheet(UV_style)
 #**********************************************************************************
