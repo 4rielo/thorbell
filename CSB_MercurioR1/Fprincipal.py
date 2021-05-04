@@ -33,7 +33,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         with open(main.statusFile) as f:
             data=json.load(f)                               #and loads json object
 
-        with open(main.path+"/idioma/" + data.get("Idioma") + ".dat") as f:
+        with open(f"{main.path}/idioma/{data.get('Idioma')}.dat") as f:
             main.texto = json.load(f)
 
         print("IDIOMA: ")
@@ -96,7 +96,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
                 #una vez por segundo, se lee el archivo "status.dat"
                 with open(main.statusFile) as st:
                     status=json.load(st)
-                status.update("LED",main.lightOnOff)
+                status.update( { 'LED' : main.lightOnOff } )
                 with open(main.statusFile, "w") as st:
                     json.dump(status, st)
             

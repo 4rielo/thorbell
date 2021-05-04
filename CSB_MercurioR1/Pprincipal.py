@@ -355,26 +355,31 @@ class Ui_form(object):
 #**********************************************************************************
 
         self.BACKGROUND.raise_()
-        self.rutina_Btn.raise_()
-        self.eco_Btn.raise_()
-        self.luz_Btn.raise_()
-        self.uv_Btn.raise_()
-        self.horizontalSlider.raise_()
+        
         self.TopProgressBar.raise_()
         self.BottomProgressBar.raise_()
-        self.config_Btn.raise_()
-        self.advertencia_Btn.raise_()
-        self.horizontalSlider_2.raise_()
-        self.reloj_Btn.raise_()
-        self.calendario_Btn.raise_()
+        
         self.hora.raise_()
         self.fecha.raise_()
         self.wind_icon2.raise_()
         self.wind_icon.raise_()
+        
         self.ModoEco_label.raise_()
         self.Rutina_label.raise_()
         self.LED_label.raise_()
         self.UV_label.raise_()
+        
+        self.horizontalSlider.raise_()
+        self.horizontalSlider_2.raise_()
+
+        self.rutina_Btn.raise_()
+        self.eco_Btn.raise_()
+        self.luz_Btn.raise_()
+        self.uv_Btn.raise_()
+        self.config_Btn.raise_()
+        self.advertencia_Btn.raise_()
+        self.reloj_Btn.raise_()
+        self.calendario_Btn.raise_()
 
         self.retranslateUi(form)
 

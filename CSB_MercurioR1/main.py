@@ -70,8 +70,8 @@ def main():
         
     
 
-    status = threading.Thread(target=statusTimer, daemon=True)
-    status.start()
+    #status = threading.Thread(target=statusTimer, daemon=True)
+    #status.start()
     
     ###############################################    
     app = QtWidgets.QApplication(sys.argv)
