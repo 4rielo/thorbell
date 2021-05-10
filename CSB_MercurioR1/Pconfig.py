@@ -43,6 +43,13 @@ class Ui_form(object):
                         background-repeat: no-repeat;
                         background-position: center center
                 }}
+                QLabel{{
+                        font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
+                        font-size: 13px;
+                        color: white;
+                        qproperty-alignment: AlignCenter;
+                        background: transparent;
+                }}
                 """
         self.BACKGROUND.setStyleSheet(Background_Style)
         """El estilo de QPushButton se aplica al BACKGROUND, y se 
@@ -55,26 +62,22 @@ class Ui_form(object):
         self.tittle = QLabel(self.BACKGROUND)
         self.tittle.setObjectName(u"tittle")
         self.tittle.setGeometry(QRect(0, 88, 480, 22))
-        self.tittle.setAttribute(Qt.WA_TranslucentBackground)
+        #self.tittle.setAttribute(Qt.WA_TranslucentBackground)
         tittle_style=f"""
                 QLabel{{
                         font-family: url({main.path}/fonts/Montserrat-SemiBold.ttf);
                         font-size: 19px;
-                        color: white;
-                        qproperty-alignment: AlignCenter;
                 }}"""
         self.tittle.setStyleSheet(tittle_style)
 
         self.tittleGlow = QLabel(self.BACKGROUND)
         self.tittleGlow.setObjectName(u"tittleGlow")
         self.tittleGlow.setGeometry(QRect(0, 88, 480, 22))
-        self.tittleGlow.setAttribute(Qt.WA_TranslucentBackground)
+        #self.tittleGlow.setAttribute(Qt.WA_TranslucentBackground)
         tittleGlow_style=f"""
                 QLabel{{
                         font-family: url({main.path}/fonts/Montserrat-SemiBold.ttf);
-                        font-size: 21px;
-                        color: white;
-                        qproperty-alignment: AlignCenter;
+                        font-size: 20px;
                 }}"""
         self.tittleGlow.setStyleSheet(tittleGlow_style)
         
@@ -111,8 +114,11 @@ class Ui_form(object):
         self.usb_Btn.setStyleSheet(usb_BtnStyle)
         self.usb_Btn.setFocusPolicy(Qt.NoFocus)
 
-#Info Button
+        self.usbLabel = QLabel(self.BACKGROUND)
+        self.usbLabel.setFixedSize(76, 16)
+        #self.usbLabel.setAttribute(Qt.WA_TranslucentBackground)
 
+#Info Button
         self.info_Btn = QPushButton(self.BACKGROUND)
         self.info_Btn.setObjectName(u"info_Btn")
         self.info_Btn.setFixedSize(76, 48)
@@ -122,6 +128,23 @@ class Ui_form(object):
                 }}"""
         self.info_Btn.setStyleSheet(info_BtnStyle)
         self.info_Btn.setFocusPolicy(Qt.NoFocus)
+
+        self.infoLabel = QLabel(self.BACKGROUND)
+        self.infoLabel.setFixedSize(76, 16)
+        #self.infoLabel.setAttribute(Qt.WA_TranslucentBackground)
+
+        self.infoLabel_Glow = QLabel(self.BACKGROUND)
+        self.infoLabel_Glow.setFixedSize(76, 16)
+        #self.infoLabel_Glow.setAttribute(Qt.WA_TranslucentBackground)
+        glowSize=f"""
+                QLabel{{
+                        font-size: 14px;
+                }}"""
+        self.infoLabel_Glow.setStyleSheet(glowSize)
+        self.infoGlow=QGraphicsBlurEffect()
+        self.infoGlow.setBlurRadius(10)
+        self.infoLabel_Glow.setGraphicsEffect(self.infoGlow)
+
 
 #Login Button
         self.login_Btn = QPushButton(self.BACKGROUND)
@@ -134,13 +157,21 @@ class Ui_form(object):
         self.login_Btn.setStyleSheet(login_BtnStyle)
         self.login_Btn.setFocusPolicy(Qt.NoFocus)
 
+        self.loginLabel = QLabel(self.BACKGROUND)
+        self.loginLabel.setFixedSize(76, 16)
+        #self.loginLabel.setAttribute(Qt.WA_TranslucentBackground)
+
 #Buttons layout
-        self.BtnsLayout = QHBoxLayout(self.BACKGROUND)
-        self.BtnsLayout.setGeometry(QRect(0, 0, 480, 48))
+        self.BtnsLayout = QGridLayout(self.BACKGROUND)
+        self.BtnsLayout.setGeometry(QRect(0, 376, 480, 86))
         self.BtnsLayout.setAlignment(Qt.AlignCenter)
-        self.BtnsLayout.addWidget(self.usb_Btn)
-        self.BtnsLayout.addWidget(self.info_Btn)
-        self.BtnsLayout.addWidget(self.login_Btn)
+        self.BtnsLayout.addWidget(self.usb_Btn,0,0)
+        self.BtnsLayout.addWidget(self.usbLabel,1,0)
+        self.BtnsLayout.addWidget(self.info_Btn,0,1)
+        self.BtnsLayout.addWidget(self.infoLabel,1,1)
+        self.BtnsLayout.addWidget(self.infoLabel_Glow,1,1)
+        self.BtnsLayout.addWidget(self.login_Btn,0,2)
+        self.BtnsLayout.addWidget(self.loginLabel,1,2)
 
 #back button
         self.return_Btn = QPushButton(self.BACKGROUND)
@@ -159,46 +190,18 @@ class Ui_form(object):
         self.versionLabel = QLabel(self.BACKGROUND)
         self.versionLabel.setObjectName(u"versionLabel")
         self.versionLabel.setGeometry(QRect(10, 10, 200, 16))
-        self.versionLabel.setAttribute(Qt.WA_TranslucentBackground)
-        version_style=f"""
-                QLabel{{
-                        font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
-                        font-size: 13px;
-                        color: white;
-                        qproperty-alignment: AlignCenter;
-                }}"""
-        self.versionLabel.setStyleSheet(version_style)
-
+        #self.versionLabel.setAttribute(Qt.WA_TranslucentBackground)
 
 #update Label        
         self.updateLabel = QLabel(self.BACKGROUND)
         self.updateLabel.setObjectName(u"updateLabel")
         self.updateLabel.setGeometry(QRect(90, 300, 300, 32))
-        self.updateLabel.setAttribute(Qt.WA_TranslucentBackground)
-        update_style=f"""
-                QLabel{{
-                        font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
-                        font-size: 13px;
-                        color: white;
-                        qproperty-alignment: AlignCenter;
-                }}"""
-        self.updateLabel.setStyleSheet(update_style)
+        #self.updateLabel.setAttribute(Qt.WA_TranslucentBackground)
 
 #**********************************************************************************
 
         self.BACKGROUND.raise_()
         self.update_Btn.raise_()
         self.tittle.raise_()
-    
-        self.retranslateUi(form)
 
         QMetaObject.connectSlotsByName(form)
-    # setupUi
-
-    def retranslateUi(self, form):
-        form.setWindowTitle(QCoreApplication.translate("form", u"form", None))
-        self.update_Btn.setText("")        
-        self.updateLabel.setText(QCoreApplication.translate("form", u"Actualización", None))
-
-    # retranslateUi
-

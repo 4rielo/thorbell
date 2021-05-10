@@ -7,9 +7,13 @@
     "LEDTittle" : "Luminaria LED",
     "configTittle" : "Configuración",
     "warningTittle" : "Advertencia" ,
+    "loginTittle" : "Login",
+    "calendarTittle" : "Calendario",
     "puerta_abierta" : "Puerta Abierta",
     "filtro_saturado" : "Filtro Saturado",
     "filtro_roto" : "Filtro Roto",
     "filtro_proximo_a_saturarse" : "Filtro próximo a saturarse",
-    "ventilador_roto" : "Ventilador Roto"
+    "ventilador_roto" : "Ventilador Roto",
+    "calendarInit" : "Inicio",
+    "calendarEnd" : "Apagado"
 }

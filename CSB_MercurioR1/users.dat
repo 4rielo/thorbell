@@ -1,0 +1,12 @@
+{
+    "Arielo": {
+        "name" : "Arielo",
+        "accessLevel" : 10,
+        "password": "*007*"
+    },
+    "": {
+        "name" : "",
+        "accessLevel" : 0,
+        "password" : ""
+    } 
+}

@@ -42,6 +42,12 @@ class Ui_form(object):
                         border-style: none;
                         background-repeat: no-repeat; 
                         background-position: center center
+                }}
+                QLabel {{
+                        font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
+                        color: white;
+                        background: transparent;
+                        qproperty-alignment: AlignCenter;
                 }} 
                 """
         self.BACKGROUND.setStyleSheet(Background_Style)
@@ -222,9 +228,9 @@ class Ui_form(object):
         font = QFont()
         font.setPointSize(25)
         self.label_2.setFont(font)
-        self.label_2.setAttribute(Qt.WA_TranslucentBackground)
-        self.label_2.setStyleSheet(u"color: white;")
-        self.label_2.setAlignment(Qt.AlignCenter)
+        #self.label_2.setAttribute(Qt.WA_TranslucentBackground)
+        #self.label_2.setStyleSheet(u"color: white;")
+        #self.label_2.setAlignment(Qt.AlignCenter)
 
         self.BottomProgressBar = QFrame(self.BACKGROUND)
         self.BottomProgressBar.setObjectName(u"BottomProgressBar")
@@ -248,9 +254,9 @@ class Ui_form(object):
         self.label_3.setObjectName(u"label_3")
         self.label_3.setGeometry(QRect(90, -10, 200, 50))
         self.label_3.setFont(font)
-        self.label_3.setAttribute(Qt.WA_TranslucentBackground)
-        self.label_3.setStyleSheet(u"color: white;")
-        self.label_3.setAlignment(Qt.AlignCenter)
+        #self.label_3.setAttribute(Qt.WA_TranslucentBackground)
+        #self.label_3.setStyleSheet(u"color: white;")
+        #self.label_3.setAlignment(Qt.AlignCenter)
 #**************************************************************************
 
         self.wind_icon = QFrame(self.BACKGROUND)
@@ -277,26 +283,29 @@ class Ui_form(object):
         self.hora = QLabel(self.BACKGROUND)
         self.hora.setObjectName(u"hora")
         self.hora.setGeometry(QRect(118, 34, 60, 16))
-        self.hora.setAttribute(Qt.WA_TranslucentBackground)
         Hora_style=f"""
                 QLabel{{
-                        font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 13px;
-                        color: white;
                 }}"""
         self.hora.setStyleSheet(Hora_style)
 
         self.fecha = QLabel(self.BACKGROUND)
         self.fecha.setObjectName(u"fecha")
         self.fecha.setGeometry(QRect(118, 85, 75, 16))
-        self.fecha.setAttribute(Qt.WA_TranslucentBackground)
         Fecha_style=f"""
                 QLabel{{
-                        font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 13px;
-                        color: white;
                 }}"""
         self.fecha.setStyleSheet(Fecha_style)
+
+        self.user = QLabel(self.BACKGROUND)
+        self.user.setGeometry(QRect(400, 785, 75, 15))
+        user_style=f"""
+                QLabel{{
+                        font-size: 13px;
+                        qproperty-alignment: AlignRight;
+                }}"""
+        self.user.setStyleSheet(user_style)
 
 #************************ Here are the labels indicating some text ***************************
 
@@ -304,52 +313,36 @@ class Ui_form(object):
         self.ModoEco_label = QLabel(self.BACKGROUND)
         self.ModoEco_label.setObjectName(u"ModoEco_label")
         self.ModoEco_label.setGeometry(QRect(312, 229, 100, 12))
-        self.ModoEco_label.setAttribute(Qt.WA_TranslucentBackground)
         ModoECO_style=f"""
                 QLabel{{
-                        font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 10px;
-                        color: white;
-                        qproperty-alignment: AlignCenter;
                 }}"""
         self.ModoEco_label.setStyleSheet(ModoECO_style)
 
         self.Rutina_label = QLabel(self.BACKGROUND)
         self.Rutina_label.setObjectName(u"Rutina_label")
         self.Rutina_label.setGeometry(QRect(68, 229, 100, 12))
-        self.Rutina_label.setAttribute(Qt.WA_TranslucentBackground)
         Rutina_style= f"""
                 QLabel{{
-                        font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 10px;
-                        color: white;
-                        qproperty-alignment: AlignCenter;
                 }}"""
         self.Rutina_label.setStyleSheet(Rutina_style)
 
         self.LED_label = QLabel(self.BACKGROUND)
         self.LED_label.setObjectName(u"LED_label")
         self.LED_label.setGeometry(QRect(68, 736, 100, 24))
-        self.LED_label.setAttribute(Qt.WA_TranslucentBackground)
         LED_style= f"""
                 QLabel{{
-                        font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 10px;
-                        color: white;
-                        qproperty-alignment: AlignCenter;
                 }}"""
         self.LED_label.setStyleSheet(LED_style)
 
         self.UV_label = QLabel(self.BACKGROUND)
         self.UV_label.setObjectName(u"UV_label")
         self.UV_label.setGeometry(QRect(312, 736, 100, 24))
-        self.UV_label.setAttribute(Qt.WA_TranslucentBackground)
         UV_style=f"""
                 QLabel{{
-                        font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 10px;
-                        color: white;
-                        qproperty-alignment: AlignCenter;
                 }}"""                
         self.UV_label.setStyleSheet(UV_style)
 #**********************************************************************************
@@ -381,30 +374,6 @@ class Ui_form(object):
         self.reloj_Btn.raise_()
         self.calendario_Btn.raise_()
 
-        self.retranslateUi(form)
 
         QMetaObject.connectSlotsByName(form)
     # setupUi
-
-    def retranslateUi(self, form):
-        form.setWindowTitle(QCoreApplication.translate("form", u"form", None))
-        self.rutina_Btn.setText("")
-        self.eco_Btn.setText("")
-        self.luz_Btn.setText("")
-        self.label_2.setText(QCoreApplication.translate("form", u"50 %", None))
-        self.label_3.setText(QCoreApplication.translate("form", u"50 %", None))
-        self.config_Btn.setText("")
-        self.advertencia_Btn.setText("")
-        self.reloj_Btn.setText("")
-        self.calendario_Btn.setText("")
-        self.hora.setText(QCoreApplication.translate("form", u"TextLabel", None))
-        self.fecha.setText(QCoreApplication.translate("form", u"TextLabel", None))
-        self.ModoEco_label.setText(QCoreApplication.translate("form", u"Modo Eco", None))
-        self.Rutina_label.setText(QCoreApplication.translate("form", u"Rutina", None))
-        self.LED_label.setText(QCoreApplication.translate("form", u"Luminaria\n"
-"LED", None))
-        self.UV_label.setText(QCoreApplication.translate("form", u"Luminaria\n"
-"UV", None))
-        self.uv_Btn.setText("")
-    # retranslateUi
-

@@ -18,6 +18,7 @@ uvOnOff = False
 path = __file__.replace("/main.py","")
 dataPath=path + "/../DATA"
 statusFile= path + "/status.dat"
+usersFile = path + "/users.dat"
 infoFile= path +"/info.dat"
 globalPath = path + "/.."
 
@@ -53,10 +54,14 @@ def main():
             "UVLEDPWM" : 100,
             "UVLEDTIMER" : 0,
             "PWR" : False,
-            "WARNINGS" : [
-                "puerta_abierta",
-                "filtro_saturado"
-                ]
+            "screenUser" : "",
+            "webUsers" : {
+                "userA" : {
+                    "ip" : "",
+                    "user": "",
+                },
+            },
+            "WARNINGS" : []
         }
         with open(statusFile, "w") as f:                   #Y lo guarda en statusFile (crea el archivo)
             json.dump(data,f)

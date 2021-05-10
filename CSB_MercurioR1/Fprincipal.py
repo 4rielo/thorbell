@@ -15,6 +15,7 @@ from Pprincipal import Ui_form
 from Fconfig import ConfigWindow            #Config window 
 from Fluminaria_led import LEDWindow        #Luminaria LED window (para dimerizar la luz)
 from Fadvertencias import AdvertenciaWindow
+from Fcalendar import CalendarWindow
 
 import main         #to read the lightOnOff status
 import json
@@ -36,8 +37,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         with open(f"{main.path}/idioma/{data.get('Idioma')}.dat") as f:
             main.texto = json.load(f)
 
-        print("IDIOMA: ")
-        print(main.texto)
+        #print("IDIOMA: ")
+        #print(main.texto)
         main.lightOnOff = data.get("LED")
         main.lightPercent = data.get("LEDPWM")
         #Create all sub-windows, to call on them when different buttons are clicked.
@@ -46,6 +47,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         self.horizontalSlider_2.valueChanged.connect(self.Dial2)
 
         self.config_Btn.clicked.connect(self.Config)
+        self.calendario_Btn.clicked.connect(self.Calendar)
 
         self.luz_Btn.setAutoRepeat(True)
         self.luz_Btn.setAutoRepeatDelay(3000)
@@ -93,12 +95,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
             #revisa el estado de la luz led, y setea el botón de luz de acuerdo
             if(self.luz_Btn.isChecked() != main.lightOnOff):
                 self.luz_Btn.toggle()
-                #una vez por segundo, se lee el archivo "status.dat"
-                with open(main.statusFile) as st:
-                    status=json.load(st)
-                status.update( { 'LED' : main.lightOnOff } )
+                self.status.update( { 'LED' : main.lightOnOff } )
                 with open(main.statusFile, "w") as st:
-                    json.dump(status, st)
+                    json.dump(self.status, st)
             
             self.ms100 += 1
             if(self.ms100>10):
@@ -108,13 +107,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
                 today=date.today().strftime("%d/%m/%Y")
                 self.fecha.setText(today)
                 #self.luz_Btn.setChecked(main.lightOnOff)
-
-                
             
                 #La variable status contiene el estado global del equipo.
                 #TODO: actualizar el estado de las salidas en base a lo leído
                 #del archivo "status.dat"
-            
+                with open(main.statusFile) as st:
+                    self.status=json.load(st)
+
+                with open(main.usersFile) as us:
+                    self.users=json.load(us)
+
+                self.currentUser=self.users.get(self.status.get("screenUser"))
+                #print(self.currentUser)
+                self.user.setText(self.currentUser['name'])
             time.sleep(0.1)
 
 #**********************************************************************************************
@@ -196,9 +201,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         self.configWindow.show()
 
 #**************************************************************************************************************
+#Calendar window
+    def Calendar(self):
+        self.calendarWindow = CalendarWindow()
+        self.calendarWindow.show()
 
-
-
+#**************************************************************************************************************
 
 #OLD test stuff
     def Upload(self):
