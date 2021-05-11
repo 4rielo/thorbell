@@ -32,15 +32,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         self.setWindowTitle("THORBELL")
 
         with open(main.statusFile) as f:
-            data=json.load(f)                               #and loads json object
+            status=json.load(f)                               #and loads json object
 
-        with open(f"{main.path}/idioma/{data.get('Idioma')}.dat") as f:
+        with open(f"{main.path}/idioma/{status.get('Idioma')}.dat") as f:
             main.texto = json.load(f)
 
         #print("IDIOMA: ")
         #print(main.texto)
-        main.lightOnOff = data.get("LED")
-        main.lightPercent = data.get("LEDPWM")
+        main.lightOnOff = status.get("LED")
+        main.lightPercent = status.get("LEDPWM")
         #Create all sub-windows, to call on them when different buttons are clicked.
 
         self.horizontalSlider.valueChanged.connect(self.Dial)
@@ -72,6 +72,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         today=date.today().strftime("%d/%m/%Y")
         self.fecha.setText(today)
         self.firstKey=False
+
+        """status.update({"UV_Calendar_init": format(datetime.now(),"%Y/%m/%d %H:%M")})
+        status.update({"UV_Calendar_end": format(datetime.now(),"%Y/%m/%d %H:%M")})
+        with open(main.statusFile,"w") as fp:
+            json.dump(status, fp)"""
 
         self.LED_label.setText(main.texto.get("luminariaLED"))
         self.UV_label.setText(main.texto.get("luminariaUV"))

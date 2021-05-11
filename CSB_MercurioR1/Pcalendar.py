@@ -99,8 +99,46 @@ class Ui_form(object):
         self.Effect=QGraphicsBlurEffect()
         self.Effect.setBlurRadius(10)
         self.tittleGlow.setGraphicsEffect(self.Effect)
-
 #**************************************************** 
+
+#**************************************************** ON OFF
+        ONOFF_btnStyle = f"""
+                QPushButton {{
+                        font-family: url({main.path}/fonts/Montserrat-SemiBold.ttf);
+                        background-image: url({main.path}/icons/calendar_circle.png);
+                        font-size: 28px;
+                        color: #34E0D6;
+                }}
+                QPushButton:checked {{
+                        background-image: url({main.path}/icons/calendar_circlePressed.png);
+                        color: #001C42;
+                }}
+                """
+        
+        self.onBtn = QPushButton(self.BACKGROUND)
+        self.onBtn.setGeometry(329, 213, 100, 100)
+        self.onBtn.setStyleSheet(ONOFF_btnStyle)
+        self.onBtn.setFocusPolicy(Qt.NoFocus)
+        self.onBtn.setFlat(True)
+        self.onBtn.setCheckable(True)
+        self.onBtn.setText("On")
+
+        self.offBtn = QPushButton(self.BACKGROUND)
+        self.offBtn.setGeometry(50, 213, 100, 100)
+        self.offBtn.setStyleSheet(ONOFF_btnStyle)
+        self.offBtn.setFocusPolicy(Qt.NoFocus)
+        self.offBtn.setFlat(True)
+        self.offBtn.setCheckable(True)
+        self.offBtn.setText("Off")
+
+        self.uvBtn = QPushButton(self.BACKGROUND)
+        self.uvBtn.setGeometry(190, 213, 100, 100)
+        self.uvBtn.setStyleSheet(ONOFF_btnStyle)
+        self.uvBtn.setFocusPolicy(Qt.NoFocus)
+        self.uvBtn.setFlat(True)
+        self.uvBtn.setText("UV")
+
+#**************************************************** INICIO
         self.inicioLbl = QLabel(self.BACKGROUND)
         self.inicioLbl.setGeometry(92, 379, 388, 17)
         inicioLbl_style=f"""
@@ -114,10 +152,63 @@ class Ui_form(object):
         self.initDateEdit = QDateEdit(self.BACKGROUND)
         self.initDateEdit.setGeometry(118, 407, 139, 24)
         self.initDateEdit.setCalendarPopup(True)
+        self.initDateEdit.setDisplayFormat("dd/MM/yyyy")
+        self.initDateEdit.setFocusPolicy(Qt.NoFocus)
 
         self.initTimeEdit = QTimeEdit(self.BACKGROUND)
         self.initTimeEdit.setGeometry(118, 460, 139, 24)
-        self.initTimeEdit.setCalendarPopup(True)
+        #self.initTimeEdit.setCalendarPopup(True)
+        self.initTimeEdit.setDisplayFormat("hh:mm")
+        self.initTimeEdit.setFocusPolicy(Qt.NoFocus)
+        self.initTimeEdit.setButtonSymbols(QAbstractSpinBox.NoButtons)
+
+#plus and minus buttons
+
+        self.initDatePlusBtn = QPushButton(self.BACKGROUND)
+        self.initDatePlusBtn.setGeometry(263, 404, 30, 30)    
+        self.initDatePlusBtn.setCheckable(True)
+        self.initDatePlusBtn.setFlat(True)    
+        initDatePlus_style=f"""
+                QPushButton {{
+                        background-image: url({main.path}/icons/calendar_plus.png);
+                }}"""
+        self.initDatePlusBtn.setStyleSheet(initDatePlus_style)
+        self.initDatePlusBtn.setFocusPolicy(Qt.NoFocus)
+
+        self.initDateMinusBtn = QPushButton(self.BACKGROUND)
+        self.initDateMinusBtn.setGeometry(90, 404, 30, 30)    
+        self.initDateMinusBtn.setCheckable(True)
+        self.initDateMinusBtn.setFlat(True)    
+        initDateMinus_style=f"""
+                QPushButton {{
+                        background-image: url({main.path}/icons/calendar_minus.png);
+                }}"""
+        self.initDateMinusBtn.setStyleSheet(initDateMinus_style)
+        self.initDateMinusBtn.setFocusPolicy(Qt.NoFocus)
+
+#INIT TIME plus and minus buttons 
+
+        self.initTimePlusBtn = QPushButton(self.BACKGROUND)
+        self.initTimePlusBtn.setGeometry(263, 457, 30, 30)    
+        self.initTimePlusBtn.setCheckable(True)
+        self.initTimePlusBtn.setFlat(True)    
+        initTimePlusBtn_style=f"""
+                QPushButton {{
+                        background-image: url({main.path}/icons/calendar_plus.png);
+                }}"""
+        self.initTimePlusBtn.setStyleSheet(initTimePlusBtn_style)
+        self.initTimePlusBtn.setFocusPolicy(Qt.NoFocus)
+
+        self.initTimeMinusBtn = QPushButton(self.BACKGROUND)
+        self.initTimeMinusBtn.setGeometry(90, 457, 30, 30)    
+        self.initTimeMinusBtn.setCheckable(True)
+        self.initTimeMinusBtn.setFlat(True)    
+        initTimeMinusBtn_style=f"""
+                QPushButton {{
+                        background-image: url({main.path}/icons/calendar_minus.png);
+                }}"""
+        self.initTimeMinusBtn.setStyleSheet(initTimeMinusBtn_style)
+        self.initTimeMinusBtn.setFocusPolicy(Qt.NoFocus)
 
 #**************************************************** 
 
@@ -135,10 +226,63 @@ class Ui_form(object):
         self.endDateEdit = QDateEdit(self.BACKGROUND)
         self.endDateEdit.setGeometry(118, 567, 139, 24)
         self.endDateEdit.setCalendarPopup(True)
+        self.endDateEdit.setDisplayFormat("dd/MM/yyyy")
+        self.endDateEdit.setFocusPolicy(Qt.NoFocus)
 
         self.endTimeEdit = QTimeEdit(self.BACKGROUND)
         self.endTimeEdit.setGeometry(118, 620, 139, 24)
-        self.endTimeEdit.setCalendarPopup(True)
+        #self.endTimeEdit.setCalendarPopup(True)
+        self.endTimeEdit.setDisplayFormat("hh:mm")
+        self.endTimeEdit.setFocusPolicy(Qt.NoFocus)
+        self.endTimeEdit.setButtonSymbols(QAbstractSpinBox.NoButtons)
+
+#plus and minus buttons
+
+        self.endDatePlusBtn = QPushButton(self.BACKGROUND)
+        self.endDatePlusBtn.setGeometry(263, 564, 30, 30)    
+        self.endDatePlusBtn.setCheckable(True)
+        self.endDatePlusBtn.setFlat(True)    
+        endDatePlusBtn_style=f"""
+                QPushButton {{
+                        background-image: url({main.path}/icons/calendar_plus.png);
+                }}"""
+        self.endDatePlusBtn.setStyleSheet(endDatePlusBtn_style)
+        self.endDatePlusBtn.setFocusPolicy(Qt.NoFocus)
+
+        self.endDateMinusBtn = QPushButton(self.BACKGROUND)
+        self.endDateMinusBtn.setGeometry(90, 564, 30, 30)    
+        self.endDateMinusBtn.setCheckable(True)
+        self.endDateMinusBtn.setFlat(True)    
+        endDateMinusBtn_style=f"""
+                QPushButton {{
+                        background-image: url({main.path}/icons/calendar_minus.png);
+                }}"""
+        self.endDateMinusBtn.setStyleSheet(endDateMinusBtn_style)
+        self.endDateMinusBtn.setFocusPolicy(Qt.NoFocus)
+
+#END TIME plus and minus buttons 
+
+        self.endTimePlusBtn = QPushButton(self.BACKGROUND)
+        self.endTimePlusBtn.setGeometry(263, 618, 30, 30)    
+        self.endTimePlusBtn.setCheckable(True)
+        self.endTimePlusBtn.setFlat(True)    
+        endTimePlusBtn_style=f"""
+                QPushButton {{
+                        background-image: url({main.path}/icons/calendar_plus.png);
+                }}"""
+        self.endTimePlusBtn.setStyleSheet(endTimePlusBtn_style)
+        self.endTimePlusBtn.focusPolicy = Qt.NoFocus
+
+        self.endTimeMinusBtn = QPushButton(self.BACKGROUND)
+        self.endTimeMinusBtn.setGeometry(90, 618, 30, 30)    
+        self.endTimeMinusBtn.setCheckable(True)
+        self.endTimeMinusBtn.setFlat(True)    
+        endTimeMinusBtn_style=f"""
+                QPushButton {{
+                        background-image: url({main.path}/icons/calendar_minus.png);
+                }}"""
+        self.endTimeMinusBtn.setStyleSheet(endTimeMinusBtn_style)
+        self.endTimeMinusBtn.focusPolicy = Qt.NoFocus
 
 #**************************************************** 
 
@@ -158,10 +302,10 @@ class Ui_form(object):
 
 #**********************************************************************************
 
-        self.BACKGROUND.raise_()
+        #self.BACKGROUND.raise_()
 
 
-        self.return_Btn.raise_()
+        #self.return_Btn.raise_()
 
         QMetaObject.connectSlotsByName(form)
     # setupUi

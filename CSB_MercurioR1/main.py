@@ -8,6 +8,7 @@ import threading
 import time
 import json
 import Fprincipal
+from datetime import datetime, date
 
 lightOnOff = False
 lightPercent=100
@@ -53,6 +54,9 @@ def main():
             "UVLED" : False,
             "UVLEDPWM" : 100,
             "UVLEDTIMER" : 0,
+            "UV_Calendar": False,
+            "UV_Calendar_init": format(datetime.now(),"%Y/%m/%d %H:%M"),
+            "UV_Calendar_end": format(datetime.now(),"%Y/%m/%d %H:%M"),
             "PWR" : False,
             "screenUser" : "",
             "webUsers" : {
