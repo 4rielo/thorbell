@@ -14,6 +14,7 @@ from datetime import datetime, date
 from Pprincipal import Ui_form
 from Fconfig import ConfigWindow            #Config window 
 from Fluminaria_led import LEDWindow        #Luminaria LED window (para dimerizar la luz)
+from Fluminaria_ledUV import UVWindow       #Luminaria UV window (para configurar un timer de apagado)
 from Fadvertencias import AdvertenciaWindow
 from Fcalendar import CalendarWindow
 
@@ -41,6 +42,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         #print(main.texto)
         main.lightOnOff = status.get("LED")
         main.lightPercent = status.get("LEDPWM")
+        main.UV_OnOff = status.get("UV_Light")
+        main.UV_Timer=status.get("UV_Timer")
+        main.UV_TimerEnable= status.get("UV_TimerEnable")
+
         #Create all sub-windows, to call on them when different buttons are clicked.
 
         self.horizontalSlider.valueChanged.connect(self.Dial)
@@ -172,21 +177,21 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
 #Antes de invocar la ventana de configuración de LED UV, setea el botón de OnOff, y el tiempo
 #según lo almacenado en "main.uvTimer"
     def UVLED_clicked(self):
-        if(not self.luz_Btn.isDown()):
-            main.uvOnOff=self.uv_Btn.isChecked()
+        if(not self.uv_Btn.isDown()):
+            main.UV_OnOff=self.uv_Btn.isChecked()
             #Opens status file
             with open(main.statusFile) as f:
                 data=json.load(f)                               #and loads json object
-            data.update( { "UVLED": main.uvOnOff } )           #updates UVLED status
+            data.update( { "UV_Light": main.UV_OnOff } )           #updates UVLED status
             with open(main.statusFile, "w") as f:               #And saves it to status File
                 json.dump(data,f)                               #as an JSON object
         else:
-            if(main.uvOnOff != self.uv_Btn.isChecked()):
+            if(main.UV_OnOff != self.uv_Btn.isChecked()):
                 self.uv_Btn.toggle()
 
-            #TODO Set UV button in config window self.ledWindow.OnOffButton.setChecked(main.lightOnOff)          
-            #TODO set UV timer in config window self.ledWindow.dialChange(main.lightPercent)
-            #TODO Show UV config window self.ledWindow.show()
+            print("UV_Config window open")
+            self.uvWindow = UVWindow()            
+            self.uvWindow.show()
 #**************************************************************************************************************
 
 
@@ -228,7 +233,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         slider= self.horizontalSlider.value()
         self.label_2.setText(str(slider) + " %")
         stopValue= (slider)/100
-    #       print("Slider value= " + str(stopValue))
+        
         gradient = stopValue-0.05
         if(gradient < 0):
             gradient = 0
@@ -244,21 +249,24 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
             color=(255,197,0,145)
         else:
             color=(51, 255, 151, 145)
-        style=u"QFrame{\n"
-        style += "	\n"
-        style += "	border-radius: 138px;\n"
-        style += "   background-image: url();\n"
-        style += "	background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:" 
-        style += str(stopValue) + " rgba(255, 255, 255, 0), stop:" + str(gradient) + " rgba" + str(color) + ");\n"
-        style += "}"
-    #        print(style)
+        style=f"""
+            QFrame{{
+                    border-radius: 138px;
+                    background-image: url();
+                    background-color: qradialgradient(
+                        spread:pad, 
+                        cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, 
+                        stop:{stopValue} rgba(255, 255, 255, 0), 
+                        stop:{gradient} rgba{color}
+                        );
+            }}"""
         self.Bar.setStyleSheet(style)
 
     def Dial2(self):
         slider= self.horizontalSlider_2.value()
         self.label_3.setText(str(slider) + " %")
         stopValue= (slider)/100
-#        print("Slider value= " + str(stopValue))
+
         gradient = stopValue-0.05
         if(gradient < 0):
             gradient = 0
@@ -275,12 +283,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         else:
             color=(51, 255, 151, 145)
 
-        style=u"QFrame{\n"
-        style += "	\n"
-        style += "	border-radius: 138px;\n"
-        style += "   background-image: url();\n"
-        style += "	background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:" 
-        style += str(stopValue) + " rgba(255, 255, 255, 0), stop:" + str(gradient) + " rgba" + str(color) + ");\n"
-        style += "}"
+        style=f"""
+            QFrame{{
+                    border-radius: 138px;
+                    background-image: url();
+                    background-color: qradialgradient(
+                        spread:pad, 
+                        cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, 
+                        stop:{stopValue} rgba(255, 255, 255, 0), 
+                        stop:{gradient} rgba{color}
+                        );
+            }}"""
         self.Bar_2.setStyleSheet(style)
 

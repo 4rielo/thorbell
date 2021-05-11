@@ -36,7 +36,7 @@ class Ui_form(object):
                 QFrame{{
                 	background-image: url({main.path}/images/fondo.png);
                 	background-repeat: no-repeat;
-                	background-position: bottom center;
+                	background-position: center center;
                 }}
                 QPushButton {{
                         border-style: none;
@@ -210,18 +210,18 @@ class Ui_form(object):
         TopHalf_style=f"""
                 QFrame{{
                 	background-image: url({main.path}/images/semi_circulo_superior.png);
-                	background-repeat: no-repeat;
-                	background-position: bottom center;
                 }}"""
         self.TopProgressBar.setStyleSheet(TopHalf_style)
         self.TopProgressBar.setFrameShape(QFrame.NoFrame)
         self.TopProgressBar.setFrameShadow(QFrame.Plain)
+
         self.Bar = QFrame(self.TopProgressBar)
         self.Bar.setObjectName(u"Bar")
         self.Bar.setGeometry(QRect(52, 93, 276, 276))
         self.Bar.setStyleSheet(Bar_InitialStyle)
         self.Bar.setFrameShape(QFrame.NoFrame)
         self.Bar.setFrameShadow(QFrame.Raised)        
+
         self.label_2 = QLabel(self.TopProgressBar)
         self.label_2.setObjectName(u"label_2")
         self.label_2.setGeometry(QRect(90, 190, 200, 50))

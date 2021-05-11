@@ -12,9 +12,10 @@ from datetime import datetime, date
 
 lightOnOff = False
 lightPercent=100
+UV_OnOff = False
+UV_Timer = 0
+UV_TimerEnable = False
 texto = dict()
-
-uvOnOff = False
 
 path = __file__.replace("/main.py","")
 dataPath=path + "/../DATA"
@@ -51,9 +52,10 @@ def main():
             "Idioma" : "es-AR",
             "LED" : False,
             "LEDPWM" : 100,
-            "UVLED" : False,
-            "UVLEDPWM" : 100,
-            "UVLEDTIMER" : 0,
+            "UV_Light" : False,
+            "UV_PWM" : 100,
+            "UV_Timer" : 0,
+            "UV_TimerEnable": False,
             "UV_Calendar": False,
             "UV_Calendar_init": format(datetime.now(),"%Y/%m/%d %H:%M"),
             "UV_Calendar_end": format(datetime.now(),"%Y/%m/%d %H:%M"),
