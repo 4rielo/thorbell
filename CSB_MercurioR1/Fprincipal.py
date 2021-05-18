@@ -33,18 +33,18 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         self.setWindowTitle("THORBELL")
 
         with open(main.statusFile) as f:
-            status=json.load(f)                               #and loads json object
+            self.status=json.load(f)                               #and loads json object
 
-        with open(f"{main.path}/idioma/{status.get('Idioma')}.dat") as f:
+        with open(f"{main.path}/idioma/{self.status.get('Idioma')}.dat") as f:
             main.texto = json.load(f)
 
         #print("IDIOMA: ")
         #print(main.texto)
-        main.lightOnOff = status.get("LED")
-        main.lightPercent = status.get("LEDPWM")
-        main.UV_OnOff = status.get("UV_Light")
-        main.UV_Timer=status.get("UV_Timer")
-        main.UV_TimerEnable= status.get("UV_TimerEnable")
+        main.lightOnOff = self.status.get("LED")
+        main.lightPercent = self.status.get("LEDPWM")
+        main.UV_OnOff = self.status.get("UV_Light")
+        main.UV_Timer=self.status.get("UV_Timer")
+        main.UV_TimerEnable= self.status.get("UV_TimerEnable")
 
         #Create all sub-windows, to call on them when different buttons are clicked.
 
@@ -110,6 +110,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
                     json.dump(self.status, st)
             
             self.ms100 += 1
+
             if(self.ms100>10):
                 self.ms100=0
                 currentTime=datetime.now().strftime("%H:%M:%S")
@@ -126,6 +127,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
 
                 with open(main.usersFile) as us:
                     self.users=json.load(us)
+
+                main.lightOnOff = self.status['LED']
+                print(self.status['LED'])
 
                 self.currentUser=self.users.get(self.status.get("screenUser"))
                 #print(self.currentUser)

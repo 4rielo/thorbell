@@ -19,8 +19,11 @@ class LoginWindow(QtWidgets.QMainWindow, Ui_form):
         self.tittleGlow.setText(main.texto.get("loginTittle"))
         self.tittle.setText(main.texto.get("loginTittle"))
 
+        with open(main.statusFile) as fp:
+            self.status=json.load(fp)
         with open(main.usersFile) as us:
             self.users=json.load(us)
+
         self.currentUser=self.users.get(self.status.get("screenUser"))
 
         self.currentPass=""
@@ -31,8 +34,7 @@ class LoginWindow(QtWidgets.QMainWindow, Ui_form):
             self.PassLabel.setEchoMode(PySide2.QtWidgets.QLineEdit.Password)
 
         self.return_Btn.clicked.connect(self.goBack)
-        self.setWindowFlags(PySide2.QtCore.Qt.FramelessWindowHint) 
-        
+        self.setWindowFlags(PySide2.QtCore.Qt.FramelessWindowHint)
 
         for number in range(10):
             self.key[number].pressed.connect(self.keyPressed)
@@ -64,7 +66,7 @@ class LoginWindow(QtWidgets.QMainWindow, Ui_form):
                 number=x
         self.currentPass += str(number)
         #self.currentPass += number
-        print(number)
+        #print(number)
         self.PassLabel.setText(self.currentPass)
 
     def asterix(self):
