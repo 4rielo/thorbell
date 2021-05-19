@@ -92,7 +92,7 @@ class Ui_form(object):
 #LED light button
         self.luz_Btn = QPushButton(self.BACKGROUND)
         self.luz_Btn.setObjectName(u"luz_Btn")
-        self.luz_Btn.setGeometry(QRect(68, 583, 100, 100))
+        self.luz_Btn.setGeometry(QRect(68, 640, 100, 100))
         self.luz_Btn.setCheckable(True)
         self.luz_Btn.setFlat(True)
         LUZ_Button = f"""
@@ -108,7 +108,7 @@ class Ui_form(object):
 #UV light button
         self.uv_Btn = QPushButton(self.BACKGROUND)
         self.uv_Btn.setObjectName(u"uv_Btn")
-        self.uv_Btn.setGeometry(QRect(312, 583, 100, 100))
+        self.uv_Btn.setGeometry(QRect(312, 640, 100, 100))
         self.uv_Btn.setCheckable(True)
         self.uv_Btn.setFlat(True)
         UV_Button = f"""
@@ -120,19 +120,6 @@ class Ui_form(object):
                 }}"""
         self.uv_Btn.setStyleSheet(UV_Button)
         self.uv_Btn.focusPolicy = Qt.NoFocus
-
-#Puerta button
-        self.door_Btn = QPushButton(self.BACKGROUND)
-        self.door_Btn.setObjectName(u"door_Btn")
-        self.door_Btn.setGeometry(QRect(190, 640, 100, 100))
-        self.door_Btn.setCheckable(True)
-        self.door_Btn.setFlat(True)
-        door_Button = f"""
-                QPushButton {{
-                        background-image: url({main.path}/icons/puerta_abierta.png); 
-                }}"""
-        self.door_Btn.setStyleSheet(door_Button)
-        self.door_Btn.focusPolicy = Qt.NoFocus        
 
 #Config Button
         self.config_Btn = QPushButton(self.BACKGROUND)
@@ -196,16 +183,16 @@ class Ui_form(object):
         self.horizontalSlider_2.setOrientation(Qt.Horizontal)
 
 #************************************************Here are the center round progress bar indicators
-        Bar_InitialStyle="""
-                QFrame{
-                	background-image: url();
+        Bar_InitialStyle=f"""
+                QFrame{{
+                        background-image: url();
                 	border-radius: 138px;
                 	background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(255, 0, 0, 145), stop:0.05 rgba(255, 255, 255, 0));
-                }"""
+                }}"""
 
         self.TopProgressBar = QFrame(self.BACKGROUND)
         self.TopProgressBar.setObjectName(u"TopProgressBar")
-        self.TopProgressBar.setGeometry(QRect(50, 175, 380, 231))  #y0 = 201
+        self.TopProgressBar.setGeometry(QRect(0, 200, 480, 231))  #y0 = 201
         self.TopProgressBar.setAutoFillBackground(True)
         TopHalf_style=f"""
                 QFrame{{
@@ -217,46 +204,43 @@ class Ui_form(object):
 
         self.Bar = QFrame(self.TopProgressBar)
         self.Bar.setObjectName(u"Bar")
-        self.Bar.setGeometry(QRect(52, 93, 276, 276))
+        self.Bar.setGeometry(QRect((480-276)/2, (231-276/2), 276, 276))
         self.Bar.setStyleSheet(Bar_InitialStyle)
         self.Bar.setFrameShape(QFrame.NoFrame)
         self.Bar.setFrameShadow(QFrame.Raised)        
-
         self.label_2 = QLabel(self.TopProgressBar)
-        self.label_2.setObjectName(u"label_2")
-        self.label_2.setGeometry(QRect(90, 190, 200, 50))
-        font = QFont()
-        font.setPointSize(25)
-        self.label_2.setFont(font)
-        #self.label_2.setAttribute(Qt.WA_TranslucentBackground)
-        #self.label_2.setStyleSheet(u"color: white;")
-        #self.label_2.setAlignment(Qt.AlignCenter)
+        self.label_2.setGeometry(QRect(0, 190, 480, 50))
+        label2_style=f"""
+                QLabel{{
+                        background-image: url(); 
+                        font-size: 25px;
+                }}"""
+        self.label_2.setStyleSheet(label2_style)
 
         self.BottomProgressBar = QFrame(self.BACKGROUND)
         self.BottomProgressBar.setObjectName(u"BottomProgressBar")
-        self.BottomProgressBar.setGeometry(QRect(50, 420, 380, 231))               #y0 = 445
+        self.BottomProgressBar.setGeometry(QRect(0, 445, 480, 231))               #y0 = 445
         BottomHalf_style=f"""
                 QFrame{{
                 	background-image: url({main.path}/images/semi_circulo_inferior.png);
-                	background-repeat: no-repeat;
-                	background-position: bottom center;
                 }}"""
         self.BottomProgressBar.setStyleSheet(BottomHalf_style)
         self.BottomProgressBar.setFrameShape(QFrame.NoFrame)
         self.BottomProgressBar.setFrameShadow(QFrame.Raised)
         self.Bar_2 = QFrame(self.BottomProgressBar)
         self.Bar_2.setObjectName(u"Bar_2")
-        self.Bar_2.setGeometry(QRect(52, -138, 271, 276))
+        self.Bar_2.setGeometry(QRect((480-276)/2, -(276/2), 276, 276))
         self.Bar_2.setStyleSheet(Bar_InitialStyle)
         self.Bar_2.setFrameShape(QFrame.NoFrame)
         self.Bar_2.setFrameShadow(QFrame.Raised)
         self.label_3 = QLabel(self.BottomProgressBar)
-        self.label_3.setObjectName(u"label_3")
-        self.label_3.setGeometry(QRect(90, -10, 200, 50))
-        self.label_3.setFont(font)
-        #self.label_3.setAttribute(Qt.WA_TranslucentBackground)
-        #self.label_3.setStyleSheet(u"color: white;")
-        #self.label_3.setAlignment(Qt.AlignCenter)
+        self.label_3.setGeometry(QRect(0, -10, 480, 50))
+        label3_style=f"""
+                QLabel{{
+                        background-image: url(); 
+                        font-size: 25px;
+                }}"""
+        self.label_3.setStyleSheet(label3_style)
 #**************************************************************************
 
         self.wind_icon = QFrame(self.BACKGROUND)
@@ -298,14 +282,14 @@ class Ui_form(object):
                 }}"""
         self.fecha.setStyleSheet(Fecha_style)
 
-        self.user = QLabel(self.BACKGROUND)
-        self.user.setGeometry(QRect(400, 785, 75, 15))
+        self.userLbl = QLabel(self.BACKGROUND)
+        self.userLbl.setGeometry(QRect(400, 785, 75, 15))
         user_style=f"""
                 QLabel{{
                         font-size: 13px;
                         qproperty-alignment: AlignRight;
                 }}"""
-        self.user.setStyleSheet(user_style)
+        self.userLbl.setStyleSheet(user_style)
 
 #************************ Here are the labels indicating some text ***************************
 

@@ -37,32 +37,34 @@ class Ui_form(object):
                         background-image: url({main.path}/images/fondo.png);
                         background-repeat: no-repeat;
                         background-position: bottom center;
+                }}
+                QPushButton {{
+                        border-style: none; 
+                        background-repeat: no-repeat; 
+                        background-position: center center
+                }}
+                QLabel{{
+                        color: white;      
+                        qproperty-alignment: AlignCenter;
+                        background: transparent;
                 }}"""
         self.BACKGROUND.setStyleSheet(Background_Style)
 
         self.tittle = QLabel(self.BACKGROUND)
-        self.tittle.setObjectName(u"tittle")
-        self.tittle.setGeometry(QRect(168, 88, 145, 22))
-        self.tittle.setAttribute(Qt.WA_TranslucentBackground)
+        self.tittle.setGeometry(QRect(0, 88, 480, 22))
         tittle_style=f"""
                 QLabel{{
                         font-family: url({main.path}/fonts/Montserrat-SemiBold.ttf);
                         font-size: 19px;
-                        color: white;
-                        qproperty-alignment: AlignCenter;
                 }}"""
         self.tittle.setStyleSheet(tittle_style)
 
         self.tittleGlow = QLabel(self.BACKGROUND)
-        self.tittleGlow.setObjectName(u"tittleGlow")
-        self.tittleGlow.setGeometry(QRect(168, 88, 145, 22))
-        self.tittleGlow.setAttribute(Qt.WA_TranslucentBackground)
+        self.tittleGlow.setGeometry(QRect(0, 88, 480, 22))
         tittleGlow_style=f"""
                 QLabel{{
                         font-family: url({main.path}/fonts/Montserrat-SemiBold.ttf);
                         font-size: 21px;
-                        color: white;
-                        qproperty-alignment: AlignCenter;
                 }}"""
         self.tittleGlow.setStyleSheet(tittleGlow_style)
         
@@ -77,10 +79,7 @@ class Ui_form(object):
         self.backButton.setFlat(True)
         backButton_style= f"""
                 QPushButton {{
-                        border-style: none; 
                         background-image: url({main.path}/icons/back.png); 
-                        background-repeat: no-repeat; 
-                        background-position: center center
                 }}"""
         self.backButton.setStyleSheet(backButton_style)
         self.backButton.focusPolicy = Qt.NoFocus
@@ -93,16 +92,10 @@ class Ui_form(object):
         self.OnOffButton.setFlat(True)
         LUZ_Button = f"""
                 QPushButton {{
-                        border-style: none; 
                         background-image: url({main.path}/icons/led_off.png); 
-                        background-repeat: no-repeat; 
-                        background-position: center center
                 }} 
                 QPushButton:checked{{
-                        border-style: none; 
                         background-image: url({main.path}/icons/led_on.png); 
-                        background-repeat: no-repeat; 
-                        background-position: center center
                 }}"""
         self.OnOffButton.setStyleSheet(LUZ_Button)
         self.OnOffButton.focusPolicy = Qt.NoFocus
@@ -115,17 +108,11 @@ class Ui_form(object):
         self.downButton.setFlat(True)
         downButton_style = f"""
                 QPushButton {{
-                        border-style: none; 
                         background-image: url({main.path}/icons/down_released.png); 
-                        background-repeat: no-repeat; 
-                        background-position: center center
+                }}
+                QPushButton:pressed {{
+                        background-image: url({main.path}/icons/down_pressed.png); 
                 }}"""
-                #QPushButton:pressed {{
-                #        border-style: none; 
-                #        background-image: url({main.path}/icons/down_pressed.png); 
-                #        background-repeat: no-repeat; 
-                #        background-position: center center
-                #}}"""
         self.downButton.setStyleSheet(downButton_style)
         self.downButton.focusPolicy = Qt.NoFocus
 
@@ -137,17 +124,11 @@ class Ui_form(object):
         self.upButton.setFlat(True)
         upButton_style = f"""   
                 QPushButton {{
-                        border-style: none; 
                         background-image: url({main.path}/icons/up_released.png); 
-                        background-repeat: no-repeat; 
-                        background-position: center center
+                }}
+                QPushButton:pressed{{
+                        background-image: url({main.path}/icons/up_pressed.png); 
                 }}"""
-                #QPushButton:pressed{{
-                #        border-style: none; 
-                #        background-image: url({main.path}/icons/up_pressed.png); 
-                #        background-repeat: no-repeat; 
-                #        background-position: center center
-                #}}"""
         self.upButton.setStyleSheet(upButton_style)
         self.upButton.focusPolicy = Qt.NoFocus
 
@@ -166,8 +147,6 @@ class Ui_form(object):
         ProgressBar_style=f"""
                 QFrame{{
                 	background-image: url({main.path}/images/dial_completo.png);
-                	background-repeat: no-repeat;
-                	background-position: bottom center;
                 }}"""
         self.ProgressBar.setStyleSheet(ProgressBar_style)
         self.ProgressBar.setFrameShape(QFrame.NoFrame)
@@ -178,15 +157,13 @@ class Ui_form(object):
         self.Bar.setStyleSheet(Bar_InitialStyle)
         self.Bar.setFrameShape(QFrame.NoFrame)
         self.Bar.setFrameShadow(QFrame.Raised)        
+
         self.percentage_label = QLabel(self.ProgressBar)
-        self.percentage_label.setObjectName(u"percentage_label")
         self.percentage_label.setGeometry(QRect(218, 220, 54, 26))
-        self.percentage_label.setAttribute(Qt.WA_TranslucentBackground)
         ProgressValue_style=f"""
                 QLabel{{
                         font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
                         font-size: 21px;
-                        color: white;
                 }}"""
         self.percentage_label.setStyleSheet(ProgressValue_style)
         #self.label_2.setAlignment(Qt.AlignCenter)
@@ -198,17 +175,6 @@ class Ui_form(object):
         self.downButton.raise_()
         self.backButton.raise_()
         
-        self.retranslateUi(form)
 
         QMetaObject.connectSlotsByName(form)
     # setupUi
-
-    def retranslateUi(self, Form):
-        Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
-        self.backButton.setText(QCoreApplication.translate("Form", u"", None))
-        self.OnOffButton.setText(QCoreApplication.translate("Form", u"", None))
-        self.percentage_label.setText(QCoreApplication.translate("Form", u"", None))
-        self.downButton.setText(QCoreApplication.translate("Form", u"", None))
-        self.upButton.setText(QCoreApplication.translate("Form", u"", None))
-    # retranslateUi
-

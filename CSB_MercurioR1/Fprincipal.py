@@ -40,6 +40,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
 
         #print("IDIOMA: ")
         #print(main.texto)
+
+        #Estado inicial de las variables
         main.lightOnOff = self.status.get("LED")
         main.lightPercent = self.status.get("LEDPWM")
         main.UV_OnOff = self.status.get("UV_Light")
@@ -51,38 +53,47 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         self.horizontalSlider.valueChanged.connect(self.Dial)
         self.horizontalSlider_2.valueChanged.connect(self.Dial2)
 
+        #Botón de configuración, cuando se clickea, conecta con "Config()""
         self.config_Btn.clicked.connect(self.Config)
+        #Botón de calendaria, cuando se clickea, conecta con "Calendar()"
         self.calendario_Btn.clicked.connect(self.Calendar)
 
+        #Botón de luz LED, cuando se clickea, conecta con "LuminariaLED_clicked()"
+        #el autorepeat es para habilitar el sub-menú manteniendo presionado.
+        #El autoRepeatDelay es el tiempo que se debe mantener presionado
+        #para ingresar al sub-menú de dicho pulsador
         self.luz_Btn.setAutoRepeat(True)
         self.luz_Btn.setAutoRepeatDelay(3000)
-        #self.luz_Btn.pressed.connect(self.LuminariaLED_pressed)#handler.LuminariaLED_pressed)
         self.luz_Btn.clicked.connect(self.LuminariaLED_clicked)
         
+        #Botón de luz UV, cuando se clickea, conecta con "UVLED_clicked()"
+        #el autorepeat es para habilitar el sub-menú manteniendo presionado.
+        #El autoRepeatDelay es el tiempo que se debe mantener presionado
+        #para ingresar al sub-menú de dicho pulsador
         self.uv_Btn.setAutoRepeat(True)
         self.uv_Btn.setAutoRepeatDelay(3000)
         self.uv_Btn.clicked.connect(self.UVLED_clicked)
 
+        #Botón de advertencias, cuando se clickea, conecta con "advertenciaClicked()""
         self.advertencia_Btn.clicked.connect(self.advertenciaClicked)
 
         self.setWindowFlags(PySide2.QtCore.Qt.FramelessWindowHint) 
 
+        #Según lo obtenido de "status.dat", setea el estado inicial de la luz LED
+        #(y el estado inicial del pulsador correspondiente)
         if(main.lightOnOff):
             self.luz_Btn.setChecked=True
         else:
             self.luz_Btn.setChecked=False
 
+        #Muestra fecha y hora actual al momento de iniciar. 
+        #ésto se actualiza cada 1 segundo en el timer de 100ms
         currentTime=datetime.now().strftime("%H:%M:%S")
         self.hora.setText(currentTime)
         today=date.today().strftime("%d/%m/%Y")
         self.fecha.setText(today)
-        self.firstKey=False
 
-        """status.update({"UV_Calendar_init": format(datetime.now(),"%Y/%m/%d %H:%M")})
-        status.update({"UV_Calendar_end": format(datetime.now(),"%Y/%m/%d %H:%M")})
-        with open(main.statusFile,"w") as fp:
-            json.dump(status, fp)"""
-
+        #Pone los textos de los pulsadores de acuerdo al idioma elegido
         self.LED_label.setText(main.texto.get("luminariaLED"))
         self.UV_label.setText(main.texto.get("luminariaUV"))
         self.ModoEco_label.setText(main.texto.get("modoEco"))
@@ -103,6 +114,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
     def timer100ms(self):           #recurrent timer - base de tiempo de 100ms para chekear estado de las cosas
         while(True):
             #revisa el estado de la luz led, y setea el botón de luz de acuerdo
+            #Compara contra "main.ligthOnOff", ya que éste valor se modifica
+            #dentro del menú de LuminariaLED
             if(self.luz_Btn.isChecked() != main.lightOnOff):
                 self.luz_Btn.toggle()
                 self.status.update( { 'LED' : main.lightOnOff } )
@@ -111,13 +124,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
             
             self.ms100 += 1
 
+            #Pasó 1 segundo
             if(self.ms100>10):
                 self.ms100=0
+
+                #Actualiza hora y fecha
                 currentTime=datetime.now().strftime("%H:%M:%S")
                 self.hora.setText(currentTime)
                 today=date.today().strftime("%d/%m/%Y")
                 self.fecha.setText(today)
-                #self.luz_Btn.setChecked(main.lightOnOff)
             
                 #La variable status contiene el estado global del equipo.
                 #TODO: actualizar el estado de las salidas en base a lo leído
@@ -129,11 +144,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
                     self.users=json.load(us)
 
                 main.lightOnOff = self.status['LED']
-                print(self.status['LED'])
 
                 self.currentUser=self.users.get(self.status.get("screenUser"))
                 #print(self.currentUser)
-                self.user.setText(self.currentUser['name'])
+                self.userLbl.setText(self.currentUser['name'])
             time.sleep(0.1)
 
 #**********************************************************************************************

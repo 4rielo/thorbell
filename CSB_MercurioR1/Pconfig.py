@@ -105,7 +105,6 @@ class Ui_form(object):
 
 #USB button
         self.usb_Btn = QPushButton(self.BACKGROUND)
-        self.usb_Btn.setObjectName(u"usb_Btn")
         self.usb_Btn.setFixedSize(76, 48)
         usb_BtnStyle = f"""
                 QPushButton {{

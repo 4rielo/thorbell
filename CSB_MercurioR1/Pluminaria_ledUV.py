@@ -59,8 +59,6 @@ class Ui_form(object):
                 QLabel{{
                         font-family: url({main.path}/fonts/Montserrat-SemiBold.ttf);
                         font-size: 19px;
-                        color: white;
-                        qproperty-alignment: AlignCenter;
                 }}"""
         self.tittle.setStyleSheet(tittle_style)
 
@@ -70,8 +68,6 @@ class Ui_form(object):
                 QLabel{{
                         font-family: url({main.path}/fonts/Montserrat-SemiBold.ttf);
                         font-size: 21px;
-                        color: white;
-                        qproperty-alignment: AlignCenter;
                 }}"""
         self.tittleGlow.setStyleSheet(tittleGlow_style)
         
@@ -93,8 +89,7 @@ class Ui_form(object):
 
 #LED light button
         self.OnOffButton = QPushButton(self.BACKGROUND)
-        self.OnOffButton.setObjectName(u"OnOffButton")
-        self.OnOffButton.setGeometry(QRect(195, 583, 100, 100))
+        self.OnOffButton.setGeometry(QRect(68, 583, 100, 100))
         self.OnOffButton.setCheckable(True)
         self.OnOffButton.setFlat(True)
         LUZ_Button = f"""
@@ -107,6 +102,21 @@ class Ui_form(object):
         self.OnOffButton.setStyleSheet(LUZ_Button)
         self.OnOffButton.focusPolicy = Qt.NoFocus
 
+#Timer light button
+        self.timerBtn = QPushButton(self.BACKGROUND)
+        self.timerBtn.setGeometry(QRect(312, 583, 100, 100))
+        self.timerBtn.setCheckable(True)
+        self.timerBtn.setFlat(True)
+        timer_Button = f"""
+                QPushButton {{
+                        background-image: url({main.path}/icons/timer_off.png); 
+                }} 
+                QPushButton:checked{{
+                        background-image: url({main.path}/icons/timer_on.png); 
+                }}"""
+        self.timerBtn.setStyleSheet(timer_Button)
+        self.timerBtn.focusPolicy = Qt.NoFocus
+
 #Down button
         self.downButton = QPushButton(self.BACKGROUND)
         self.downButton.setObjectName(u"downButton")
@@ -115,10 +125,10 @@ class Ui_form(object):
         downButton_style = f"""
                 QPushButton {{
                         background-image: url({main.path}/icons/down_released.png); 
+                }}
+                QPushButton:pressed {{
+                        background-image: url({main.path}/icons/down_pressed.png); 
                 }}"""
-                #QPushButton:pressed {{
-                #        background-image: url({main.path}/icons/down_pressed.png); 
-                #}}"""
         self.downButton.setStyleSheet(downButton_style)
         self.downButton.focusPolicy = Qt.NoFocus
 
@@ -130,10 +140,10 @@ class Ui_form(object):
         upButton_style = f"""   
                 QPushButton {{
                         background-image: url({main.path}/icons/up_released.png); 
+                }}
+                QPushButton:pressed{{
+                        background-image: url({main.path}/icons/up_pressed.png); 
                 }}"""
-                #QPushButton:pressed{{
-                #        background-image: url({main.path}/icons/up_pressed.png); 
-                #}}"""
         self.upButton.setStyleSheet(upButton_style)
         self.upButton.focusPolicy = Qt.NoFocus
 
@@ -151,7 +161,7 @@ class Ui_form(object):
         self.ProgressBar.setAutoFillBackground(True)
         ProgressBar_style=f"""
                 QFrame{{
-                	background-image: url({main.path}/images/dial_completo.png);
+                	background-image: url({main.path}/images/dial_hueco.png);
                 }}"""
         self.ProgressBar.setStyleSheet(ProgressBar_style)
         self.ProgressBar.setFrameShape(QFrame.NoFrame)
