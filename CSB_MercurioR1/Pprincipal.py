@@ -172,16 +172,6 @@ class Ui_form(object):
 
 #**************************************************************************
 
-        self.horizontalSlider = QSlider(self.BACKGROUND)
-        self.horizontalSlider.setObjectName(u"horizontalSlider")
-        self.horizontalSlider.setGeometry(QRect(200, 50, 100, 20))
-        self.horizontalSlider.setOrientation(Qt.Horizontal)
-
-        self.horizontalSlider_2 = QSlider(self.BACKGROUND)
-        self.horizontalSlider_2.setObjectName(u"horizontalSlider_2")
-        self.horizontalSlider_2.setGeometry(QRect(200, 720, 100, 20))
-        self.horizontalSlider_2.setOrientation(Qt.Horizontal)
-
 #************************************************Here are the center round progress bar indicators
         Bar_InitialStyle=f"""
                 QFrame{{
@@ -202,20 +192,20 @@ class Ui_form(object):
         self.TopProgressBar.setFrameShape(QFrame.NoFrame)
         self.TopProgressBar.setFrameShadow(QFrame.Plain)
 
-        self.Bar = QFrame(self.TopProgressBar)
-        self.Bar.setObjectName(u"Bar")
-        self.Bar.setGeometry(QRect((480-276)/2, (231-276/2), 276, 276))
-        self.Bar.setStyleSheet(Bar_InitialStyle)
-        self.Bar.setFrameShape(QFrame.NoFrame)
-        self.Bar.setFrameShadow(QFrame.Raised)        
-        self.label_2 = QLabel(self.TopProgressBar)
-        self.label_2.setGeometry(QRect(0, 190, 480, 50))
+        self.presionEntradaBar = QFrame(self.TopProgressBar)
+        self.presionEntradaBar.setObjectName(u"Bar")
+        self.presionEntradaBar.setGeometry(QRect((480-276)/2, (231-276/2), 276, 276))
+        self.presionEntradaBar.setStyleSheet(Bar_InitialStyle)
+        self.presionEntradaBar.setFrameShape(QFrame.NoFrame)
+        self.presionEntradaBar.setFrameShadow(QFrame.Raised)        
+        self.flujoEntradaLbl = QLabel(self.TopProgressBar)
+        self.flujoEntradaLbl.setGeometry(QRect(0, 190, 480, 50))
         label2_style=f"""
                 QLabel{{
                         background-image: url(); 
                         font-size: 25px;
                 }}"""
-        self.label_2.setStyleSheet(label2_style)
+        self.flujoEntradaLbl.setStyleSheet(label2_style)
 
         self.BottomProgressBar = QFrame(self.BACKGROUND)
         self.BottomProgressBar.setObjectName(u"BottomProgressBar")
@@ -227,20 +217,20 @@ class Ui_form(object):
         self.BottomProgressBar.setStyleSheet(BottomHalf_style)
         self.BottomProgressBar.setFrameShape(QFrame.NoFrame)
         self.BottomProgressBar.setFrameShadow(QFrame.Raised)
-        self.Bar_2 = QFrame(self.BottomProgressBar)
-        self.Bar_2.setObjectName(u"Bar_2")
-        self.Bar_2.setGeometry(QRect((480-276)/2, -(276/2), 276, 276))
-        self.Bar_2.setStyleSheet(Bar_InitialStyle)
-        self.Bar_2.setFrameShape(QFrame.NoFrame)
-        self.Bar_2.setFrameShadow(QFrame.Raised)
-        self.label_3 = QLabel(self.BottomProgressBar)
-        self.label_3.setGeometry(QRect(0, -10, 480, 50))
+        self.presionSalidaBar = QFrame(self.BottomProgressBar)
+        self.presionSalidaBar.setObjectName(u"Bar_2")
+        self.presionSalidaBar.setGeometry(QRect((480-276)/2, -(276/2), 276, 276))
+        self.presionSalidaBar.setStyleSheet(Bar_InitialStyle)
+        self.presionSalidaBar.setFrameShape(QFrame.NoFrame)
+        self.presionSalidaBar.setFrameShadow(QFrame.Raised)
+        self.flujoSalidaLbl = QLabel(self.BottomProgressBar)
+        self.flujoSalidaLbl.setGeometry(QRect(0, -10, 480, 50))
         label3_style=f"""
                 QLabel{{
                         background-image: url(); 
                         font-size: 25px;
                 }}"""
-        self.label_3.setStyleSheet(label3_style)
+        self.flujoSalidaLbl.setStyleSheet(label3_style)
 #**************************************************************************
 
         self.wind_icon = QFrame(self.BACKGROUND)
@@ -253,7 +243,6 @@ class Ui_form(object):
                 	background-image: url({main.path}/images/viento.png);
                 }}"""
         self.wind_icon.setStyleSheet(Wind_style)
-        self.wind_icon.setVisible(False)
 
         self.wind_icon2 = QFrame(self.BACKGROUND)
         self.wind_icon2.setObjectName(u"wind_icon2")
@@ -261,7 +250,6 @@ class Ui_form(object):
         self.wind_icon2.setFrameShape(QFrame.NoFrame)
         self.wind_icon2.setFrameShadow(QFrame.Raised)        
         self.wind_icon2.setStyleSheet(Wind_style)
-        self.wind_icon2.setVisible(False)
 
 #************************ Here are the labels indicating some text ***************************
         self.hora = QLabel(self.BACKGROUND)
@@ -282,8 +270,16 @@ class Ui_form(object):
                 }}"""
         self.fecha.setStyleSheet(Fecha_style)
 
+        self.firebaseLbl = QLabel(self.BACKGROUND)
+        self.firebaseLbl.setGeometry(10,10,400,15)
+        Firebase_style=f"""
+                QLabel{{
+                        font-size: 13px;
+                }}"""
+        self.firebaseLbl.setStyleSheet(Firebase_style)
+
         self.userLbl = QLabel(self.BACKGROUND)
-        self.userLbl.setGeometry(QRect(400, 785, 75, 15))
+        self.userLbl.setGeometry(QRect(400, 10, 70, 15))
         user_style=f"""
                 QLabel{{
                         font-size: 13px;

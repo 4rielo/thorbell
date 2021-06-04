@@ -9,12 +9,17 @@
     "configTittle" : "Configuración",
     "warningTittle" : "Advertencia" ,
     "loginTittle" : "Login",
+    "clockTittle": "Configuración de Fecha y Hora",
+    "horaActual" : "Hora Actual",
+    "fechaActual" : "Fecha Actual",
     "calendarTittle" : "Calendario",
+    "calendarUV" : "Calendario de UV",
+    "calendarRutina" : "Calendario de Rutina",
+    "calendarInit" : "Inicio",
+    "calendarEnd": "Apagado",
     "puerta_abierta" : "Puerta Abierta",
     "filtro_saturado" : "Filtro Saturado",
     "filtro_roto" : "Filtro Roto",
     "filtro_proximo_a_saturarse" : "Filtro próximo a saturarse",
-    "ventilador_roto" : "Ventilador Roto",
-    "calendarInit" : "Inicio",
-    "calendarEnd" : "Apagado"
+    "ventilador_roto" : "Ventilador Roto"
 }
