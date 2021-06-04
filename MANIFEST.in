@@ -1,0 +1,5 @@
+graft data
+graft fonts
+graft icons
+graft images
+global-exclude *.pyc
