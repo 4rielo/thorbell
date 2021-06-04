@@ -48,7 +48,7 @@ class Ui_form(object):
                 QPushButton {{
                         border-style: none;
                         background-repeat: no-repeat;
-                        background-position: center center
+                        background-position: center center;
                 }}
                 QDateEdit {{
                         font-family: url({main.path}/fonts/Montserrat-SemiBold.ttf);
@@ -77,7 +77,7 @@ class Ui_form(object):
         """
 
 #**************************************************** Tittle
-
+#Tittle
         self.tittle = QLabel(self.BACKGROUND)
         self.tittle.setObjectName(u"tittle")
         self.tittle.setGeometry(QRect(0, 88, 480, 22))
@@ -99,6 +99,27 @@ class Ui_form(object):
         self.Effect=QGraphicsBlurEffect()
         self.Effect.setBlurRadius(10)
         self.tittleGlow.setGraphicsEffect(self.Effect)
+
+#SubTittle
+        self.subTittle = QLabel(self.BACKGROUND)
+        self.subTittle.setGeometry(QRect(0, 128, 480, 22))
+        subTittle_style=f"""
+                QLabel{{
+                        font-size: 19px;
+                }}"""
+        self.subTittle.setStyleSheet(subTittle_style)
+
+        self.subTittleGlow = QLabel(self.BACKGROUND)
+        self.subTittleGlow.setGeometry(QRect(0, 128, 480, 22))
+        subTittleGlow_style=f"""
+                QLabel{{
+                        font-size: 19px;
+                }}"""
+        self.subTittleGlow.setStyleSheet(subTittleGlow_style)
+        
+        self.Effect2=QGraphicsBlurEffect()
+        self.Effect2.setBlurRadius(10)
+        self.subTittleGlow.setGraphicsEffect(self.Effect2)
 #**************************************************** 
 
 #**************************************************** ON OFF
@@ -114,29 +135,42 @@ class Ui_form(object):
                         color: #001C42;
                 }}
                 """
-        
-        self.onBtn = QPushButton(self.BACKGROUND)
-        self.onBtn.setGeometry(329, 213, 100, 100)
-        self.onBtn.setStyleSheet(ONOFF_btnStyle)
-        self.onBtn.setFocusPolicy(Qt.NoFocus)
-        self.onBtn.setFlat(True)
-        self.onBtn.setCheckable(True)
-        self.onBtn.setText("On")
+        self.onOffBtn = QPushButton(self.BACKGROUND)
+        self.onOffBtn.setGeometry(50, 213, 100, 100)
+        self.onOffBtn.setStyleSheet(ONOFF_btnStyle)
+        self.onOffBtn.setFocusPolicy(Qt.NoFocus)
+        self.onOffBtn.setFlat(True)
+        self.onOffBtn.setCheckable(True)
 
-        self.offBtn = QPushButton(self.BACKGROUND)
-        self.offBtn.setGeometry(50, 213, 100, 100)
-        self.offBtn.setStyleSheet(ONOFF_btnStyle)
-        self.offBtn.setFocusPolicy(Qt.NoFocus)
-        self.offBtn.setFlat(True)
-        self.offBtn.setCheckable(True)
-        self.offBtn.setText("Off")
-
+        uvStyle  = f"""
+                QPushButton {{
+                        background-image: url({main.path}/icons/uv_off.png);
+                }}
+                QPushButton:checked {{
+                        background-image: url({main.path}/icons/uv_on.png);
+                }}"""
         self.uvBtn = QPushButton(self.BACKGROUND)
-        self.uvBtn.setGeometry(190, 213, 100, 100)
+        self.uvBtn.setGeometry(190, 213, 100, 100)#(190, 213, 100, 100)
         self.uvBtn.setStyleSheet(ONOFF_btnStyle)
         self.uvBtn.setFocusPolicy(Qt.NoFocus)
         self.uvBtn.setFlat(True)
-        self.uvBtn.setText("UV")
+        self.uvBtn.setCheckable(True)
+        self.uvBtn.setStyleSheet(uvStyle)
+
+        rutinaStyle = f"""
+                QPushButton {{
+                        background-image: url({main.path}/icons/routine_off.png);
+                }}
+                QPushButton:checked {{
+                        background-image: url({main.path}/icons/routine_on.png);
+                }}"""
+        self.rutinaBtn = QPushButton(self.BACKGROUND)
+        self.rutinaBtn.setGeometry(329, 213, 100, 100)
+        self.rutinaBtn.setStyleSheet(ONOFF_btnStyle)
+        self.rutinaBtn.setFocusPolicy(Qt.NoFocus)
+        self.rutinaBtn.setFlat(True)
+        self.rutinaBtn.setCheckable(True)
+        self.rutinaBtn.setStyleSheet(rutinaStyle)
 
 #**************************************************** INICIO
         self.inicioLbl = QLabel(self.BACKGROUND)
@@ -166,7 +200,7 @@ class Ui_form(object):
 
         self.initDatePlusBtn = QPushButton(self.BACKGROUND)
         self.initDatePlusBtn.setGeometry(263, 404, 30, 30)    
-        self.initDatePlusBtn.setCheckable(True)
+        #self.initDatePlusBtn.setCheckable(True)
         self.initDatePlusBtn.setFlat(True)    
         initDatePlus_style=f"""
                 QPushButton {{
@@ -177,7 +211,7 @@ class Ui_form(object):
 
         self.initDateMinusBtn = QPushButton(self.BACKGROUND)
         self.initDateMinusBtn.setGeometry(90, 404, 30, 30)    
-        self.initDateMinusBtn.setCheckable(True)
+        #self.initDateMinusBtn.setCheckable(True)
         self.initDateMinusBtn.setFlat(True)    
         initDateMinus_style=f"""
                 QPushButton {{
@@ -190,7 +224,7 @@ class Ui_form(object):
 
         self.initTimePlusBtn = QPushButton(self.BACKGROUND)
         self.initTimePlusBtn.setGeometry(263, 457, 30, 30)    
-        self.initTimePlusBtn.setCheckable(True)
+        #self.initTimePlusBtn.setCheckable(True)
         self.initTimePlusBtn.setFlat(True)    
         initTimePlusBtn_style=f"""
                 QPushButton {{
@@ -298,7 +332,7 @@ class Ui_form(object):
                         background-image: url({main.path}/icons/back.png); 
                 }}"""
         self.return_Btn.setStyleSheet(return_Button)
-        self.return_Btn.focusPolicy = Qt.NoFocus
+        self.return_Btn.setFocusPolicy(Qt.NoFocus)
 
 #**********************************************************************************
 

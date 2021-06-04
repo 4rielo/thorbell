@@ -341,9 +341,6 @@ class Ui_form(object):
         self.Rutina_label.raise_()
         self.LED_label.raise_()
         self.UV_label.raise_()
-        
-        self.horizontalSlider.raise_()
-        self.horizontalSlider_2.raise_()
 
         self.rutina_Btn.raise_()
         self.eco_Btn.raise_()

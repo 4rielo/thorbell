@@ -158,15 +158,34 @@ class Ui_form(object):
         self.Bar.setFrameShape(QFrame.NoFrame)
         self.Bar.setFrameShadow(QFrame.Raised)        
 
+        self.percentage_labelGlow = QLabel(self.ProgressBar)
+        self.percentage_labelGlow.setGeometry(QRect(218, 220, 54, 26))
+        ProgressValueGlow_style=f"""
+                QLabel{{
+                        font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
+                        font-size: 21px;
+                        color: #010A1E;
+                }}"""
+        self.percentage_labelGlow.setStyleSheet(ProgressValueGlow_style)
+
+        self.Effect_percentageLabel=QGraphicsBlurEffect()
+        self.Effect_percentageLabel.setBlurRadius(3)
+        self.percentage_labelGlow.setGraphicsEffect(self.Effect_percentageLabel)
+
         self.percentage_label = QLabel(self.ProgressBar)
         self.percentage_label.setGeometry(QRect(218, 220, 54, 26))
         ProgressValue_style=f"""
                 QLabel{{
-                        font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
+                        font-family: url({main.path}/fonts/Montserrat-Bold.ttf);
                         font-size: 21px;
+                        color: white;
+                        outline-style: solid;
+                        outline-color: black;
                 }}"""
+        #border-color: white;
         self.percentage_label.setStyleSheet(ProgressValue_style)
         #self.label_2.setAlignment(Qt.AlignCenter)
+        
 
         self.BACKGROUND.raise_()
         self.ProgressBar.raise_()

@@ -7,6 +7,7 @@ from PySide2.QtUiTools import QUiLoader
 import time
 import threading
 import json
+import requests
 
 import main         #to read the lightOnOff status
 
@@ -36,7 +37,7 @@ class LEDWindow(QtWidgets.QMainWindow, Ui_form):
         self.downButton.setAutoRepeat(True)
         self.downButton.setAutoRepeatDelay(initialPressDelay)
         self.downButton.setAutoRepeatInterval(autoRepeatDelay)
-        self.downButton.pressed.connect(self.DownBtn_clicked)
+        self.downButton.clicked.connect(self.DownBtn_clicked)
         
         self.OnOffButton.clicked.connect(self.OnOff_clicked)
         
@@ -53,37 +54,50 @@ class LEDWindow(QtWidgets.QMainWindow, Ui_form):
             main.lightPercent -=1
             self.dialChange(main.lightPercent)
             #Changes Status data
-            with open(main.statusFile) as f:
+            """with open(main.statusFile) as f:
                 data=json.load(f)                               #and loads json object
             data.update( { "LEDPWM": main.lightPercent } )           #updates LED status
             with open(main.statusFile, "w") as f:               #And saves it to status File
-                json.dump(data,f)                               #as an JSON object
+                json.dump(data,f)                               #as an JSON object"""
+
+        if(not self.downButton.isDown()):                     #Si soltó el pulsador
+            #Guardo el valor en memoria
+            response = requests.post(main.localhost,params= {"LEDPWM" : main.lightPercent})
+            print(response.text)
 
     def UpBtn_clicked(self):
-        #print("Clicked UP")
+        #print("Clicked UP") 
         if(main.lightPercent<100):
             main.lightPercent +=1
             self.dialChange(main.lightPercent)
             #Changes Status data
-            with open(main.statusFile) as f:
+            """with open(main.statusFile) as f:
                 data=json.load(f)                               #and loads json object
             data.update( { "LEDPWM": main.lightPercent } )           #updates LED status
             with open(main.statusFile, "w") as f:               #And saves it to status File
-                json.dump(data,f)                               #as an JSON object
+                json.dump(data,f)                               #as an JSON object"""
+
+        if(not self.upButton.isDown()):                     #Si soltó el pulsador
+            #Guardo el valor en memoria
+            response = requests.post(main.localhost,params= {"LEDPWM" : main.lightPercent})
+            print(response.text)
+
 
     def OnOff_clicked(self):
         print(f"On Off -> {self.OnOffButton.isChecked()}")
         main.lightOnOff=self.OnOffButton.isChecked()
-
-        #Changes Status data
+        response = requests.post(main.localhost,params= {"LED_Light" : main.lightOnOff})
+        """#Changes Status data
         with open(main.statusFile) as f:
             data=json.load(f)                               #and loads json object
         data.update( { "LED": main.lightOnOff } )           #updates LED status
         with open(main.statusFile, "w") as f:               #And saves it to status File
-            json.dump(data,f)                               #as an JSON object
+            json.dump(data,f)                               #as an JSON object"""
 
     def dialChange(self, slider):
         self.percentage_label.setText(str(slider) + " %")
+        self.percentage_labelGlow.setText(str(slider) + " %")
+
         stopValue= (slider)/100
     #       print("Slider value= " + str(stopValue))
         gradient = stopValue-0.05

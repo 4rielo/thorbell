@@ -4,25 +4,24 @@ import PySide2
 from PySide2 import QtGui, QtWidgets
 from PySide2.QtUiTools import QUiLoader
 
-#import fbUpload
 import time
 import threading
+import requests
+import json
 from datetime import datetime, date
-#from CSB_MercurioR1.Pprincipal import Ui_form
-#from CSB_MercurioR1.Fconfig import ConfigWindow
 
-from Pprincipal import Ui_form
+from Pprincipal import Ui_form              #El formulario descriptivo de qué contiene ésta ventana
 from Fconfig import ConfigWindow            #Config window 
 from Fluminaria_led import LEDWindow        #Luminaria LED window (para dimerizar la luz)
 from Fluminaria_ledUV import UVWindow       #Luminaria UV window (para configurar un timer de apagado)
-from Fadvertencias import AdvertenciaWindow
-from Fcalendar import CalendarWindow
+from Fadvertencias import AdvertenciaWindow #Advertencia window (Muestra las advertencias)
+from Fcalendar import CalendarWindow        #Calendario, setea hora de inicio y fin de rutina y/o luz UV
+from Fclock import ClockWindow              #Setea fecha, hora y uso horario
+
+#import FfirebaseUpload
 
 import main         #to read the lightOnOff status
-import json
 
-counter = 0
-lightPercent = 50
 
 class MainWindow(QtWidgets.QMainWindow, Ui_form):
     def __init__(self):
@@ -32,31 +31,33 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
 
         self.setWindowTitle("THORBELL")
 
-        with open(main.statusFile) as f:
-            self.status=json.load(f)                               #and loads json object
+        #Obtiene el estado global del servidor de estado
+        response = requests.get(f"{main.localhost}/status").text
+        self.status = json.loads(str(response))
 
+        #Idioma almacenado en el estado del equipo
         with open(f"{main.path}/idioma/{self.status.get('Idioma')}.dat") as f:
             main.texto = json.load(f)
 
-        #print("IDIOMA: ")
-        #print(main.texto)
-
         #Estado inicial de las variables
-        main.lightOnOff = self.status.get("LED")
+        main.lightOnOff = self.status.get("LED_Light")
         main.lightPercent = self.status.get("LEDPWM")
-        main.UV_OnOff = self.status.get("UV_Light")
+        main.uvOnOff = self.status.get("UV_Light")
         main.UV_Timer=self.status.get("UV_Timer")
         main.UV_TimerEnable= self.status.get("UV_TimerEnable")
 
         #Create all sub-windows, to call on them when different buttons are clicked.
 
-        self.horizontalSlider.valueChanged.connect(self.Dial)
-        self.horizontalSlider_2.valueChanged.connect(self.Dial2)
+        #self.horizontalSlider.valueChanged.connect(self.Dial)
+        #self.horizontalSlider_2.valueChanged.connect(self.Dial2)
 
         #Botón de configuración, cuando se clickea, conecta con "Config()""
         self.config_Btn.clicked.connect(self.Config)
-        #Botón de calendaria, cuando se clickea, conecta con "Calendar()"
+        #Botón de calendario, cuando se clickea, conecta con "Calendar()"
         self.calendario_Btn.clicked.connect(self.Calendar)
+        #Botón de reloj, cuando se clickea, conecta con "Clock()"
+        self.reloj_Btn.clicked.connect(self.Clock)
+      
 
         #Botón de luz LED, cuando se clickea, conecta con "LuminariaLED_clicked()"
         #el autorepeat es para habilitar el sub-menú manteniendo presionado.
@@ -81,10 +82,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
 
         #Según lo obtenido de "status.dat", setea el estado inicial de la luz LED
         #(y el estado inicial del pulsador correspondiente)
-        if(main.lightOnOff):
-            self.luz_Btn.setChecked=True
-        else:
-            self.luz_Btn.setChecked=False
+        self.luz_Btn.setChecked(main.lightOnOff)
+        
+        #Según lo obtenido de "status.dat", setea el estado inicial de la luz LED
+        #(y el estado inicial del pulsador correspondiente)
+        self.luz_Btn.setChecked(main.uvOnOff)
 
         #Muestra fecha y hora actual al momento de iniciar. 
         #ésto se actualiza cada 1 segundo en el timer de 100ms
@@ -106,10 +108,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         clock.start()
     #FIN init
 
+
+    def UpdateData(self, payload):
+        self.firebaseLbl.setText(payload)
 #**********************************************************************************************
-#Timer de 100 ms. Éste timer corre en paralelo con la app principal. 
-#Aquí se lee el "status.dat", y se actualiza el estado de las salidas
-#Cada un segundo se actualiza el reloj en pantalla.
+# Timer de 100 ms. Éste timer corre en paralelo con la app principal. 
+# Aquí se lee el "status.dat", y se actualiza el estado de las salidas
+# Cada un segundo se actualiza el reloj en pantalla.
 
     def timer100ms(self):           #recurrent timer - base de tiempo de 100ms para chekear estado de las cosas
         while(True):
@@ -118,36 +123,50 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
             #dentro del menú de LuminariaLED
             if(self.luz_Btn.isChecked() != main.lightOnOff):
                 self.luz_Btn.toggle()
-                self.status.update( { 'LED' : main.lightOnOff } )
-                with open(main.statusFile, "w") as st:
-                    json.dump(self.status, st)
-            
+            if(self.uv_Btn.isChecked() != main.uvOnOff):
+                self.uv_Btn.toggle()
             self.ms100 += 1
 
             #Pasó 1 segundo
             if(self.ms100>10):
                 self.ms100=0
 
+                #Pide la hora actual a microservicios (server en localhost:8085)
+                currentTimeDate = requests.get(f"{main.localhost}/status", params = "time").text
+                #Convierte el string con fecha y hora, en OBJETO de datetime
+                currentTimeDate=datetime.fromisoformat(currentTimeDate)
                 #Actualiza hora y fecha
-                currentTime=datetime.now().strftime("%H:%M:%S")
+                #obtiene la hora en string para mostrar en pantalla
+                currentTime=currentTimeDate.strftime("%H:%M:%S")
                 self.hora.setText(currentTime)
-                today=date.today().strftime("%d/%m/%Y")
+                #obtiene la fecha en string para mostrar en pantalla
+                today=currentTimeDate.strftime("%d/%m/%Y")
                 self.fecha.setText(today)
             
                 #La variable status contiene el estado global del equipo.
-                #TODO: actualizar el estado de las salidas en base a lo leído
-                #del archivo "status.dat"
-                with open(main.statusFile) as st:
-                    self.status=json.load(st)
+                """with open(main.usersFile) as us:
+                    self.users=json.load(us)"""
+                
+                #Lee el estado global del equipo
+                self.status=json.loads(requests.get(f"{main.localhost}/status").text)
+                main.lightOnOff=self.status.get("LED_Light")
+                main.uvOnOff=self.status.get("UV_Light")
 
-                with open(main.usersFile) as us:
-                    self.users=json.load(us)
+                #Lee los valores de ADC para mostrar vel de flujo y presión en el dial
+                #print("Pide ADC")
+                medicionesADC = json.loads(requests.get(f"{main.localhost}/adc").text)
+                #print(medicionesADC)
+                flujoEntrada_aux=float(medicionesADC['flujoEntrada'])
+                flujoSalida_aux=float(medicionesADC['flujoSalida'])
+                self.flujoEntradaLbl.setText("{:.2f} m/s".format(flujoEntrada_aux))
+                self.flujoSalidaLbl.setText("{:.2f} m/s".format(flujoSalida_aux))
+                self.presionEntradaDial(float(medicionesADC['presionEntrada']))
+                self.presionSalidaDial(float(medicionesADC['presionSalida']))
+                
 
-                main.lightOnOff = self.status['LED']
-
-                self.currentUser=self.users.get(self.status.get("screenUser"))
+                #self.currentUser=self.users.get(self.status.get("screenUser"))
                 #print(self.currentUser)
-                self.userLbl.setText(self.currentUser['name'])
+                #self.userLbl.setText(self.currentUser['name'])
             time.sleep(0.1)
 
 #**********************************************************************************************
@@ -165,19 +184,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
     def LuminariaLED_clicked(self):
         if(not self.luz_Btn.isDown()):
             main.lightOnOff=self.luz_Btn.isChecked()
-            #Opens status file
-            with open(main.statusFile) as f:
-                data=json.load(f)                               #and loads json object
-            data.update( { "LED": main.lightOnOff } )           #updates LED status
-            with open(main.statusFile, "w") as f:               #And saves it to status File
-                json.dump(data,f)                               #as an JSON object
+            response = requests.post(f"{main.localhost}/status",params= {"LED_Light" : main.lightOnOff})
+            #TODO si no obtiene respuesta de "request.post" debería hacer algo, 
+            # y/o ejecutar el servidor de estado
         else:
             if(main.lightOnOff != self.luz_Btn.isChecked()):
                 self.luz_Btn.toggle()
 
             self.ledWindow = LEDWindow()            
             self.ledWindow.show()
-        
 
 #**************************************************************************************
 
@@ -197,24 +212,20 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
     def UVLED_clicked(self):
         if(not self.uv_Btn.isDown()):
             main.UV_OnOff=self.uv_Btn.isChecked()
-            #Opens status file
-            with open(main.statusFile) as f:
-                data=json.load(f)                               #and loads json object
-            data.update( { "UV_Light": main.UV_OnOff } )           #updates UVLED status
-            with open(main.statusFile, "w") as f:               #And saves it to status File
-                json.dump(data,f)                               #as an JSON object
+            response = requests.post(f"{main.localhost}/status",params= {"UV_Light" : main.UV_OnOff})
+            #TODO si no obtiene respuesta de "request.post" debería hacer algo, 
+            # y/o ejecutar el servidor de estado
         else:
             if(main.UV_OnOff != self.uv_Btn.isChecked()):
                 self.uv_Btn.toggle()
 
-            print("UV_Config window open")
-            self.uvWindow = UVWindow()            
+            #print("UV_Config window open")
+            self.uvWindow = UVWindow()
             self.uvWindow.show()
 #**************************************************************************************************************
 
-
 #**************************************************************************************************************
-#Ventana de advertencia
+#Ventana de advertencia         - Muestra las advertencias existentes
     def advertenciaClicked(self):
         print("Show Advertencia")
         self.advertenciaWindow = AdvertenciaWindow()
@@ -229,29 +240,25 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         self.configWindow.show()
 
 #**************************************************************************************************************
-#Calendar window
-    def Calendar(self):
+#Calendar window                - Configura hora y fecha de inicio/fin de encendido de rutina o luz Uv
+    def Calendar(self): 
         self.calendarWindow = CalendarWindow()
         self.calendarWindow.show()
 
 #**************************************************************************************************************
 
-#OLD test stuff
-    def Upload(self):
-        #fbUpload.upload()
-        self.counter += 1
-        self.label.setText(str(counter))
-
-    def Decrease(self):
-        self.counter -= 1
-        self.label.setText(str(counter))
+#**************************************************************************************************************
+#Clock window                   - setea fecha, hora, y uso horario
+    def Clock(self):
+        self.clockWindow = ClockWindow()
+        self.clockWindow.show()
 
 #**************************************************************************************************************
-    def Dial(self):
-        slider= self.horizontalSlider.value()
-        self.label_2.setText(str(slider) + " %")
-        stopValue= (slider)/100
-        
+
+#**************************************************************************************************************
+    def presionEntradaDial(self, presion):
+        stopValue = presion / 4096
+
         gradient = stopValue-0.05
         if(gradient < 0):
             gradient = 0
@@ -278,15 +285,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
                         stop:{gradient} rgba{color}
                         );
             }}"""
-        self.Bar.setStyleSheet(style)
+        self.presionEntradaBar.setStyleSheet(style)
 
-    def Dial2(self):
-        slider= self.horizontalSlider_2.value()
-        self.label_3.setText(str(slider) + " %")
-        stopValue= (slider)/100
+    def presionSalidaDial(self, presion):
+        stopValue= presion / 4096.0
 
+        #print(f"stopValue: {stopValue}")
         gradient = stopValue-0.05
-        if(gradient < 0):
+        if(gradient < 0): 
             gradient = 0
             stopValue = 0.05
         if(stopValue>1):
@@ -312,5 +318,5 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
                         stop:{gradient} rgba{color}
                         );
             }}"""
-        self.Bar_2.setStyleSheet(style)
+        self.presionSalidaBar.setStyleSheet(style)
 
