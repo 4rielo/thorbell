@@ -18,8 +18,8 @@ import time
 import json
 import datetime
 import threading
-import ADS1115
-#import random
+#import ADS1115
+import random
 
 #Variables "globales", que se acceden en las distintas clases que atienden
 # las solicitudes
@@ -209,15 +209,6 @@ def timer10ms():
     ADS1115_FS_1024 = 3
     ADS1115_FS_512 = 4
 
-    ADS_tmpEntrada = (ads1,5,ADS1115_FS_4096)
-    ADS_rvEntrada = (ads1,4,ADS1115_FS_4096)
-
-    ADS_tmpSalida = (ads1,7,ADS1115_FS_4096)
-    ADS_rvSalida = (ads1,6,ADS1115_FS_4096)
-
-    ADS_presionEntrada = (ads2,4,ADS1115_FS_512)
-    ADS_presionSalida = (ads2,5,ADS1115_FS_512)
-
     acumTmp_flujoEntrada = 0
     acumRv_flujoEntrada = 0
 
@@ -235,7 +226,7 @@ def timer10ms():
 
         if(not sec1%10):             #cada 100 ms
             #Mido temperatura y Rv de flujo de entrada, y acumulo para sacar medición promedio
-            acumTmp_flujoEntrada += ADS1115.ReadADC(ads1,5,ADS1115_FS_4096)
+            """acumTmp_flujoEntrada += ADS1115.ReadADC(ads1,5,ADS1115_FS_4096)
             acumRv_flujoEntrada += ADS1115.ReadADC(ads1,4,ADS1115_FS_4096)
 
             #Mido temperatura y Rv de flujo de salida, y acumulo para sacar medición promedio
@@ -243,9 +234,9 @@ def timer10ms():
             acumRv_flujoSalida += ADS1115.ReadADC(ads1,6,ADS1115_FS_4096)
 
             acumPresion_Entrada += ADS1115.ReadADC(ads2,4,ADS1115_FS_512)
-            acumPresion_Salida += ADS1115.ReadADC(ads2,5,ADS1115_FS_512)
+            acumPresion_Salida += ADS1115.ReadADC(ads2,5,ADS1115_FS_512)"""
 
-            """acumTmp_flujoEntrada += random.randint(0,4096)
+            acumTmp_flujoEntrada += random.randint(0,4096)
             acumRv_flujoEntrada += random.randint(0,4096)
 
             #Mido temperatura y Rv de flujo de salida, y acumulo para sacar medición promedio
@@ -253,7 +244,7 @@ def timer10ms():
             acumRv_flujoSalida += random.randint(2000,2500)
 
             acumPresion_Entrada += random.randint(0,4096)
-            acumPresion_Salida += random.randint(3000,3596)"""
+            acumPresion_Salida += random.randint(2000,2596) #"""
             contadorMediciones +=1          #incremento la cantidad de mediciones
 
             if(contadorMediciones>9):        #10 mediciones para calcular el promedio (contador de 0 a 9)

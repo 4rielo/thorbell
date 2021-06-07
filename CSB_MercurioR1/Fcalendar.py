@@ -20,9 +20,14 @@ class CalendarWindow(QtWidgets.QMainWindow, Ui_form):
         self.setWindowTitle("CONFIG")
         self.setWindowFlags(PySide2.QtCore.Qt.FramelessWindowHint) 
 
-        #Obtiene el "status" general
-        response = requests.get(main.localhost).text
-        self.status=json.loads(response)
+        try:
+            #Obtiene el "status" general
+            response = requests.get(f"{main.localhost}/status").text
+            self.status=json.loads(response)
+        except:
+            #TODO: add a function or routine that checkes whether the microservices process is running, 
+            #and reboots it if needed
+            pass
 
         #Revisa si está encendido la función de calendario (Por defecto, inicia en UV Calendar)
         if(self.status.get("UV_Calendar")):
@@ -315,10 +320,18 @@ class CalendarWindow(QtWidgets.QMainWindow, Ui_form):
 
             if(self.uvBtn.isChecked()):
                 self.status.update({"UV_Calendar_init": format(init_Status,"%Y/%m/%d %H:%M")})
-                response = requests.post(main.localhost,params = {"UV_Calendar_init": format(init_Status,"%Y/%m/%d %H:%M")})
+                try:
+                    response = requests.post(f"{main.localhost}/status",params = {"UV_Calendar_init": format(init_Status,"%Y/%m/%d %H:%M")})
+                except:
+                    #TODO: handling microprocess request failure
+                    pass
             elif(self.rutinaBtn.isChecked()):
                 self.status.update({"Rutina_Calendar_init": format(init_Status,"%Y/%m/%d %H:%M")})
-                response = requests.post(main.localhost,params = {"Rutina_Calendar_init": format(init_Status,"%Y/%m/%d %H:%M")})
+                try:
+                    response = requests.post(f"{main.localhost}/status",params = {"Rutina_Calendar_init": format(init_Status,"%Y/%m/%d %H:%M")})
+                except:
+                    #TODO: handling microprocess request failure
+                    pass
 
     def updateEndDate(self):
         #Antes de guardar, verifica que, si la fecha/hora de fin son menores
@@ -341,9 +354,17 @@ class CalendarWindow(QtWidgets.QMainWindow, Ui_form):
 
             if(self.uvBtn.isChecked()):
                 self.status.update({"UV_Calendar_end": format(end_Status,"%Y/%m/%d %H:%M")})
-                response = requests.post(main.localhost,params = {"UV_Calendar_end": format(end_Status,"%Y/%m/%d %H:%M")})
+                try:
+                    response = requests.post(f"{main.localhost}/status",params = {"UV_Calendar_end": format(end_Status,"%Y/%m/%d %H:%M")})
+                except:
+                    #TODO: handling microprocess request failure
+                    pass
             elif(self.rutinaBtn.isChecked()):
                 self.status.update({"Rutina_Calendar_end": format(end_Status,"%Y/%m/%d %H:%M")})
-                response = requests.post(main.localhost,params = {"Rutina_Calendar_end": format(end_Status,"%Y/%m/%d %H:%M")})
+                try:
+                    response = requests.post(f"{main.localhost}/status",params = {"Rutina_Calendar_end": format(end_Status,"%Y/%m/%d %H:%M")})
+                except:
+                    #TODO: handling microprocess request failure
+                    pass
 
             #print(format(end_Status,"%Y/%m/%d %H:%M"))

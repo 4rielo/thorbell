@@ -72,9 +72,25 @@ class ClockWindow(QtWidgets.QMainWindow, Ui_form):
         self.fechaEdit.dateChanged.connect(self.updateFecha)
 
         #Mostrar fecha y hora actual
-        self.today=date.today()         #Obtiene la fecha de hoy
+        try:
+            #Obtiene el "status" general
+            currentTimeDate = requests.get(f"{main.localhost}/status", params = "time").text
+            currentTimeDate=datetime.fromisoformat(currentTimeDate)
+            #Actualiza hora y fecha
+            
+            gmtValue = requests.get(f"{main.localhost}/status",params = 'GMT').text
+            self.gmtEdit.setValue(gmtValue.value())
+
+            self.now = currentTimeDate.today()
+            self.today=currentTimeDate.now()
+        except:
+            #TODO: add a function or routine that checks whether the microservices process is running, 
+            #and reboots it if needed
+            self.today=date.today()         #Obtiene la fecha de hoy
+            self.now=datetime.now()
+            pass
+        
         todayQt = PySide2.QtCore.QDate(self.today.year, self.today.month, self.today.day)
-        self.now=datetime.now()
         hourQt = PySide2.QtCore.QTime(self.now.hour, self.now.minute,0)
 
         self.horaEdit.setTime(hourQt)
@@ -105,12 +121,16 @@ class ClockWindow(QtWidgets.QMainWindow, Ui_form):
         self.fechaEdit.setDate(self.fechaEdit.date().addDays(-1))
 
     def updateHora(self):
-        fecha = f"{self.fechaEdit.year}-{self.fechaEdit.month}-{self.fechaEdit.day}"
-        hora = f"{self.horaEdit.hour}:{self.horaEdit.minute}:{self.horaEdit.seconds}"
-        command = f"timedatectl set-time '{fecha} {hora}'"
+        """fecha = self.fechaEdit.date()
+        fecha = f"{fecha.year}-{fecha.month}-{fecha.day}"
+        hora = f"{self.horaEdit.hour}:{self.horaEdit.minute}:{self.horaEdit.seconds}"""
+        pass
+
+        """command = f"timedatectl set-time '{fecha} {hora}'"
         response = subprocess.run(command, capture_output=True,text=True,shell=True)
-        print(response)
+        print(response)"""
 
     def updateFecha(self):
-        command = f"timedatectl set-time '{self.fechaEdit.year}-{self.fechaEdit.month}-{self.fechaEdit.day} {self.horaEdit.hour}:{self.horaEdit.minute}:{self.horaEdit.seconds}'"
-        response = subprocess.run(command, shell=True)
+        #command = f"timedatectl set-time '{self.fechaEdit.year}-{self.fechaEdit.month}-{self.fechaEdit.day} {self.horaEdit.hour}:{self.horaEdit.minute}:{self.horaEdit.seconds}'"
+        #response = subprocess.run(command, shell=True)
+        pass

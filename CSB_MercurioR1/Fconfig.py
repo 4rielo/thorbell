@@ -8,6 +8,7 @@ import time
 import threading
 import main
 import json
+import requests
 
 #from CSB_MercurioR1.Pconfig import Ui_form
 from Pconfig import Ui_form
@@ -20,7 +21,7 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
         self.setupUi(self)
         self.setWindowTitle("CONFIG")
 
-        print("Open: " + main.texto.get("configTittle"))
+        #print("Open: " + main.texto.get("configTittle"))
 
         self.tittleGlow.setText(main.texto.get("configTittle"))
         self.tittle.setText(main.texto.get("configTittle"))
@@ -29,9 +30,17 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
         self.infoLabel.setText("Info")
         self.infoLabel_Glow.setText("Info")
 
-        with open(main.statusFile) as f:
-            status=json.load(f)
-        if(status.get("screenUser")):
+        try:
+            #Obtiene el "status" general
+            response = requests.get(f"{main.localhost}/status").text
+            self.status=json.loads(response)
+        except:
+            #TODO: add a function or routine that checkes whether the microservices process is running, 
+            #and reboots it if needed
+            self.status= dict()
+            pass
+
+        if(self.status.get("screenUser")):
             self.loginLabel.setText("Log Out")
         else: 
             self.loginLabel.setText("Log In")
@@ -60,9 +69,21 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
         self.infoWindow = InfoWindow()
         self.infoWindow.show()
 
-    def login(self):
-        self.loginWindow = LoginWindow()
-        self.loginWindow.show()
+    def login(self):            #Dependiendo de si ya se está logueado o no
+        if(self.status.get("screenUser")):                  #Si se está logueado
+            self.loginLabel.setText("Log In")
+            self.status.update({"screenUser" : ""})
+            try:
+                response = requests.post(json.dumps(f"{main.localhost}/status", params = {"screenUser" : self.status.get('screenUser')}))
+            except:
+                #TODO: add a function or routine that checks whether the microservices process is running, 
+                #and reboots it if needed
+                pass
+
+        else: 
+            self.loginWindow = LoginWindow()
+            self.loginWindow.show()
+        
 
     def UpdateFunction(self):
         import subprocess

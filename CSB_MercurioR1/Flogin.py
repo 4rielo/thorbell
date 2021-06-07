@@ -7,6 +7,7 @@ from PySide2.QtUiTools import QUiLoader
 import time
 import main
 import json
+import requests
 
 from Plogin import Ui_form
 
@@ -19,8 +20,17 @@ class LoginWindow(QtWidgets.QMainWindow, Ui_form):
         self.tittleGlow.setText(main.texto.get("loginTittle"))
         self.tittle.setText(main.texto.get("loginTittle"))
 
-        with open(main.statusFile) as fp:
-            self.status=json.load(fp)
+        try:
+            #Obtiene el "status" general
+            response = requests.get(f"{main.localhost}/status").text
+            self.status=json.loads(response)
+        except:
+            #TODO: add a function or routine that checkes whether the microservices process is running, 
+            #and reboots it if needed
+            self.status= dict()
+            pass
+
+        
         with open(main.usersFile) as us:
             self.users=json.load(us)
 

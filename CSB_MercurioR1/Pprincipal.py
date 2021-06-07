@@ -327,6 +327,12 @@ class Ui_form(object):
         self.UV_label.setStyleSheet(UV_style)
 #**********************************************************************************
 
+#**********************************************************************************
+        self.TimingTimer = QTimer(self.BACKGROUND)
+        self.TimingTimer.setInterval(100)
+        self.TimingTimer.setSingleShot(False)
+#**********************************************************************************
+
         self.BACKGROUND.raise_()
         
         self.TopProgressBar.raise_()

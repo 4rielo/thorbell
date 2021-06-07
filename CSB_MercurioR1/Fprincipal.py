@@ -104,8 +104,10 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         #Thread de 100 ms, para base de tiempo de ejecución. 
         #Corre en paralelo con la app
         self.ms100=0
-        clock = threading.Thread(target=self.timer100ms,daemon=True)
-        clock.start()
+        #clock = threading.Thread(target=self.timer100ms,daemon=True)
+        #clock.start()
+        self.TimingTimer.timeout.connect(self.timer100ms)
+        self.TimingTimer.start()
     #FIN init
 
 
@@ -117,57 +119,63 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
 # Cada un segundo se actualiza el reloj en pantalla.
 
     def timer100ms(self):           #recurrent timer - base de tiempo de 100ms para chekear estado de las cosas
-        while(True):
-            #revisa el estado de la luz led, y setea el botón de luz de acuerdo
-            #Compara contra "main.ligthOnOff", ya que éste valor se modifica
-            #dentro del menú de LuminariaLED
-            if(self.luz_Btn.isChecked() != main.lightOnOff):
-                self.luz_Btn.toggle()
-            if(self.uv_Btn.isChecked() != main.uvOnOff):
-                self.uv_Btn.toggle()
-            self.ms100 += 1
+        #revisa el estado de la luz led, y setea el botón de luz de acuerdo
+        #Compara contra "main.ligthOnOff", ya que éste valor se modifica
+        #dentro del menú de LuminariaLED
+        if(self.luz_Btn.isChecked() != main.lightOnOff):
+            self.luz_Btn.toggle()
+        if(self.uv_Btn.isChecked() != main.uvOnOff):
+            self.uv_Btn.toggle()
+        self.ms100 += 1
 
-            #Pasó 1 segundo
-            if(self.ms100>10):
-                self.ms100=0
+        #Pasó 1 segundo
+        if(self.ms100>10):
+            self.ms100=0
 
-                #Pide la hora actual a microservicios (server en localhost:8085)
-                currentTimeDate = requests.get(f"{main.localhost}/status", params = "time").text
-                #Convierte el string con fecha y hora, en OBJETO de datetime
-                currentTimeDate=datetime.fromisoformat(currentTimeDate)
-                #Actualiza hora y fecha
-                #obtiene la hora en string para mostrar en pantalla
-                currentTime=currentTimeDate.strftime("%H:%M:%S")
-                self.hora.setText(currentTime)
-                #obtiene la fecha en string para mostrar en pantalla
-                today=currentTimeDate.strftime("%d/%m/%Y")
-                self.fecha.setText(today)
+            #Pide la hora actual a microservicios (server en localhost:8085)
+            currentTimeDate = requests.get(f"{main.localhost}/status", params = "time").text
+            #Convierte el string con fecha y hora, en OBJETO de datetime
+            currentTimeDate=datetime.fromisoformat(currentTimeDate)
+            #Actualiza hora y fecha
+            #obtiene la hora en string para mostrar en pantalla
+            currentTime=currentTimeDate.strftime("%H:%M:%S")
+            self.hora.setText(currentTime)
+            #obtiene la fecha en string para mostrar en pantalla
+            today=currentTimeDate.strftime("%d/%m/%Y")
+            self.fecha.setText(today)
+        
+            #La variable status contiene el estado global del equipo.
+            """with open(main.usersFile) as us:
+                self.users=json.load(us)"""
             
-                #La variable status contiene el estado global del equipo.
-                """with open(main.usersFile) as us:
-                    self.users=json.load(us)"""
-                
-                #Lee el estado global del equipo
-                self.status=json.loads(requests.get(f"{main.localhost}/status").text)
-                main.lightOnOff=self.status.get("LED_Light")
-                main.uvOnOff=self.status.get("UV_Light")
+            #Lee el estado global del equipo
+            self.status=json.loads(requests.get(f"{main.localhost}/status").text)
+            main.lightOnOff=self.status.get("LED_Light")
+            main.uvOnOff=self.status.get("UV_Light")
 
-                #Lee los valores de ADC para mostrar vel de flujo y presión en el dial
-                #print("Pide ADC")
+            #Lee los valores de ADC para mostrar vel de flujo y presión en el dial
+            #print("Pide ADC")
+            try:
                 medicionesADC = json.loads(requests.get(f"{main.localhost}/adc").text)
-                #print(medicionesADC)
-                flujoEntrada_aux=float(medicionesADC['flujoEntrada'])
-                flujoSalida_aux=float(medicionesADC['flujoSalida'])
-                self.flujoEntradaLbl.setText("{:.2f} m/s".format(flujoEntrada_aux))
-                self.flujoSalidaLbl.setText("{:.2f} m/s".format(flujoSalida_aux))
-                self.presionEntradaDial(float(medicionesADC['presionEntrada']))
-                self.presionSalidaDial(float(medicionesADC['presionSalida']))
-                
+            except:
+                medicionesADC = {
+                    'flujoEntrada':1000,
+                    'flujoSalida' : 1000,
+                    'presionEntrada' : 1000,
+                    'presionSalida' : 1000,
+                }
+                print(medicionesADC)
+            flujoEntrada_aux=float(medicionesADC['flujoEntrada'])
+            flujoSalida_aux=float(medicionesADC['flujoSalida'])
+            self.flujoEntradaLbl.setText("{:.2f} m/s".format(flujoEntrada_aux))
+            self.flujoSalidaLbl.setText("{:.2f} m/s".format(flujoSalida_aux))
+            self.presionEntradaDial(float(medicionesADC['presionEntrada']))
+            self.presionSalidaDial(float(medicionesADC['presionSalida']))
+            
 
-                #self.currentUser=self.users.get(self.status.get("screenUser"))
-                #print(self.currentUser)
-                #self.userLbl.setText(self.currentUser['name'])
-            time.sleep(0.1)
+            #self.currentUser=self.users.get(self.status.get("screenUser"))
+            #print(self.currentUser)
+            #self.userLbl.setText(self.currentUser['name'])
 
 #**********************************************************************************************
 #Aquí está la interacción con el botón de luz.
@@ -184,9 +192,12 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
     def LuminariaLED_clicked(self):
         if(not self.luz_Btn.isDown()):
             main.lightOnOff=self.luz_Btn.isChecked()
-            response = requests.post(f"{main.localhost}/status",params= {"LED_Light" : main.lightOnOff})
-            #TODO si no obtiene respuesta de "request.post" debería hacer algo, 
-            # y/o ejecutar el servidor de estado
+            try:
+                response = requests.post(f"{main.localhost}/status",params= {"LED_Light" : main.lightOnOff})
+            except:
+                #TODO: handle microservises request failure
+                pass
+            
         else:
             if(main.lightOnOff != self.luz_Btn.isChecked()):
                 self.luz_Btn.toggle()
@@ -211,12 +222,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
 #según lo almacenado en "main.uvTimer"
     def UVLED_clicked(self):
         if(not self.uv_Btn.isDown()):
-            main.UV_OnOff=self.uv_Btn.isChecked()
-            response = requests.post(f"{main.localhost}/status",params= {"UV_Light" : main.UV_OnOff})
-            #TODO si no obtiene respuesta de "request.post" debería hacer algo, 
-            # y/o ejecutar el servidor de estado
+            main.uvOnOff=self.uv_Btn.isChecked()
+            try:
+                response = requests.post(f"{main.localhost}/status",params= {"UV_Light" : main.uvOnOff})
+            except:
+                #TODO: handle microservises request failure
+                pass
         else:
-            if(main.UV_OnOff != self.uv_Btn.isChecked()):
+            if(main.uvOnOff != self.uv_Btn.isChecked()):
                 self.uv_Btn.toggle()
 
             #print("UV_Config window open")
@@ -227,7 +240,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
 #**************************************************************************************************************
 #Ventana de advertencia         - Muestra las advertencias existentes
     def advertenciaClicked(self):
-        print("Show Advertencia")
+        #print("Show Advertencia")
         self.advertenciaWindow = AdvertenciaWindow()
         self.advertenciaWindow.show()
 
@@ -257,7 +270,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
 
 #**************************************************************************************************************
     def presionEntradaDial(self, presion):
-        stopValue = presion / 4096
+        stopValue = round (presion / 4096.0 , 2)
 
         gradient = stopValue-0.05
         if(gradient < 0):
@@ -287,36 +300,37 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
             }}"""
         self.presionEntradaBar.setStyleSheet(style)
 
-    def presionSalidaDial(self, presion):
-        stopValue= presion / 4096.0
+    def presionSalidaDial(self, presion2):
+        #print("Presion: " + str(presion))
+        stopValue2= round(presion2 / 4096.0 , 2)
 
-        #print(f"stopValue: {stopValue}")
-        gradient = stopValue-0.05
-        if(gradient < 0): 
-            gradient = 0
-            stopValue = 0.05
-        if(stopValue>1):
-            stopValue=1
-        if(gradient>1):
-            gradient=1
+        print(f"stopValue: {stopValue2}")
+
+        gradient2 = stopValue2-0.05
+        if(gradient2 < 0): 
+            gradient2 = 0
+            stopValue2 = 0.05
+        if(stopValue2>1):
+            stopValue2=1
+        if(gradient2>1):
+            gradient2=1
             
-        if(stopValue < 0.15 or stopValue > 0.85 ):
-            color=(255, 0, 0, 145)
-        elif(stopValue < 0.4 or stopValue > 0.6):
-            color=(255,197,0,145)
+        if(stopValue2 < 0.15 or stopValue2 > 0.85 ):
+            color2=(255, 0, 0, 145)
+        elif(stopValue2 < 0.4 or stopValue2 > 0.6):
+            color2=(255,197,0,145)
         else:
-            color=(51, 255, 151, 145)
+            color2=(51, 255, 151, 145)
 
-        style=f"""
+        style2=f"""
             QFrame{{
                     border-radius: 138px;
                     background-image: url();
                     background-color: qradialgradient(
                         spread:pad, 
                         cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, 
-                        stop:{stopValue} rgba(255, 255, 255, 0), 
-                        stop:{gradient} rgba{color}
+                        stop:{stopValue2} rgba(255, 255, 255, 0), 
+                        stop:{gradient2} rgba{color2}
                         );
             }}"""
-        self.presionSalidaBar.setStyleSheet(style)
-
+        self.presionSalidaBar.setStyleSheet(style2)

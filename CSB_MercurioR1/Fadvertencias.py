@@ -7,6 +7,7 @@ from PySide2.QtUiTools import QUiLoader
 import time
 import threading
 import json
+import requests
 
 import main         #to read the lightOnOff status
 
@@ -21,10 +22,19 @@ class AdvertenciaWindow(QtWidgets.QMainWindow, Ui_form):
 
         initialPressDelay=500          #Delay inicial, antes de tomar el "autoRepeat" (en ms)
         autoRepeatDelay=50            #Delay entre incremento cuando se mantiene presionado (en ms)
-        with open(main.statusFile) as f:
-            data=json.load(f)                               #and loads json object
+
+        try:
+            #Obtiene el "status" general
+            response = requests.get(f"{main.localhost}/status").text
+            self.status=json.loads(response)
+        except:
+            #TODO: add a function or routine that checkes whether the microservices process is running, 
+            #and reboots it if needed
+            self.status= {'WARNINGS':[]}
+            print(self.status)
+            pass
     
-        advertencias=data.get("WARNINGS")
+        advertencias=self.status.get("WARNINGS")
         cantidad = len(advertencias)            #Cantidad de advertencias a mostrar
         self.listLabels = list()
         self.listLabelsGlow = list()
@@ -39,13 +49,10 @@ class AdvertenciaWindow(QtWidgets.QMainWindow, Ui_form):
         self.label_style=f"""
             QLabel{{
                 font-size: 23px;
-            }}
-        """
+            }}"""
 
         self.tittleGlow.setText(main.texto.get("warningTittle"))
         self.tittle.setText(main.texto.get("warningTittle"))
-        print("Tittle effect: ")
-        print(self.Effect)
         self.tittleGlow.setGraphicsEffect(self.Effect)
 
 
@@ -80,8 +87,8 @@ class AdvertenciaWindow(QtWidgets.QMainWindow, Ui_form):
             self.BtnsLayout.addWidget(self.listLabels[idx], idx, 1)     #Agrega la etiqueta al layout, row= IDX, columna= 1 
             self.BtnsLayout.addWidget(self.listLabelsGlow[idx], idx, 1) #Agrega el efecto de brillo, en la misma posicion que la etiqueta
         
-        print(self.listLabels)
-        print(self.listLabelsGlow)
+        #print(self.listLabels)
+        #print(self.listLabelsGlow)
 
         self.backButton.clicked.connect(self.goBack_clicked)
         
