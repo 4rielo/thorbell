@@ -24,7 +24,7 @@ statusFile= path + "/status.dat"
 usersFile = path + "/users.dat"
 infoFile= path +"/info.dat"
 globalPath = path + "/.."
-port = 8085
+port = 8095
 localhost = f"http://localhost:{port}" 
 
 def statusTimer():              #StatusTimer, reads statuts file every XXX seconds, and activates or deactivates outputs

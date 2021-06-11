@@ -164,6 +164,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
                     'presionEntrada' : 1000,
                     'presionSalida' : 1000,
                 }
+            
                 print(medicionesADC)
             flujoEntrada_aux=float(medicionesADC['flujoEntrada'])
             flujoSalida_aux=float(medicionesADC['flujoSalida'])
@@ -304,7 +305,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         #print("Presion: " + str(presion))
         stopValue2= round(presion2 / 4096.0 , 2)
 
-        print(f"stopValue: {stopValue2}")
+        #print(f"stopValue: {stopValue2}")
 
         gradient2 = stopValue2-0.05
         if(gradient2 < 0): 

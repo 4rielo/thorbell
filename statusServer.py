@@ -18,7 +18,16 @@ import time
 import json
 import datetime
 import threading
-#import ADS1115
+
+#Módulos de manejo de puertos de I/O e I2C
+import ADS1115
+import MCP23017
+import OPi.GPIO as GPIO                 #Para PWM en RA5 (PWM0)
+
+from pyA20.gpio import gpio             #Para PWM por software en PA6 (pin 7)    
+from pyA20.gpio import port
+from orangepwm import *
+
 import random
 
 #Variables "globales", que se acceden en las distintas clases que atienden
@@ -44,8 +53,25 @@ essentials = (
                 "WARNINGS"
             )
 
+#################################################################################
+
+#PWM por software, con librería orangepwm, y pyA20
+gpio.init()
+pwm = OrangePwm(100, port.PA6)          #100Hz en PA6
+pwm.start(0)
+
+#PWM0 - Configuración con librería OPi.GPIO
+PWM_chip = 0
+PWM_pin = 0
+frequency_Hz=2000
+Duty_Cycle_Percent=0
+LED = GPIO.PWM(PWM_chip, PWM_pin, frequency_Hz, Duty_Cycle_Percent)
+LED.start_pwm(0)
+
+#################################################################################
+
 #Las direcciones sobre las que recibe solicitudes de microservicios "status"
-urls = ('/','root', '/status', 'Status','/adc','ADC')
+urls = ('/','root', '/status', 'Status','/adc','ADC', '/reboot','reboot')
 app = web.application(urls,globals())
 
 #Dirección de la carpeta, donde se encuentra el archivo ejecutado
@@ -101,12 +127,6 @@ except:                             #Si no econtró el arvchivo
         json.dump(data,f)
     print("Status file not found. Creates initial ( default) status file")
 
-#print(path+"/idioma/" + data.get("Idioma") + ".dat")
-
-"""with open(path+"/idioma/" + data.get("Idioma") + ".dat") as f:
-    global texto
-    texto = json.load(f)"""
-
 #TODO: Aquí se obtiene el tiempo del reloj SPI, y se revisa si hay conexión a 
 # internet. 
 
@@ -119,15 +139,23 @@ class root:
     def GET(self):
         return self.hello
 
+class reboot:
+    def GET(self):
+        input = web.input()
+        for x in input.keys():
+            if(x == "reboot"): 
+                command = "reboot"
+                subprocess.run(command,shell=True)
+
 class Status:
     #Variables globales obtenidas del archivo status.dat
     global status
     global essentials
     #####################################################
     def __init__(self):
-        """clock = threading.Thread(target=timer10ms,daemon=True)
-        clock.start()
-        print("New Thread" + str(clock.id))"""
+        #GPIO.setboard(GPIO.)
+        global LED
+        
         pass
 
     def GET(self):              #Aquí defino qué variable quiero leer, ej: GET -> status?Idioma
@@ -175,6 +203,23 @@ class Status:
                 #storeInStatusp=True           #Si corresponde, actualiza el archivo status.dat
                 with open(statusFile, "w") as st:
                     json.dump(status,st)
+
+            if (a == 'LED_Light'):          #se quiere encender o apagar la luz LED
+                if(input[a]):
+                    LED.duty_cycle(status.get('LEDPWM'))
+                else:
+                    LED.duty_cycle(0)
+                
+            if(a == 'LEDPWM'):
+                if(status.get('LED_Light')):
+                    LED.duty_cycle(status.get('LEDPWM'))
+
+            if(a == 'UV_Light'):
+                if(input[a]):
+                    pwm.changeDutyCycle(status.get('LEDPWM'))
+                else:
+                    pwm.changeDutyCycle(0)
+
         #Finalmente, devuelve el valor de la variable status que se modificó
         return json.dumps({x: status.get(x) for x in input.keys()})
 
@@ -188,7 +233,7 @@ class ADC:
         input = web.input()             #What ADC reading was requested
         for x in input.keys():          
             pass
-        print(f"GET: {mediciones}")
+        #print(f"GET: {mediciones}")
         return json.dumps(mediciones)
         
     def POST(self):
@@ -196,122 +241,145 @@ class ADC:
         for x in input.keys():
             mediciones[x] = input[x]
 
-        print(f"POST: {mediciones}")
+        #print(f"POST: {mediciones}")
         return "Ok"
 
-def timer10ms():
-    sec1=0 
-    ads1 = 0x48
-    ads2 = 0x49
+class TIMER:
+    def __init__(self):
+        self.flujoEntrada=float()
+        self.flujoSalida=float()
+        self.presionEntrada=float()
+        self.presionSalida=float()
 
-    ADS1115_FS_4096 = 1
-    ADS1115_FS_2048 = 2
-    ADS1115_FS_1024 = 3
-    ADS1115_FS_512 = 4
+        self.status=dict()
 
-    acumTmp_flujoEntrada = 0
-    acumRv_flujoEntrada = 0
+        self.status = json.loads(app.request("/status", method = 'GET').data)
 
-    acumTmp_flujoSalida = 0
-    acumRv_flujoSalida = 0
+        self.mediciones = { 'flujoEntrada' : self.flujoEntrada , 
+                        'flujoSalida' : self.flujoSalida , 
+                        'presionEntrada' : self.presionEntrada , 
+                        'presionSalida' : self.presionSalida
+                        }
 
-    acumPresion_Entrada = 0
-    acumPresion_Salida = 0
+    def timer10ms(self):
+        sec1=0 
+        ads1 = 0x48
+        ads2 = 0x49
 
-    contadorMediciones = 0
+        ADS1115_FS_4096 = 1
+        ADS1115_FS_2048 = 2
+        ADS1115_FS_1024 = 3
+        ADS1115_FS_512 = 4
 
-    while(True):
+        acumTmp_flujoEntrada = 0
+        acumRv_flujoEntrada = 0
 
-        sec1 += 1
+        acumTmp_flujoSalida = 0
+        acumRv_flujoSalida = 0
 
-        if(not sec1%10):             #cada 100 ms
-            #Mido temperatura y Rv de flujo de entrada, y acumulo para sacar medición promedio
-            """acumTmp_flujoEntrada += ADS1115.ReadADC(ads1,5,ADS1115_FS_4096)
-            acumRv_flujoEntrada += ADS1115.ReadADC(ads1,4,ADS1115_FS_4096)
+        acumPresion_Entrada = 0
+        acumPresion_Salida = 0
 
-            #Mido temperatura y Rv de flujo de salida, y acumulo para sacar medición promedio
-            acumTmp_flujoSalida += ADS1115.ReadADC(ads1,7,ADS1115_FS_4096)
-            acumRv_flujoSalida += ADS1115.ReadADC(ads1,6,ADS1115_FS_4096)
+        contadorMediciones = 0
 
-            acumPresion_Entrada += ADS1115.ReadADC(ads2,4,ADS1115_FS_512)
-            acumPresion_Salida += ADS1115.ReadADC(ads2,5,ADS1115_FS_512)"""
+        while(True):
 
-            acumTmp_flujoEntrada += random.randint(0,4096)
-            acumRv_flujoEntrada += random.randint(0,4096)
+            sec1 += 1
 
-            #Mido temperatura y Rv de flujo de salida, y acumulo para sacar medición promedio
-            acumTmp_flujoSalida += 100#random.randint(00,500)
-            acumRv_flujoSalida += random.randint(2000,2500)
+            if(not sec1%10):             #cada 100 ms
+                #Mido temperatura y Rv de flujo de entrada, y acumulo para sacar medición promedio
+                acumTmp_flujoEntrada += ADS1115.ReadADC(ads1,5,ADS1115_FS_4096)
+                acumRv_flujoEntrada += ADS1115.ReadADC(ads1,4,ADS1115_FS_4096)
 
-            acumPresion_Entrada += random.randint(0,4096)
-            acumPresion_Salida += random.randint(2000,2596) #"""
-            contadorMediciones +=1          #incremento la cantidad de mediciones
+                #Mido temperatura y Rv de flujo de salida, y acumulo para sacar medición promedio
+                acumTmp_flujoSalida += ADS1115.ReadADC(ads1,7,ADS1115_FS_4096)
+                acumRv_flujoSalida += ADS1115.ReadADC(ads1,6,ADS1115_FS_4096)
 
-            if(contadorMediciones>9):        #10 mediciones para calcular el promedio (contador de 0 a 9)
-
-                """Cálculo de flujo de Entrada"""
-                rvEntrada = acumRv_flujoEntrada/10.0          #promedio de 10 mediciones
-                tmpEntrada = acumTmp_flujoEntrada/10.0        #promedio de 10 mediciones
+                acumPresion_Entrada += ADS1115.ReadADC(ads2,4,ADS1115_FS_512)
+                acumPresion_Salida += ADS1115.ReadADC(ads2,5,ADS1115_FS_512) #"""
                 
-                #Fórmula obtenida de software de PIC, extraida de hoja de datos del sensor de flujo de aire
-                velCeroEntrada = -0.0006 * tmpEntrada * tmpEntrada / 1024.0 + 1.0727 * tmpEntrada/32.0 + 8.172
-                rvEntrada /= 32.0
-                velCeroEntrada = (rvEntrada - velCeroEntrada) * 0.01739
-                if(velCeroEntrada < 0):
-                    velCeroEntrada = 0.0
-                
-                flujoEntrada = pow(velCeroEntrada,2.7265) * 160.934
+                """#bloque de números RANDOM para probar el código en la PC
+                acumTmp_flujoEntrada += random.randint(1000,2096)
+                acumRv_flujoEntrada += random.randint(2000,3096)
 
-                """Cálculo de flujo de Salida"""
-                rvSalida = acumRv_flujoSalida/10.0          #promedio de 10 mediciones
-                tmpSalida = acumTmp_flujoSalida/10.0        #promedio de 10 mediciones
-                
-                #Fórmula obtenida de software de PIC, extraida de hoja de datos del sensor de flujo de aire
-                velCeroSalida = -0.0006 * tmpSalida * tmpSalida / 1024.0 + 1.0727 * tmpSalida/32.0 + 8.172
-                rvSalida /= 32.0
-                velCeroSalida = (rvSalida - velCeroSalida) * 0.01739
-                if(velCeroSalida < 0):
-                    velCeroSalida = 0.0
-                
-                flujoSalida = pow(velCeroSalida,2.7265) * 160.934
+                #Mido temperatura y Rv de flujo de salida, y acumulo para sacar medición promedio
+                acumTmp_flujoSalida += 100#random.randint(00,500)
+                acumRv_flujoSalida += random.randint(2000,2500)
 
-                """Cálculo de presion de flujo de entrada """
-                presionEntrada = acumPresion_Entrada/10
+                acumPresion_Entrada += random.randint(1000,2096)
+                acumPresion_Salida += random.randint(2000,2596) #"""
+                contadorMediciones +=1          #incremento la cantidad de mediciones
 
-                """Cálculo de presion de flujo de salida """
-                presionSalida = acumPresion_Salida/10
+                if(contadorMediciones>9):        #10 mediciones para calcular el promedio (contador de 0 a 9)
 
-                """Recopilo todas las mediciones en un dict"""
-                mediciones = { 'flujoEntrada' : flujoEntrada , 
-                    'flujoSalida' : flujoSalida , 
-                    'presionEntrada' : presionEntrada , 
-                    'presionSalida' : presionSalida
-                    }
-                #y lo envío al servidor, para que la pantalla y app web tengan un nuevo valor
-                print(f"ADC: {mediciones}")
-                postData = app.request("/adc" , method ='POST' , data = mediciones)
+                    """Cálculo de flujo de Entrada"""
+                    rvEntrada = acumRv_flujoEntrada/10.0          #promedio de 10 mediciones
+                    tmpEntrada = acumTmp_flujoEntrada/10.0        #promedio de 10 mediciones
+                    
+                    #Fórmula obtenida de software de PIC, extraida de hoja de datos del sensor de flujo de aire
+                    velCeroEntrada = -0.0006 * tmpEntrada * tmpEntrada / 1024.0 + 1.0727 * tmpEntrada/32.0 + 8.172
+                    rvEntrada /= 32.0
+                    velCeroEntrada = (rvEntrada - velCeroEntrada) * 0.01739
+                    if(velCeroEntrada < 0):
+                        velCeroEntrada = 0.0
+                    
+                    self.flujoEntrada = pow(velCeroEntrada,2.7265) * 160.934
 
-                """ Reinicio contadores y acumuladores a cero"""
-                acumTmp_flujoEntrada=0
-                acumRv_flujoEntrada=0
+                    """Cálculo de flujo de Salida"""
+                    rvSalida = acumRv_flujoSalida/10.0          #promedio de 10 mediciones
+                    tmpSalida = acumTmp_flujoSalida/10.0        #promedio de 10 mediciones
+                    
+                    #Fórmula obtenida de software de PIC, extraida de hoja de datos del sensor de flujo de aire
+                    velCeroSalida = -0.0006 * tmpSalida * tmpSalida / 1024.0 + 1.0727 * tmpSalida/32.0 + 8.172
+                    rvSalida /= 32.0
+                    velCeroSalida = (rvSalida - velCeroSalida) * 0.01739
+                    if(velCeroSalida < 0):
+                        velCeroSalida = 0.0
+                    
+                    self.flujoSalida = pow(velCeroSalida,2.7265) * 160.934
 
-                acumTmp_flujoSalida=0
-                acumRv_flujoSalida=0
+                    """Cálculo de presion de flujo de entrada """
+                    self.presionEntrada = acumPresion_Entrada/10
 
-                acumPresion_Entrada = 0
-                acumPresion_Salida = 0
+                    """Cálculo de presion de flujo de salida """
+                    self.presionSalida = acumPresion_Salida/10
 
-                contadorMediciones=0
+                    """Recopilo todas las mediciones en un dict"""
+                    self.mediciones = { 'flujoEntrada' : self.flujoEntrada , 
+                        'flujoSalida' : self.flujoSalida , 
+                        'presionEntrada' : self.presionEntrada , 
+                        'presionSalida' : self.presionSalida
+                        }
+                    #y lo envío al servidor, para que la pantalla y app web tengan un nuevo valor
+                    print(f"ADC: {self.mediciones}")
+                    postData = app.request("/adc" , method ='POST' , data = self.mediciones)
+                    
+                    """ Reinicio contadores y acumuladores a cero"""
+                    acumTmp_flujoEntrada=0
+                    acumRv_flujoEntrada=0
+
+                    acumTmp_flujoSalida=0
+                    acumRv_flujoSalida=0
+
+                    acumPresion_Entrada = 0
+                    acumPresion_Salida = 0
+
+                    contadorMediciones=0
+
+                    self.status = json.loads(app.request("/status", method = 'GET').data)
+
+            if(sec1>100):       #Pasó 1 segundo
+                sec1=0
+                if(self.status.get('UV_Light')):
+                    print("Turn on that damn light!!!")
 
 
-        if(sec1>100):       #Pasó 1 segundo
-            sec1=0
-
-        time.sleep(0.01)
+            time.sleep(0.01)
 
 
 if __name__ == "__main__":
-    clock = threading.Thread(target=timer10ms,daemon=True)
+    loopTimer = TIMER()
+    clock = threading.Thread(target=loopTimer.timer10ms,daemon=True)
     clock.start()
 
     app.run()
