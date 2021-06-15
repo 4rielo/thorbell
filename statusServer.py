@@ -22,6 +22,7 @@ import threading
 #Módulos de manejo de puertos de I/O e I2C
 import ADS1115
 import MCP23017
+from DS3231 import DS3231
 import OPi.GPIO as GPIO                 #Para PWM en RA5 (PWM0)
 
 from pyA20.gpio import gpio             #Para PWM por software en PA6 (pin 7)    
@@ -68,6 +69,8 @@ Duty_Cycle_Percent=0
 LED = GPIO.PWM(PWM_chip, PWM_pin, frequency_Hz, Duty_Cycle_Percent)
 LED.start_pwm(0)
 
+#Crea una instancia de la lectura/escritura del reloj RTC 
+RTC = DS3231()
 #################################################################################
 
 #Las direcciones sobre las que recibe solicitudes de microservicios "status"
@@ -166,7 +169,24 @@ class Status:
             #print("Key: " + str(x))
             if(x == "time"):                 #consulto la hora
                 #TODO: currentTimeDate es el valor obtenido del RTC, NO la hora del sistema
-                currentTimeDate = datetime.datetime.now()       #gets datetime object
+                timeRTC = RTC.readTimeString()
+                while(timeRTC == "ERROR"):                      #Dió error, debido a un intento fallido de acceso al puerto I2C
+                    time.sleep(0.005)                           #Espera un muy breve instante a que se desocupe
+                    timeRTC = RTC.readTimeString()              #Y vuelve a consultar la hora
+
+                dateRTC = RTC.readDateString()
+                while(dateRTC == "ERROR"):                      #Dió error, debido a un intento fallido de acceso al puerto I2C
+                    time.sleep(0.005)                           #Espera un muy breve instante a que se desocupe
+                    dateRTC = RTC.readDateString()              #Y vuelve a consultar la fecha
+
+                currentTime = datetime.time.fromisoformat(timeRTC)       #gets datetime object
+                currentDate = datetime.datetime.fromisoformat(dateRTC)
+                currentTimeDate = datetime.datetime(year=currentDate.year,
+                                                    month=currentDate.month,
+                                                    day = currentDate.day,
+                                                    hour=currentTime.hour,
+                                                    minute=currentTime.minute,
+                                                    second=currentTime.second)
                 #print (currentTimeDate)
                 return currentTimeDate
             if(x=='ADC'):
