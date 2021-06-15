@@ -30,29 +30,31 @@ def ReadADC(Address, channel, ref):
     configH = (config>>8)
     configL = config & 0x00FF
 
+    try:
+        i2c.init("/dev/i2c-0") 
 
-    i2c.init("/dev/i2c-0") 
-
-    i2c.open(Address)           #Open ADC I2C
-    i2c.write([0x01, configH, configL])         #Write to Adddress 1 (config register) 
-    i2c.close()
-
-
-    while(lectura != aux):
-
-        i2c.open(Address)
-        high = i2c.read(2)
+        i2c.open(Address)           #Open ADC I2C
+        i2c.write([0x01, configH, configL])         #Write to Adddress 1 (config register) 
         i2c.close()
 
-        lectura = high[0] & aux
 
-    i2c.open(Address)
-    i2c.write([0x00])
-    i2c.close()
+        while(lectura != aux):
 
-    i2c.open(Address)
-    read = i2c.read(2)
-    i2c.close()
+            i2c.open(Address)
+            high = i2c.read(2)
+            i2c.close()
 
-    value=(read[0]<<8)+read[1]
+            lectura = high[0] & aux
+
+        i2c.open(Address)
+        i2c.write([0x00])
+        i2c.close()
+
+        i2c.open(Address)
+        read = i2c.read(2)
+        i2c.close()
+
+        value=(read[0]<<8)+read[1]
+    except:         #port busy or something
+        value = "ERROR" 
     return value

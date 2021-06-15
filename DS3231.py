@@ -44,21 +44,26 @@ class DS3231:
         secondsByte = highByte << 4
         lowByte = currentTime.second % 10
         secondsByte += lowByte
-        self.write(0,secondsByte)
+        response = self.write(0,secondsByte)
 
         #Extrae los minutos, y lo formatea para el RTC DS3231
         highByte = int(currentTime.minute / 10)
         minuteByte = highByte << 4
         lowByte = currentTime.minute % 10
         minuteByte += lowByte
-        self.write(1,minuteByte)
+        response2 = self.write(1,minuteByte)
 
         #Extrae la hora, y lo formatea para el RTC DS3231
         highByte = int(currentTime.hour / 10)
         hourByte = highByte << 4
         lowByte = currentTime.hour % 10
         hourByte += lowByte
-        self.write(2,hourByte)
+        response3 = self.write(2,hourByte)
+
+        if(response != response2 != response 3)
+            response = "ERROR"
+
+        return response
 
     def writeDateString(self, dateString):
         #Convierte la fecha en objeto datetime
@@ -69,14 +74,14 @@ class DS3231:
         dayByte = highByte << 4
         lowByte = currentDate.day % 10
         dayByte += lowByte
-        self.write(4,dayByte)
+        response = self.write(4,dayByte)
 
         #Extrae el mes, y lo formatea para el RTC DS3231
         highByte = int(currentDate.month / 10)
         monthByte = highByte << 4
         lowByte = currentDate.month % 10
         monthByte += lowByte
-        self.write(5,monthByte)
+        response2 = self.write(5,monthByte)
 
         #Extrae el año, y lo formatea para el RTC DS3231 (rango de 2000 a 2099)
         year = currentDate.year %100
@@ -84,7 +89,12 @@ class DS3231:
         yearByte = highByte << 4
         lowByte = year % 10
         yearByte += lowByte
-        self.write(6,yearByte)
+        response3 = self.write(6,yearByte)
+
+        if(response != response2 != response 3)
+            response = "ERROR"
+
+        return response
 
     def readTimeString(self):
         readSeconds = self.read(0)

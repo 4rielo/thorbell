@@ -44,6 +44,7 @@ mediciones = dict()
 # se almacena la modificación en el archivo "status.dat"
 global essentials 
 essentials = ( 
+                "LEDPWM",
                 "UV_Timer",
                 "UV_Calendar",
                 "UV_Calendar_init",
@@ -217,25 +218,41 @@ class Status:
                 input[x]=False                      #sobreescribo con la variable booleana False
             status.update({x:input[x]})             #y actualizo el valor en la variable "status"
 
-        storeInStatus = False           #pre define que no es una variable digna de almacenar en archivo
-        for a in input.keys():          #Según la clave de lo solicitado,
-            if a in essentials:         #Busca si se encuentra dentro de las variables esenciales
-                #storeInStatusp=True           #Si corresponde, actualiza el archivo status.dat
+            if x in essentials:         #Busca si se encuentra dentro de las variables esenciales
                 with open(statusFile, "w") as st:
                     json.dump(status,st)
 
-            if (a == 'LED_Light'):          #se quiere encender o apagar la luz LED
-                if(input[a]):
+            if(x == "time"):                 #Modifico la hora
+                newTimeDate = datetime.datetime.fromisoformat(input[x])
+ 
+                timeRTC = datetime.time(hour = newTimeDate.hour,
+                                        minute = newTimeDate.minute,
+                                        second = newTimeDate.second)
+                response = RTC.writeTimeString(timerRTC.strftime(%H:%M:%s))
+                while(response == "ERROR"):                      #Dió error, debido a un intento fallido de acceso al puerto I2C
+                    time.sleep(0.005)                           #Espera un muy breve instante a que se desocupe
+                    response = RTC.writeTimeString(timerRTC.strftime(%H:%M:%s))              #Y vuelve a intentar guardar la hora
+
+                dateRTC = datetime.datetime(year=newTimeDate.year,
+                                            month=newTimeDate.month,
+                                            day = newTimeDate.day)
+                response = RTC.writeDateString(dateRTC.strftime(%Y-%m-%d))
+                while(response == "ERROR"):                      #Dió error, debido a un intento fallido de acceso al puerto I2C
+                    time.sleep(0.005)                           #Espera un muy breve instante a que se desocupe
+                    response = RTC.writeDateString(dateRTC.strftime(%Y-%m-%d))              #Y vuelve a consultar la fecha                          
+
+            if (x == 'LED_Light'):          #se quiere encender o apagar la luz LED
+                if(input[x]):
                     LED.duty_cycle(status.get('LEDPWM'))
                 else:
                     LED.duty_cycle(0)
                 
-            if(a == 'LEDPWM'):
+            if(x == 'LEDPWM'):
                 if(status.get('LED_Light')):
                     LED.duty_cycle(status.get('LEDPWM'))
 
-            if(a == 'UV_Light'):
-                if(input[a]):
+            if(x == 'UV_Light'):
+                if(input[x]):
                     pwm.changeDutyCycle(status.get('LEDPWM'))
                 else:
                     pwm.changeDutyCycle(0)
@@ -308,15 +325,42 @@ class TIMER:
 
             if(not sec1%10):             #cada 100 ms
                 #Mido temperatura y Rv de flujo de entrada, y acumulo para sacar medición promedio
-                acumTmp_flujoEntrada += ADS1115.ReadADC(ads1,5,ADS1115_FS_4096)
-                acumRv_flujoEntrada += ADS1115.ReadADC(ads1,4,ADS1115_FS_4096)
+                ADC_reading=ADS1115.ReadADC(ads1,5,ADS1115_FS_4096)     #intenta leer
+                while(ADC_reading == "ERROR"):                      #si devuelve ERROR (puerto I2C ocupado)
+                    time.sleep(0.003)                               #espera 3 ms
+                    ADC_reading=ADS1115.ReadADC(ads1,5,ADS1115_FS_4096) #e intenta nuevamente
+                acumTmp_flujoEntrada += ADC_reading
+
+                ADC_reading=ADS1115.ReadADC(ads1,4,ADS1115_FS_4096)
+                while(ADC_reading == "ERROR"):
+                    time.sleep(0.003)
+                    ADC_reading=ADS1115.ReadADC(ads1,4,ADS1115_FS_4096)
+                acumRv_flujoEntrada += ADC_reading
 
                 #Mido temperatura y Rv de flujo de salida, y acumulo para sacar medición promedio
-                acumTmp_flujoSalida += ADS1115.ReadADC(ads1,7,ADS1115_FS_4096)
-                acumRv_flujoSalida += ADS1115.ReadADC(ads1,6,ADS1115_FS_4096)
+                ADC_reading=ADS1115.ReadADC(ads1,7,ADS1115_FS_4096)
+                while(ADC_reading == "ERROR"):
+                    time.sleep(0.003)
+                    ADC_reading=ADS1115.ReadADC(ads1,7,ADS1115_FS_4096)
+                acumTmp_flujoSalida += ADC_reading
 
-                acumPresion_Entrada += ADS1115.ReadADC(ads2,4,ADS1115_FS_512)
-                acumPresion_Salida += ADS1115.ReadADC(ads2,5,ADS1115_FS_512) #"""
+                ADC_reading=ADS1115.ReadADC(ads1,6,ADS1115_FS_4096)
+                while(ADC_reading == "ERROR"):
+                    time.sleep(0.003)
+                    ADC_reading=ADS1115.ReadADC(ads1,6,ADS1115_FS_4096)
+                acumRv_flujoSalida += ADC_reading
+
+                ADC_reading=ADS1115.ReadADC(ads2,4,ADS1115_FS_512)
+                while(ADC_reading == "ERROR"):
+                    time.sleep(0.003)
+                    ADC_reading=ADS1115.ReadADC(ads2,4,ADS1115_FS_512)
+                acumPresion_Entrada += ADC_reading
+
+                ADC_reading=ADS1115.ReadADC(ads2,5,ADS1115_FS_512) 
+                while(ADC_reading == "ERROR"):
+                    time.sleep(0.003)
+                    ADC_reading=ADS1115.ReadADC(ads2,5,ADS1115_FS_512) 
+                acumPresion_Salida += ADC_reading #"""
                 
                 """#bloque de números RANDOM para probar el código en la PC
                 acumTmp_flujoEntrada += random.randint(1000,2096)
