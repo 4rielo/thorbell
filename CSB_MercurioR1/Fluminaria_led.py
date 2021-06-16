@@ -64,7 +64,7 @@ class LEDWindow(QtWidgets.QMainWindow, Ui_form):
             main.lightPercent -=1
             self.dialChange(main.lightPercent)
 
-        if(not self.downButton.isDown()):                     #Si soltó el pulsador
+        #if(not self.downButton.isDown()):                     #Si soltó el pulsador
             #Guardo el valor en memoria
             try:
                 response = requests.post(f"{main.localhost}/status",params= {"LEDPWM" : main.lightPercent})
@@ -79,7 +79,7 @@ class LEDWindow(QtWidgets.QMainWindow, Ui_form):
             main.lightPercent +=1
             self.dialChange(main.lightPercent)
 
-        if(not self.upButton.isDown()):                     #Si soltó el pulsador
+        i#f(not self.upButton.isDown()):                     #Si soltó el pulsador
             #Guardo el valor en memoria
             try:
                 response = requests.post(f"{main.localhost}/status",params= {"LEDPWM" : main.lightPercent})

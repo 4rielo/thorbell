@@ -81,17 +81,19 @@ class ClockWindow(QtWidgets.QMainWindow, Ui_form):
             gmtValue = requests.get(f"{main.localhost}/status",params = 'GMT').text
             self.gmtEdit.setValue(gmtValue.value())
 
-            self.now = currentTimeDate.today()
-            self.today=currentTimeDate.now()
+            """self.today = currentTimeDate.today()
+            self.now = currentTimeDate.now()"""
+            
         except:
             #TODO: add a function or routine that checks whether the microservices process is running, 
             #and reboots it if needed
-            self.today=date.today()         #Obtiene la fecha de hoy
-            self.now=datetime.now()
+            currentTimeDate=datetime.now()
+            """self.today=date.today()         #Obtiene la fecha de hoy
+            self.now=datetime.now()"""
             pass
         
-        todayQt = PySide2.QtCore.QDate(self.today.year, self.today.month, self.today.day)
-        hourQt = PySide2.QtCore.QTime(self.now.hour, self.now.minute,0)
+        todayQt = PySide2.QtCore.QDate(currentTimeDate.year, currentTimeDate.month, currentTimeDate.day)
+        hourQt = PySide2.QtCore.QTime(currentTimeDate.hour, currentTimeDate.minute,0)
 
         self.horaEdit.setTime(hourQt)
         self.fechaEdit.setDate(todayQt)

@@ -1,4 +1,5 @@
 from pyA20 import i2c
+import time
 
 if __name__ == "__init__":
     
@@ -37,7 +38,7 @@ def ReadADC(Address, channel, ref):
         i2c.write([0x01, configH, configL])         #Write to Adddress 1 (config register) 
         i2c.close()
 
-
+        time.sleep(0.001)
         while(lectura != aux):
 
             i2c.open(Address)
