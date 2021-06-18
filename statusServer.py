@@ -23,6 +23,7 @@ import threading
 import ADS1115
 import MCP23017
 from DS3231 import DS3231
+from MCP23017 import MCP23017
 import OPi.GPIO as OPiGPIO                 #Para PWM en RA5 (PWM0)
 
 from pyA20.gpio import gpio             #Para PWM por software en PA6 (pin 7)    
@@ -58,11 +59,6 @@ essentials = (
 
 #################################################################################
 
-#PWM por software, con librería orangepwm, y pyA20
-gpio.init()
-pwm = OrangePwm(100, port.PA6)          #100Hz en PA6
-pwm.start(0)
-
 #PWM0 - Configuración con librería OPi.GPIO
 PWM_chip = 0
 PWM_pin = 0
@@ -73,6 +69,13 @@ LED.start_pwm())
 
 #Crea una instancia de la lectura/escritura del reloj RTC 
 RTC = DS3231()
+
+MCP = MCP23017()
+
+response = MCP.configMCP()
+while(response != "OK"):
+    time.sleep(0.005)
+    response = MCP.configMCP()
 #################################################################################
 
 #Las direcciones sobre las que recibe solicitudes de microservicios "status"
@@ -252,11 +255,21 @@ class Status:
                 if(status.get('LED_Light')):
                     LED.duty_cycle(status.get('LEDPWM'))
 
-            if(x == 'UV_Light'):
-                if(input[x]):
-                    pwm.changeDutyCycle(status.get('LEDPWM'))
-                else:
-                    pwm.changeDutyCycle(0)
+            if(x == 'puerta'):
+                if(input[x] == "subir_init"):
+                    pass
+                elif(input[x] == "subir_cont"):
+                    pass
+                elif(input[x] == "bajar_init"):
+                    pass
+                elif(input[x] == "bajar_cont"):
+                    pass
+                elif(input[x] == "trabajo"):
+                    pass
+                elif(input[x] == "abrir"):
+                    pass
+                elif(input[x] == "cerrar"):
+                    pass
 
         #Finalmente, devuelve el valor de la variable status que se modificó
         return json.dumps({x: status.get(x) for x in input.keys()})
@@ -282,173 +295,169 @@ class ADC:
         #print(f"POST: {mediciones}")
         return "Ok"
 
-class TIMER:
+class PUERTA:
     def __init__(self):
-        self.flujoEntrada=float()
-        self.flujoSalida=float()
-        self.presionEntrada=float()
-        self.presionSalida=float()
+        self.estado = None
 
-        self.status=dict()
+    def subirPuerta_init():
+        gpio.init()
+        gpio.setcfg(port.PA9,gpio.output)
+        gpio.setcfg(port.PA10,gpio,output)
 
-        self.status = json.loads(app.request("/status", method = 'GET').data)
+        #PWM por software, con librería orangepwm, y pyA20
+        pwm = OrangePwm(100, port.PA8)          #100Hz en PA6
+        pwm.start(0)
+        pwm.changeDutyCycle(0)
 
-        self.mediciones = { 'flujoEntrada' : self.flujoEntrada , 
-                        'flujoSalida' : self.flujoSalida , 
-                        'presionEntrada' : self.presionEntrada , 
-                        'presionSalida' : self.presionSalida
-                        }
+        gpio.output(port.PA9, gpio.HIGH)
+        gpio.output(port.PA10, gpio.LOW)
         
-        self.lectura = 0
+        doorTimeout = 70            #70 * 0.15 = 10.5 segundos de timeout.
 
-    def timer10ms(self):
-        sec1=0 
-        ads1 = 0x48
-        ads2 = 0x49
+        #Rampa de a sceleración
+        for x in range(100):
+            pwm.changeDutyCycle(x)
+            time.sleep(0.010)
 
-        ADS1115_FS_4096 = 1
-        ADS1115_FS_2048 = 2
-        ADS1115_FS_1024 = 3
-        ADS1115_FS_512 = 4
-
-        acumTmp_flujoEntrada = 0
-        acumRv_flujoEntrada = 0
-
-        acumTmp_flujoSalida = 0
-        acumRv_flujoSalida = 0
-
-        acumPresion_Entrada = 0
-        acumPresion_Salida = 0
-
-        contadorMediciones = 0
-
-        while(True):
-
-            sec1 += 1
+        #lee el estado de la puerta, hasta llegar a la posición deseada
+        puerta = MCP.estadoPuerta()
+        while(puerta != "arriba"):
+            time.sleep(0.15)
+            puerta = MCP.estadoPuerta()
+            doorTimeout -= 1                    #decrementa el timeout. Si llega a 0 y no llegó la puerta, informa del error
+            if(not doorTimeout):
+                break
         
-            #Mido temperatura y Rv de flujo de entrada, y acumulo para sacar medición promedio
-            if(not self.lectura):
-                ADC_reading=ADS1115.ReadADC(ads1,5,ADS1115_FS_4096)     #intenta leer
-                while(ADC_reading == "ERROR"):                      #si devuelve ERROR (puerto I2C ocupado)
-                    time.sleep(0.001)                               #espera 3 ms
-                    ADC_reading=ADS1115.ReadADC(ads1,5,ADS1115_FS_4096) #e intenta nuevamente
-                acumTmp_flujoEntrada += ADC_reading
-                self.lectura += 1
-            elif(self.lectura == 1):
-                ADC_reading=ADS1115.ReadADC(ads1,4,ADS1115_FS_4096)
-                while(ADC_reading == "ERROR"):
-                    time.sleep(0.001)
-                    ADC_reading=ADS1115.ReadADC(ads1,4,ADS1115_FS_4096)
-                acumRv_flujoEntrada += ADC_reading
-                self.lectura += 1
-            elif(self.lectura==2):
-                #Mido temperatura y Rv de flujo de salida, y acumulo para sacar medición promedio
-                ADC_reading=ADS1115.ReadADC(ads1,7,ADS1115_FS_4096)
-                while(ADC_reading == "ERROR"):
-                    time.sleep(0.001)
-                    ADC_reading=ADS1115.ReadADC(ads1,7,ADS1115_FS_4096)
-                acumTmp_flujoSalida += ADC_reading
-                self.lectura += 1
-            elif(self.lectura==3):
-                ADC_reading=ADS1115.ReadADC(ads1,6,ADS1115_FS_4096)
-                while(ADC_reading == "ERROR"):
-                    time.sleep(0.001)
-                    ADC_reading=ADS1115.ReadADC(ads1,6,ADS1115_FS_4096)
-                acumRv_flujoSalida += ADC_reading
-                self.lectura += 1
-            elif(self.lectura==4):
-                ADC_reading=ADS1115.ReadADC(ads2,4,ADS1115_FS_512)
-                while(ADC_reading == "ERROR"):
-                    time.sleep(0.001)
-                    ADC_reading=ADS1115.ReadADC(ads2,4,ADS1115_FS_512)
-                acumPresion_Entrada += ADC_reading
-                self.lectura += 1
-            elif(self.lectura==5):
-                ADC_reading=ADS1115.ReadADC(ads2,5,ADS1115_FS_512) 
-                while(ADC_reading == "ERROR"):
-                    time.sleep(0.001)
-                    ADC_reading=ADS1115.ReadADC(ads2,5,ADS1115_FS_512) 
-                acumPresion_Salida += ADC_reading #"""
-                self.lectura=0
-                contadorMediciones +=1          #incremento la cantidad de mediciones
+        if(not doorTimeout):                    #Aquí informa del error por timeout con un POST al microservicio
+            pass
             
+        """pwm.stop()
+        gpio.output(port.PA9, gpio.LOW)
+        gpio.output(port.PA10, gpio.LOW)"""
+
+    def abrirPuerta():
+        gpio.init()
+        gpio.setcfg(port.PA9,gpio.output)
+        gpio.setcfg(port.PA10,gpio,output)
+
+        #PWM por software, con librería orangepwm, y pyA20
+        pwm = OrangePwm(100, port.PA8)          #100Hz en PA6
+        pwm.start(0)
+        pwm.changeDutyCycle(0)
+
+        gpio.output(port.PA9, gpio.HIGH)
+        gpio.output(port.PA10, gpio.LOW)
+        
+        doorTimeout = 70            #70 * 0.15 = 10.5 segundos de timeout.
+
+        #Rampa de a sceleración
+        for x in range(100):
+            pwm.changeDutyCycle(x)
+            time.sleep(0.010)
+
+        #lee el estado de la puerta, hasta llegar a la posición deseada
+        puerta = MCP.estadoPuerta()
+        while(puerta != "arriba"):
+            time.sleep(0.15)
+            puerta = MCP.estadoPuerta()
+            doorTimeout -= 1                    #decrementa el timeout. Si llega a 0 y no llegó la puerta, informa del error
+            if(not doorTimeout):
+                break
+        
+        if(not doorTimeout):                    #Aquí informa del error por timeout con un POST al microservicio
+            pass
             
-            """#bloque de números RANDOM para probar el código en la PC
-            acumTmp_flujoEntrada += random.randint(1000,2096)
-            acumRv_flujoEntrada += random.randint(2000,3096)
+        pwm.stop()
+        gpio.output(port.PA9, gpio.LOW)
+        gpio.output(port.PA10, gpio.LOW)
 
-            #Mido temperatura y Rv de flujo de salida, y acumulo para sacar medición promedio
-            acumTmp_flujoSalida += 100#random.randint(00,500)
-            acumRv_flujoSalida += random.randint(2000,2500)
+    def cerrarPuerta():
+        gpio.init()
+        gpio.setcfg(port.PA9,gpio.output)
+        gpio.setcfg(port.PA10,gpio,output)
 
-            acumPresion_Entrada += random.randint(1000,2096)
-            acumPresion_Salida += random.randint(2000,2596) #"""
+        #PWM por software, con librería orangepwm, y pyA20
+        pwm = OrangePwm(100, port.PA8)          #100Hz en PA6
+        pwm.start(0)
+        pwm.changeDutyCycle(0)
 
-            if(contadorMediciones>9):        #10 mediciones para calcular el promedio (contador de 0 a 9)
+        gpio.output(port.PA9, gpio.LOW)                 
+        gpio.output(port.PA10, gpio.HIGH)
+        
+        doorTimeout = 70            #70 * 0.15 = 10.5 segundos de timeout.
 
-                """Cálculo de flujo de Entrada"""
-                rvEntrada = acumRv_flujoEntrada/10.0          #promedio de 10 mediciones
-                tmpEntrada = acumTmp_flujoEntrada/10.0        #promedio de 10 mediciones
-                
-                #Fórmula obtenida de software de PIC, extraida de hoja de datos del sensor de flujo de aire
-                velCeroEntrada = -0.0006 * tmpEntrada * tmpEntrada / 1024.0 + 1.0727 * tmpEntrada/32.0 + 8.172
-                rvEntrada /= 32.0
-                velCeroEntrada = (rvEntrada - velCeroEntrada) * 0.01739
-                if(velCeroEntrada < 0):
-                    velCeroEntrada = 0.0
-                
-                self.flujoEntrada = pow(velCeroEntrada,2.7265) * 160.934
+        #Rampa de a sceleración
+        for x in range(100):
+            pwm.changeDutyCycle(x)
+            time.sleep(0.010)
 
-                """Cálculo de flujo de Salida"""
-                rvSalida = acumRv_flujoSalida/10.0          #promedio de 10 mediciones
-                tmpSalida = acumTmp_flujoSalida/10.0        #promedio de 10 mediciones
-                
-                #Fórmula obtenida de software de PIC, extraida de hoja de datos del sensor de flujo de aire
-                velCeroSalida = -0.0006 * tmpSalida * tmpSalida / 1024.0 + 1.0727 * tmpSalida/32.0 + 8.172
-                rvSalida /= 32.0
-                velCeroSalida = (rvSalida - velCeroSalida) * 0.01739
-                if(velCeroSalida < 0):
-                    velCeroSalida = 0.0
-                
-                self.flujoSalida = pow(velCeroSalida,2.7265) * 160.934
+        #lee el estado de la puerta, hasta llegar a la posición deseada
+        puerta = MCP.estadoPuerta()
+        while(puerta != "abajo"):
+            time.sleep(0.15)
+            puerta = MCP.estadoPuerta()
+            doorTimeout -= 1                    #decrementa el timeout. Si llega a 0 y no llegó la puerta, informa del error
+            if(not doorTimeout):
+                break
+        
+        if(not doorTimeout):                    #Aquí informa del error por timeout con un POST al microservicio
+            pass    
 
-                """Cálculo de presion de flujo de entrada """
-                self.presionEntrada = acumPresion_Entrada/10
+        pwm.stop()
+        gpio.output(port.PA9, gpio.LOW)
+        gpio.output(port.PA10, gpio.LOW)
 
-                """Cálculo de presion de flujo de salida """
-                self.presionSalida = acumPresion_Salida/10
+    def puertaPosicionCorrecta():
+        gpio.init()
+        gpio.setcfg(port.PA9,gpio.output)
+        gpio.setcfg(port.PA10,gpio,output)
 
-                """Recopilo todas las mediciones en un dict"""
-                self.mediciones = { 'flujoEntrada' : self.flujoEntrada , 
-                    'flujoSalida' : self.flujoSalida , 
-                    'presionEntrada' : self.presionEntrada , 
-                    'presionSalida' : self.presionSalida
-                    }
-                #y lo envío al servidor, para que la pantalla y app web tengan un nuevo valor
-                print(f"ADC: {self.mediciones}")
-                postData = app.request("/adc" , method ='POST' , data = self.mediciones)
-                
-                """ Reinicio contadores y acumuladores a cero"""
-                acumTmp_flujoEntrada=0
-                acumRv_flujoEntrada=0
+        #PWM por software, con librería orangepwm, y pyA20
+        pwm = OrangePwm(100, port.PA8)          #100Hz en PA6
+        pwm.start(0)
+        pwm.changeDutyCycle(0)
 
-                acumTmp_flujoSalida=0
-                acumRv_flujoSalida=0
+        puerta = MCP.estadoPuerta()             #consulta la posición actual de la puerta
+        while(puerta == "ERROR"):               
+            time.sleep(0.002)
+            puerta = MCP.estadoPuerta()
+        
+        if(puerta == "arriba"):                 #Si la puerta se encuentra arriba
+            gpio.output(port.PA9, gpio.LOW)                 
+            gpio.output(port.PA10, gpio.HIGH)
+        elif(puerta == "abajo"):                #si la puerta se encuentra abajo
+            gpio.output(port.PA9, gpio.HIGH)                 
+            gpio.output(port.PA10, gpio.LOW)
+        elif(puerta == "correcta"):
+            return "Correcta"
+        else:
+            return "NoDoorFound"
 
-                acumPresion_Entrada = 0
-                acumPresion_Salida = 0
+        doorTimeout = 70            #70 * 0.15 = 10.5 segundos de timeout.
 
-                contadorMediciones=0
+        #Rampa de a sceleración
+        for x in range(100):
+            pwm.changeDutyCycle(x)
+            time.sleep(0.010)
 
-                self.status = json.loads(app.request("/status", method = 'GET').data)
+        #lee el estado de la puerta, hasta llegar a la posición deseada
+        puerta = MCP.estadoPuerta()
+        while(puerta != "correcta"):
+            time.sleep(0.15)
+            puerta = MCP.estadoPuerta()
+            doorTimeout -= 1                    #decrementa el timeout. Si llega a 0 y no llegó la puerta, informa del error
+            if(not doorTimeout):
+                break
+        
+        if(not doorTimeout):                    #Aquí informa del error por timeout con un POST al microservicio
+            pass    
 
-            if(sec1>100):       #Pasó 1 segundo
-                sec1=0
-                if(self.status.get('UV_Light')):
-                    print("Turn on that damn light!!!")
+        pwm.stop()
+        gpio.output(port.PA9, gpio.LOW)
+        gpio.output(port.PA10, gpio.LOW)
 
-
-            time.sleep(0.01)
+        gpio.setcfg(port.PA8,gpio.output)
+        gpio.output(port.PA8, gpio.LOW)                 #deshabilita el enable, para que no 
 
 
 if __name__ == "__main__":

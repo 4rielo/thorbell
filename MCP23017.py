@@ -1,57 +1,5 @@
 from pyA20 import i2c
 
-def MCP_write(address, register, byte):
-    try:
-        i2c.init("/dev/i2c-0")
-        i2c.open(address)
-        i2c.write([register, byte])         #Write to Adddress 1 (config register) 
-        i2c.close()
-        return 0
-    except:
-        return "ERROR"
-
-def MCP_read(address, register):
-    try:
-        i2c.init("/dev/i2c-0")
-        i2c.open(address)
-        i2c.write([register])         #Write to Adddress 1 (config register) 
-        i2c.close()
-
-        i2c.open(address)
-        response = i2c.read(1)
-        i2c.close()
-    except:
-        response = "ERROR"
-
-    return response
-
-def MCP_readMultiple(address, initRegister, quantity):
-    try:
-        i2c.init("/dev/i2c-0")
-        i2c.open(address)
-        i2c.write([register])
-        i2c.close()
-
-        i2c.open(address)
-        response = i2c.read(quantity)
-        i2c.close()
-    except:
-        response = "ERROR"
-
-    return response
-
-def configMCP_pinIO(address, port, pin, mode):
-    pass
-
-def configMCP_pinPullUp(address, port, pin, pullup):
-    pass
-
-def configMCP_interrupts(address, port, GPintEn, intcon, defval):
-    pass
-
-def readMCP_inputs(address, port):
-    pass
-
 
 class MCP23017:
     def __init__(self, address=0x24):
@@ -94,10 +42,17 @@ class MCP23017:
 
         trisB = 0xFF                    #de momento no se utiliza, quedan como entradas
 
-        self.write(0x00,trisA)          #Configura los pines del puerto A como entrada/salida
-        self.write(0x0C,pullUpA)        #configura los pullups del puerto A
+        response = self.write(0x00,trisA)          #Configura los pines del puerto A como entrada/salida
+        if(response != "OK"):
+            return response
 
-        self.write(0x01,trisB)          #configura los pines del puerto B como entrada
+        response = self.write(0x0C,pullUpA)        #configura los pullups del puerto A
+        if(response != "OK"):
+            return response
+
+        response = self.write(0x01,trisB)          #configura los pines del puerto B como entrada
+        
+        return response
 
     def encenderUV(self):               #La luminaria UV está controlada por el pin A5
         estadoActual = self.read(self.GPIOA)           #lee el estado del GPIOA
@@ -108,3 +63,21 @@ class MCP23017:
         estadoActual = self.read(self.GPIOA)            #lee el estado actual del GPIOA
         estadoActual = estadoActual & 0xDF              #pone a 0 el bit del pin A5
         self.write(self.LATA,estadoActual)
+
+
+    def estadoPuerta(self):             #Lee el estado de la puerta
+        posicionPuerta = self.read(self.GPIOA)      #GPIOA 1, 2 y 3 son las posiciones de arriba, abajo, y pos. común
+
+        return posicionPuerta
+        
+        if(posicionPuerta != "ERROR"):
+            if(posicionPuerta[0] & 0x02):
+                posicionPuerta = "abajo"
+            elif(posicionPuerta[0] & 0x04):
+                posicionPuerta = "arriba"
+            elif(posicionPuerta[0] & 0x08):
+                posicionPuerta = "correcta"
+            else:
+                posicionPuerta = "movimiento"
+
+        return posicionPuerta

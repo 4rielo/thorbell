@@ -17,6 +17,7 @@ from Fluminaria_ledUV import UVWindow       #Luminaria UV window (para configura
 from Fadvertencias import AdvertenciaWindow #Advertencia window (Muestra las advertencias)
 from Fcalendar import CalendarWindow        #Calendario, setea hora de inicio y fin de rutina y/o luz UV
 from Fclock import ClockWindow              #Setea fecha, hora y uso horario
+from Fpuerta import PuertaWindow            #Menu para manipular la puerta motorizada
 
 #import FfirebaseUpload
 
@@ -31,10 +32,44 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
 
         self.setWindowTitle("THORBELL")
 
+        try:
         #Obtiene el estado global del servidor de estado
-        response = requests.get(f"{main.localhost}/status").text
-        self.status = json.loads(str(response))
+            response = requests.get(f"{main.localhost}/status").text
+            self.status = json.loads(str(response))
+        except:
+            self.status = {                        #genera un status inicial
+                "Idioma": "es-AR", 
+                
+                "LED_Light": False, 
+                "LEDPWM": 100, 
+                
+                "UV_Light": False, 
+                "UV_TimerEnable": False,
+                "UV_Timer": 0, 
+                
+                "UVLEDPWM": 100, 
+                
+                "UV_Calendar": False, 
+                "UV_Calendar_init": format(datetime.now(),"%Y/%m/%d %H:%M"), 
+                "UV_Calendar_end": format(datetime.now(),"%Y/%m/%d %H:%M"), 
 
+                "Rutina_Calendar": False,
+                "Rutina_Calendar_init": format(datetime.now(),"%Y/%m/%d %H:%M"), 
+                "Rutina_Calendar_end": format(datetime.now(),"%Y/%m/%d %H:%M"), 
+
+                "PWR": False, 
+
+                "screenUser": "", 
+
+                "webUsers": {
+                    "userA": {
+                        "ip": "", 
+                        "user": ""
+                    }
+                }, 
+                "WARNINGS": [],
+                "GMT": 0
+            }
         #Idioma almacenado en el estado del equipo
         with open(f"{main.path}/idioma/{self.status.get('Idioma')}.dat") as f:
             main.texto = json.load(f)
@@ -77,6 +112,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
 
         #Botón de advertencias, cuando se clickea, conecta con "advertenciaClicked()""
         self.advertencia_Btn.clicked.connect(self.advertenciaClicked)
+
+        #Botón de control de puerta
+        self.eco_Btn.clicked.connect(self.puertaClicked)
 
         self.setWindowFlags(PySide2.QtCore.Qt.FramelessWindowHint) 
 
@@ -244,6 +282,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         #print("Show Advertencia")
         self.advertenciaWindow = AdvertenciaWindow()
         self.advertenciaWindow.show()
+
+#**************************************************************************************************************
+
+#**************************************************************************************************************
+#Ventana de control de puerta
+    def puertaClicked(self):
+        self.puertaWindow = PuertaWindow()
+        self.puertaWindow.show()
 
 #**************************************************************************************************************
 

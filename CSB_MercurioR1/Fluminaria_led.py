@@ -65,13 +65,13 @@ class LEDWindow(QtWidgets.QMainWindow, Ui_form):
             self.dialChange(main.lightPercent)
 
         #if(not self.downButton.isDown()):                     #Si soltó el pulsador
-            #Guardo el valor en memoria
-            try:
-                response = requests.post(f"{main.localhost}/status",params= {"LEDPWM" : main.lightPercent})
-            except:
-                #TODO: handling microprocess request failure
-                pass
-            #print(response.text)
+        #Guardo el valor en memoria
+        try:
+            response = requests.post(f"{main.localhost}/status",params= {"LEDPWM" : main.lightPercent})
+        except:
+            #TODO: handling microprocess request failure
+            pass
+        #print(response.text)
 
     def UpBtn_clicked(self):
         #print("Clicked UP") 
@@ -80,13 +80,13 @@ class LEDWindow(QtWidgets.QMainWindow, Ui_form):
             self.dialChange(main.lightPercent)
 
         i#f(not self.upButton.isDown()):                     #Si soltó el pulsador
-            #Guardo el valor en memoria
-            try:
-                response = requests.post(f"{main.localhost}/status",params= {"LEDPWM" : main.lightPercent})
-            except:
-                #TODO: handling microprocess request failure
-                pass
-            #print(response.text)
+        #Guardo el valor en memoria
+        try:
+            response = requests.post(f"{main.localhost}/status",params= {"LEDPWM" : main.lightPercent})
+        except:
+            #TODO: handling microprocess request failure
+            pass
+        #print(response.text)
 
 
     def OnOff_clicked(self):
