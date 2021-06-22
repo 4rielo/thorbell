@@ -137,7 +137,7 @@ class Ui_form(object):
         self.abrirBtn = QPushButton(self.BACKGROUND)
         self.abrirBtn.setGeometry(QRect(40, 366, 100, 100))
         self.abrirBtn.setFlat(True)
-        self.abrirBtn.setStyleSheet(subir_Button)
+        #self.abrirBtn.setStyleSheet(abrir_Button)
         self.abrirBtn.focusPolicy = Qt.NoFocus
 
 #Cerrada puerta button
@@ -151,7 +151,7 @@ class Ui_form(object):
         self.cerrarBtn = QPushButton(self.BACKGROUND)
         self.cerrarBtn.setGeometry(QRect(340, 366, 100, 100))
         self.cerrarBtn.setFlat(True)
-        self.cerrarBtn.setStyleSheet(bajar_Button)
+        #self.cerrarBtn.setStyleSheet(cerrar_Button)
         self.cerrarBtn.focusPolicy = Qt.NoFocus
 
 

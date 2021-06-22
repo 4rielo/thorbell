@@ -72,6 +72,8 @@ RTC = DS3231()
 
 MCP = MCP23017()
 
+controlPuerta = PUERTA()
+
 response = MCP.configMCP()
 while(response != "OK"):
     time.sleep(0.005)
@@ -257,12 +259,18 @@ class Status:
 
             if(x == 'puerta'):
                 if(input[x] == "subir_init"):
+                    subirPuerta = threading.Thread(target= controlPuerta.subirPuerta_init) 
+                    subirPuerta.start()
                     pass
                 elif(input[x] == "subir_cont"):
+                    controlPuerta.subirPuerta_cont()
                     pass
                 elif(input[x] == "bajar_init"):
+                    subirPuerta = threading.Thread(target= controlPuerta.bajarPuerta_init) 
+                    subirPuerta.start()
                     pass
                 elif(input[x] == "bajar_cont"):
+                    controlPuerta.bajarPuerta_cont()
                     pass
                 elif(input[x] == "trabajo"):
                     pass
@@ -299,7 +307,7 @@ class PUERTA:
     def __init__(self):
         self.estado = None
 
-    def subirPuerta_init():
+    def subirPuerta_init(self):
         gpio.init()
         gpio.setcfg(port.PA9,gpio.output)
         gpio.setcfg(port.PA10,gpio,output)
@@ -327,13 +335,63 @@ class PUERTA:
             doorTimeout -= 1                    #decrementa el timeout. Si llega a 0 y no llegó la puerta, informa del error
             if(not doorTimeout):
                 break
+            if(self.estado != "subir"):
+                break
+            else:
+                self.estado = None
         
         if(not doorTimeout):                    #Aquí informa del error por timeout con un POST al microservicio
             pass
             
-        """pwm.stop()
+        pwm.stop()
         gpio.output(port.PA9, gpio.LOW)
-        gpio.output(port.PA10, gpio.LOW)"""
+        gpio.output(port.PA10, gpio.LOW)
+
+    def subirPuerta_cont(self):
+        self.estado = "subir"
+
+    def bajarPuerta_init(self):
+        gpio.init()
+        gpio.setcfg(port.PA9,gpio.output)
+        gpio.setcfg(port.PA10,gpio,output)
+
+        #PWM por software, con librería orangepwm, y pyA20
+        pwm = OrangePwm(100, port.PA8)          #100Hz en PA6
+        pwm.start(0)
+        pwm.changeDutyCycle(0)
+
+        gpio.output(port.PA9, gpio.LOW)
+        gpio.output(port.PA10, gpio.HIGH)
+        
+        doorTimeout = 70            #70 * 0.15 = 10.5 segundos de timeout.
+
+        #Rampa de a sceleración
+        for x in range(100):
+            pwm.changeDutyCycle(x)
+            time.sleep(0.010)
+
+        #lee el estado de la puerta, hasta llegar a la posición deseada
+        puerta = MCP.estadoPuerta()
+        while(puerta != "abajo"):
+            time.sleep(0.15)
+            puerta = MCP.estadoPuerta()
+            doorTimeout -= 1                    #decrementa el timeout. Si llega a 0 y no llegó la puerta, informa del error
+            if(not doorTimeout):
+                break
+            if(self.estado != "bajar"):
+                break
+            else:
+                self.estado = None
+        
+        if(not doorTimeout):                    #Aquí informa del error por timeout con un POST al microservicio
+            pass
+            
+        pwm.stop()
+        gpio.output(port.PA9, gpio.LOW)
+        gpio.output(port.PA10, gpio.LOW)
+
+    def bajarPuerta_cont(self):
+        self.estado = "bajar"
 
     def abrirPuerta():
         gpio.init()
