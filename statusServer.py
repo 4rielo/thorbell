@@ -274,10 +274,16 @@ class Status:
                     controlPuerta.bajarPuerta_cont()
                     pass
                 elif(input[x] == "trabajo"):
+                    posTrabajoPuerta = threading.Thread(target= controlPuerta.puertaPosicionCorrecta) 
+                    posTrabajoPuerta.start()
                     pass
                 elif(input[x] == "abrir"):
+                    abrirPuerta = threading.Thread(target= controlPuerta.abrirPuerta) 
+                    abrirPuerta.start()
                     pass
                 elif(input[x] == "cerrar"):
+                    cerrarPuerta = threading.Thread(target= controlPuerta.cerrarPuerta) 
+                    cerrarPuerta.start()
                     pass
 
         #Finalmente, devuelve el valor de la variable status que se modificó

@@ -34,7 +34,7 @@ class PuertaWindow(QtWidgets.QMainWindow, Ui_form):
         self.tittle.setText(main.texto.get("puertaTittle"))
 
         initialPressDelay=500          #Delay inicial, antes de tomar el "autoRepeat" (en ms)
-        autoRepeatDelay=500            #Delay entre incremento cuando se mantiene presionado (en ms)
+        autoRepeatDelay=100            #Delay entre incremento cuando se mantiene presionado (en ms)
 
         self.subirBtn.setAutoRepeat(True)
         self.subirBtn.setAutoRepeatDelay(initialPressDelay)
@@ -61,17 +61,19 @@ class PuertaWindow(QtWidgets.QMainWindow, Ui_form):
 
     def subir_clicked(self):
         if(self.subir_1er):             #Si es verdadero, ya había pulsado el botón de subir
+            print("arriba")
             try:
                 response = requests.post(f"{main.localhost}/status",params = {'puerta' : 'subir_cont'})
             except:
                 pass
         else:                   #Si es falso, es la primera vez que se pulsa el botón de subir
+            print("arriba po' primera ve'")
             try:                    #y comienza con una rampa de aceleración
                 response = requests.post(f"{main.localhost}/status",params = {'puerta' : 'subir_init'})
             except:
                 pass
 
-        if(subirBtn.isDown()):             #si está presionado, revisa si es la primera vez que se presiona
+        if(self.subirBtn.isDown()):             #si está presionado, revisa si es la primera vez que se presiona
             self.subir_1er=True            #ya no es el primer click
         else:
             self.subir_1er=False            #Si soltó el pulsador, resetea el flag de primer click        
@@ -87,6 +89,11 @@ class PuertaWindow(QtWidgets.QMainWindow, Ui_form):
                 response = requests.post(f"{main.localhost}/status",params = {'puerta' : 'bajar_init'})
             except:
                 pass
+
+        if(self.bajarBtn.isDown()):             #si está presionado, revisa si es la primera vez que se presiona
+            self.bajar_1er=True            #ya no es el primer click
+        else:
+            self.bajar_1er=False            #Si soltó el pulsador, resetea el flag de primer click        
 
     def posTrabajo_clicked(self):
         try:

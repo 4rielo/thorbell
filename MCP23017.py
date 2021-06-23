@@ -68,14 +68,14 @@ class MCP23017:
     def estadoPuerta(self):             #Lee el estado de la puerta
         posicionPuerta = self.read(self.GPIOA)      #GPIOA 1, 2 y 3 son las posiciones de arriba, abajo, y pos. común
 
-        return posicionPuerta
+        #return posicionPuerta
         
         if(posicionPuerta != "ERROR"):
-            if(posicionPuerta[0] & 0x02):
+            if(not posicionPuerta[0] & 0x02):
                 posicionPuerta = "abajo"
-            elif(posicionPuerta[0] & 0x04):
+            elif(not posicionPuerta[0] & 0x04):
                 posicionPuerta = "arriba"
-            elif(posicionPuerta[0] & 0x08):
+            elif(not posicionPuerta[0] & 0x08):
                 posicionPuerta = "correcta"
             else:
                 posicionPuerta = "movimiento"

@@ -17,8 +17,11 @@ class TIMER:
 
         try:
             self.status = json.loads(requests.get(f"{self.localhost}/status").text)
+        except:
+            pass
 
-        self.mediciones = { 'flujoEntrada' : self.flujoEntrada , 
+        self.mediciones = { 
+                        'flujoEntrada' : self.flujoEntrada , 
                         'flujoSalida' : self.flujoSalida , 
                         'presionEntrada' : self.presionEntrada , 
                         'presionSalida' : self.presionSalida
@@ -152,8 +155,10 @@ class TIMER:
                 #y lo envío al servidor, para que la pantalla y app web tengan un nuevo valor
                 print(f"ADC: {self.mediciones}")
                 try:
-                    postData = requests.(f"{self.localhost}/adc" , params = self.mediciones)
-                
+                    postData = requests.post(f"{self.localhost}/adc" , params = self.mediciones)
+                except:
+                    pass
+
                 """ Reinicio contadores y acumuladores a cero"""
                 acumTmp_flujoEntrada=0
                 acumRv_flujoEntrada=0
@@ -168,6 +173,8 @@ class TIMER:
 
                 try:
                     self.status = json.loads(app.request("/status", method = 'GET').data)
+                except:
+                    pass
 
             if(sec1>100):       #Pasó 1 segundo
                 sec1=0
