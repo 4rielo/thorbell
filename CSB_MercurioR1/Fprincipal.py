@@ -5,10 +5,12 @@ from PySide2 import QtGui, QtWidgets
 from PySide2.QtUiTools import QUiLoader
 
 import time
-import threading
+#import threading
 import requests
 import json
 from datetime import datetime, date
+
+import ADS1115 
 
 from Pprincipal import Ui_form              #El formulario descriptivo de qué contiene ésta ventana
 from Fconfig import ConfigWindow            #Config window 
@@ -139,24 +141,52 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         self.ModoEco_label.setText(main.texto.get("modoEco"))
         self.Rutina_label.setText(main.texto.get("rutina"))
 
-        #Thread de 100 ms, para base de tiempo de ejecución. 
-        #Corre en paralelo con la app
+        #Timer counters de 100ms y 1s, para base de tiempo de ejecución. 
         self.ms100=0
-        #clock = threading.Thread(target=self.timer100ms,daemon=True)
-        #clock.start()
-        self.TimingTimer.timeout.connect(self.timer100ms)
+        self.s1=0
+        
+        self.flujoEntrada=float()
+        self.flujoSalida=float()
+        self.presionEntrada=float()
+        self.presionSalida=float()
+
+        self.medicionesADC=0
+
+        self.ads1 = 0x48
+        self.ads2 = 0x49
+
+        self.ADS1115_FS_4096 = 1
+        self.ADS1115_FS_2048 = 2
+        self.ADS1115_FS_1024 = 3
+        self.ADS1115_FS_512 = 4
+
+        self.acumTmp_flujoEntrada = 0
+        self.acumRv_flujoEntrada = 0
+
+        self.acumTmp_flujoSalida = 0
+        self.acumRv_flujoSalida = 0
+
+        self.acumPresion_Entrada = 0
+        self.acumPresion_Salida = 0
+
+        self.lectura=0
+        self.contadorMediciones=0          #incremento la cantidad de mediciones
+
+        self.TimingTimer.timeout.connect(self.timer10ms)
         self.TimingTimer.start()
+
+        
     #FIN init
 
 
     def UpdateData(self, payload):
         self.firebaseLbl.setText(payload)
 #**********************************************************************************************
-# Timer de 100 ms. Éste timer corre en paralelo con la app principal. 
+# Timer de 10 ms. 
 # Aquí se lee el "status.dat", y se actualiza el estado de las salidas
 # Cada un segundo se actualiza el reloj en pantalla.
 
-    def timer100ms(self):           #recurrent timer - base de tiempo de 100ms para chekear estado de las cosas
+    def timer10ms(self):           #recurrent timer - base de tiempo de 100ms para chekear estado de las cosas
         #revisa el estado de la luz led, y setea el botón de luz de acuerdo
         #Compara contra "main.ligthOnOff", ya que éste valor se modifica
         #dentro del menú de LuminariaLED
@@ -164,11 +194,132 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
             self.luz_Btn.toggle()
         if(self.uv_Btn.isChecked() != main.uvOnOff):
             self.uv_Btn.toggle()
+
+        self.s1 +=1
         self.ms100 += 1
 
+        #Mediciones de ADC:
+
+        #Mido temperatura y Rv de flujo de entrada, y acumulo para sacar medición promedio
+        if(not self.lectura):
+            ADC_reading=ADS1115.ReadADC(self.ads1,5,self.ADS1115_FS_4096)     #intenta leer
+            while(ADC_reading == "ERROR"):                      #si devuelve ERROR (puerto I2C ocupado)
+                time.sleep(0.001)                               #espera 3 ms
+                ADC_reading=ADS1115.ReadADC(self.ads1,5,self.ADS1115_FS_4096) #e intenta nuevamente
+            self.acumTmp_flujoEntrada += ADC_reading
+            self.lectura += 1
+        elif(self.lectura == 1):
+            ADC_reading=ADS1115.ReadADC(self.ads1,4,self.ADS1115_FS_4096)
+            while(ADC_reading == "ERROR"):
+                time.sleep(0.001)
+                ADC_reading=ADS1115.ReadADC(self.ads1,4,self.ADS1115_FS_4096)
+            self.acumRv_flujoEntrada += ADC_reading
+            self.lectura += 1
+        elif(self.lectura==2):
+            #Mido temperatura y Rv de flujo de salida, y acumulo para sacar medición promedio
+            ADC_reading=ADS1115.ReadADC(self.ads1,7,self.ADS1115_FS_4096)
+            while(ADC_reading == "ERROR"):
+                time.sleep(0.001)
+                ADC_reading=ADS1115.ReadADC(self.ads1,7,self.ADS1115_FS_4096)
+            self.acumTmp_flujoSalida += ADC_reading
+            self.lectura += 1
+        elif(self.lectura==3):
+            ADC_reading=ADS1115.ReadADC(self.ads1,6,self.ADS1115_FS_4096)
+            while(ADC_reading == "ERROR"):
+                time.sleep(0.001)
+                ADC_reading=ADS1115.ReadADC(self.ads1,6,self.ADS1115_FS_4096)
+            self.acumRv_flujoSalida += ADC_reading
+            self.lectura += 1
+        elif(self.lectura==4):
+            ADC_reading=ADS1115.ReadADC(self.ads2,4,self.ADS1115_FS_512)
+            while(ADC_reading == "ERROR"):
+                time.sleep(0.001)
+                ADC_reading=ADS1115.ReadADC(self.ads2,4,self.ADS1115_FS_512)
+            self.acumPresion_Entrada += ADC_reading
+            self.lectura += 1
+        elif(self.lectura==5):
+            ADC_reading=ADS1115.ReadADC(self.ads2,5,self.ADS1115_FS_512) 
+            while(ADC_reading == "ERROR"):
+                time.sleep(0.001)
+                ADC_reading=ADS1115.ReadADC(self.ads2,5,self.ADS1115_FS_512) 
+            self.acumPresion_Salida += ADC_reading #"""
+            self.lectura=0
+            self.contadorMediciones +=1          #incremento la cantidad de mediciones (hizo un loop completo de medidas)
+
+        """#bloque de números RANDOM para probar el código en la PC
+        self.acumTmp_flujoEntrada += random.randint(1000,2096)
+        self.acumRv_flujoEntrada += random.randint(2000,3096)
+
+        #Mido temperatura y Rv de flujo de salida, y acumulo para sacar medición promedio
+        self.acumTmp_flujoSalida += 100#random.randint(00,500)
+        self.acumRv_flujoSalida += random.randint(2000,2500)
+
+        self.acumPresion_Entrada += random.randint(1000,2096)
+        self.acumPresion_Salida += random.randint(2000,2596) #"""
+
+        if(self.contadorMediciones>9):        #10 mediciones para calcular el promedio (contador de 0 a 9)
+
+            """Cálculo de flujo de Entrada"""
+            rvEntrada = self.acumRv_flujoEntrada/10.0          #promedio de 10 mediciones
+            tmpEntrada = self.acumTmp_flujoEntrada/10.0        #promedio de 10 mediciones
+            
+            #Fórmula obtenida de software de PIC, extraida de hoja de datos del sensor de flujo de aire
+            velCeroEntrada = -0.0006 * tmpEntrada * tmpEntrada / 1024.0 + 1.0727 * tmpEntrada/32.0 + 8.172
+            rvEntrada /= 32.0
+            velCeroEntrada = (rvEntrada - velCeroEntrada) * 0.01739
+            if(velCeroEntrada < 0):
+                velCeroEntrada = 0.0
+            
+            self.flujoEntrada = pow(velCeroEntrada,2.7265) * 160.934
+
+            """Cálculo de flujo de Salida"""
+            rvSalida = self.acumRv_flujoSalida/10.0          #promedio de 10 mediciones
+            tmpSalida = self.acumTmp_flujoSalida/10.0        #promedio de 10 mediciones
+            
+            #Fórmula obtenida de software de PIC, extraida de hoja de datos del sensor de flujo de aire
+            velCeroSalida = -0.0006 * tmpSalida * tmpSalida / 1024.0 + 1.0727 * tmpSalida/32.0 + 8.172
+            rvSalida /= 32.0
+            velCeroSalida = (rvSalida - velCeroSalida) * 0.01739
+            if(velCeroSalida < 0):
+                velCeroSalida = 0.0
+            
+            self.flujoSalida = pow(velCeroSalida,2.7265) * 160.934
+
+            """Cálculo de presion de flujo de entrada """
+            self.presionEntrada = self.acumPresion_Entrada/10
+
+            """Cálculo de presion de flujo de salida """
+            self.presionSalida = self.acumPresion_Salida/10
+
+            """Recopilo todas las mediciones en un dict"""
+            self.medicionesADC = { 'flujoEntrada' : self.flujoEntrada , 
+                'flujoSalida' : self.flujoSalida , 
+                'presionEntrada' : self.presionEntrada , 
+                'presionSalida' : self.presionSalida
+                }
+            #y lo envío al servidor, para que la pantalla y app web tengan un nuevo valor
+            #print(f"ADC: {self.medicionesADC}")
+            try:
+                postData = requests.post(f"{main.localhost}/adc" , params = self.medicionesADC)
+            except:
+                pass
+
+            """ Reinicio contadores y acumuladores a cero"""
+            self.acumTmp_flujoEntrada=0
+            self.acumRv_flujoEntrada=0
+
+            self.acumTmp_flujoSalida=0
+            self.acumRv_flujoSalida=0
+
+            self.acumPresion_Entrada = 0
+            self.acumPresion_Salida = 0
+
+            self.contadorMediciones=0
+
+
         #Pasó 1 segundo
-        if(self.ms100>10):
-            self.ms100=0
+        if(self.s1>100):
+            self.s1=0
 
             #Pide la hora actual a microservicios (server en localhost:8085)
             currentTimeDate = requests.get(f"{main.localhost}/status", params = "time").text
@@ -193,7 +344,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
 
             #Lee los valores de ADC para mostrar vel de flujo y presión en el dial
             #print("Pide ADC")
-            try:
+            """try:
                 medicionesADC = json.loads(requests.get(f"{main.localhost}/adc").text)
             except:
                 medicionesADC = {
@@ -203,13 +354,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
                     'presionSalida' : 1000,
                 }
             
-                print(medicionesADC)
-            flujoEntrada_aux=float(medicionesADC['flujoEntrada'])
-            flujoSalida_aux=float(medicionesADC['flujoSalida'])
+                print(medicionesADC)"""
+            flujoEntrada_aux=float(self.medicionesADC['flujoEntrada'])
+            flujoSalida_aux=float(self.medicionesADC['flujoSalida'])
             self.flujoEntradaLbl.setText("{:.2f} m/s".format(flujoEntrada_aux))
             self.flujoSalidaLbl.setText("{:.2f} m/s".format(flujoSalida_aux))
-            self.presionEntradaDial(float(medicionesADC['presionEntrada']))
-            self.presionSalidaDial(float(medicionesADC['presionSalida']))
+            self.presionEntradaDial(float(self.medicionesADC['presionEntrada']))
+            self.presionSalidaDial(float(self.medicionesADC['presionSalida']))
             
 
             #self.currentUser=self.users.get(self.status.get("screenUser"))

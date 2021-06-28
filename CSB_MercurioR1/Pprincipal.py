@@ -329,7 +329,7 @@ class Ui_form(object):
 
 #**********************************************************************************
         self.TimingTimer = QTimer(self.BACKGROUND)
-        self.TimingTimer.setInterval(100)
+        self.TimingTimer.setInterval(10)
         self.TimingTimer.setSingleShot(False)
 #**********************************************************************************
 
