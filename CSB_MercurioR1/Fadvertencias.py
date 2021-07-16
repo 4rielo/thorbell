@@ -33,6 +33,12 @@ class AdvertenciaWindow(QtWidgets.QMainWindow, Ui_form):
             self.status= {'WARNINGS':[]}
             print(self.status)
             pass
+        
+        try:
+            response = requests.get(f"{main.localhost}/language").text
+            self.idioma=json.loads(response)
+        except:
+            self.idioma = main.texto
     
         advertencias=self.status.get("WARNINGS")
         cantidad = len(advertencias)            #Cantidad de advertencias a mostrar
@@ -51,8 +57,8 @@ class AdvertenciaWindow(QtWidgets.QMainWindow, Ui_form):
                 font-size: 23px;
             }}"""
 
-        self.tittleGlow.setText(main.texto.get("warningTittle"))
-        self.tittle.setText(main.texto.get("warningTittle"))
+        self.tittleGlow.setText(self.idioma.get("warningTittle"))
+        self.tittle.setText(self.idioma.get("warningTittle"))
         self.tittleGlow.setGraphicsEffect(self.Effect)
 
 
@@ -61,14 +67,14 @@ class AdvertenciaWindow(QtWidgets.QMainWindow, Ui_form):
             información, obtenida del archivo de idioma"""
 
             #Ícono:
-            self.listIcons.insert(idx, PySide2.QtWidgets.QFrame(self.BACKGROUND))
-            self.listIcons[idx].setFixedSize(46, 47)
-            self.listIcons[idx].setFrameShape(PySide2.QtWidgets.QFrame.NoFrame)
-            #self.listIcons[idx].setFrameShadow(PySide2.QtWidgets.QFrame.Raised)
             Icon_style=f"""
                     QFrame {{
                         background-image: url({main.path}/icons/{a}.png);
                     }}"""
+            self.listIcons.insert(idx, PySide2.QtWidgets.QFrame(self.BACKGROUND))
+            self.listIcons[idx].setFixedSize(46, 47)
+            self.listIcons[idx].setFrameShape(PySide2.QtWidgets.QFrame.NoFrame)
+            #self.listIcons[idx].setFrameShadow(PySide2.QtWidgets.QFrame.Raised)
             self.listIcons[idx].setStyleSheet(Icon_style)
 
             #Texto descriptivo y su fondo de efecto glow
@@ -78,8 +84,8 @@ class AdvertenciaWindow(QtWidgets.QMainWindow, Ui_form):
             self.listEffects.append(PySide2.QtWidgets.QGraphicsBlurEffect())        #Crea el efecto borroso 
             self.listEffects[idx].setBlurRadius(10)                                 #para la iluminosidad de fondo
 
-            self.listLabels[idx].setText(main.texto.get(a))     #escribe la etiqueta
-            self.listLabelsGlow[idx].setText(main.texto.get(a))     #y la etiqueta de efecto luminoso
+            self.listLabels[idx].setText(self.idioma.get(a))     #escribe la etiqueta
+            self.listLabelsGlow[idx].setText(self.idioma.get(a))     #y la etiqueta de efecto luminoso
             self.listLabelsGlow[idx].setGraphicsEffect(self.listEffects[idx])     #aplica efecto blur para simular iluminosidad
             self.listLabels[idx].raise_()                       #"levanta" la etiqueta si efecto, para que esté por encima de la borrosa
 

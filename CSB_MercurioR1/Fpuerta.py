@@ -30,8 +30,14 @@ class PuertaWindow(QtWidgets.QMainWindow, Ui_form):
             self.status= dict()
             pass
 
-        self.tittleGlow.setText(main.texto.get("puertaTittle"))
-        self.tittle.setText(main.texto.get("puertaTittle"))
+        try:
+            response = requests.get(f"{main.localhost}/language").text
+            self.idioma=json.loads(response)
+        except:
+            self.idioma = main.texto
+
+        self.tittleGlow.setText(self.idioma.get("puertaTittle"))
+        self.tittle.setText(self.idioma.get("puertaTittle"))
 
         initialPressDelay=500          #Delay inicial, antes de tomar el "autoRepeat" (en ms)
         autoRepeatDelay=100            #Delay entre incremento cuando se mantiene presionado (en ms)
@@ -61,13 +67,11 @@ class PuertaWindow(QtWidgets.QMainWindow, Ui_form):
 
     def subir_clicked(self):
         if(self.subir_1er):             #Si es verdadero, ya había pulsado el botón de subir
-            print("arriba")
             try:
                 response = requests.post(f"{main.localhost}/status",params = {'puerta' : 'subir_cont'})
             except:
                 pass
         else:                   #Si es falso, es la primera vez que se pulsa el botón de subir
-            print("arriba po' primera ve'")
             try:                    #y comienza con una rampa de aceleración
                 response = requests.post(f"{main.localhost}/status",params = {'puerta' : 'subir_init'})
             except:

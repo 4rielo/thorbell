@@ -14,6 +14,7 @@ import requests
 from Pconfig import Ui_form
 from Finfo import InfoWindow
 from Flogin import LoginWindow
+from Flanguage import LanguageWindow
 
 class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
     def __init__(self):
@@ -21,14 +22,31 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
         self.setupUi(self)
         self.setWindowTitle("CONFIG")
 
-        #print("Open: " + main.texto.get("configTittle"))
+        try:
+            #Obtiene el "status" general
+            response = requests.get(f"{main.localhost}/status").text
+            self.status=json.loads(response)
+        except:
+            #TODO: add a function or routine that checkes whether the microservices process is running, 
+            #and reboots it if needed
+            self.status= {'WARNINGS':[]}
+            print(self.status)
+            pass
 
-        self.tittleGlow.setText(main.texto.get("configTittle"))
-        self.tittle.setText(main.texto.get("configTittle"))
+        try:
+            #Obtiene el "status" general
+            print("Retrieving available Languages")
+            response = requests.get(f"{main.localhost}/language?list").text
+            self.availableLanguages=json.loads(response)
+            print(self.availableLanguages)
+        except:
+            self.availableLanguages=""
 
-        self.usbLabel.setText("USB")
-        self.infoLabel.setText("Info")
-        self.infoLabel_Glow.setText("Info")
+        for x in self.availableLanguages:
+            x=x.replace(".dat","")
+            self.LanguageBox.addItem(x)
+            if(x == self.status['Idioma']):
+                self.LanguageBox.setCurrentText(x)
 
         try:
             #Obtiene el "status" general
@@ -40,6 +58,11 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
             self.status= dict()
             pass
 
+        self.updateLanguage()
+
+        self.infoLabel.setText("Info")
+        self.infoLabel_Glow.setText("Info")
+
         if(self.status.get("screenUser")):
             self.loginLabel.setText("Log Out")
         else: 
@@ -48,7 +71,11 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
         self.update_Btn.clicked.connect(self.UpdateFunction)
         self.info_Btn.clicked.connect(self.showInfo)
         self.login_Btn.clicked.connect(self.login)
+        self.language_Btn.clicked.connect(self.showLanguages)
+        self.LanguageBox.setVisible(False)
+        self.language_Btn.setChecked(False)
 
+        self.LanguageBox.currentTextChanged.connect(self.changeLanguage)
         """Checks local version number. """
         try:
             currentVersion=open(main.globalPath + "/version.txt","r").readline()
@@ -62,8 +89,36 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
         self.return_Btn.clicked.connect(self.goBack)
         self.setWindowFlags(PySide2.QtCore.Qt.FramelessWindowHint) 
 
+    def updateLanguage(self):
+        try:
+            response = requests.get(f"{main.localhost}/language").text
+            self.idioma=json.loads(response)
+        except:
+            self.idioma = main.texto
+
+        self.tittleGlow.setText(self.idioma.get("configTittle"))
+        self.tittle.setText(self.idioma.get("configTittle"))
+
     def goBack(self):                   #Function to go back to previous menu (close this window)
         self.close()
+
+    def showLanguages(self):
+        self.LanguageBox.setVisible(self.language_Btn.isChecked())
+        #self.languageWindow = LanguageWindow()
+        #self.languageWindow.show()
+
+    def changeLanguage(self):
+        selectedLanguage=self.LanguageBox.currentText()
+        #selectedLanguage += '.dat'
+        #print(selectedLanguage)
+        self.status['Idioma'] = selectedLanguage
+        try:
+            response = requests.post(f"{main.localhost}/status", params= {'Idioma': self.status['Idioma']}).text
+            print(response)
+        except:
+            pass
+        
+        self.updateLanguage()
 
     def showInfo(self):
         self.infoWindow = InfoWindow()

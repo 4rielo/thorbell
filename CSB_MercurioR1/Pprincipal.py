@@ -73,21 +73,17 @@ class Ui_form(object):
         self.rutina_Btn.setStyleSheet(RUTINA_Button)
         self.rutina_Btn.focusPolicy = Qt.NoFocus
         
-#ECO mode button
-        self.eco_Btn = QPushButton(self.BACKGROUND)
-        self.eco_Btn.setObjectName(u"eco_Btn")
-        self.eco_Btn.setGeometry(QRect(312, 133, 100, 100))
-        self.eco_Btn.setCheckable(True)
-        self.eco_Btn.setFlat(True)
-        ECO_Button = f"""
+#Control de puerta button
+        PUERTA_Button = f"""
                 QPushButton {{
-                        background-image: url({main.path}/icons/eco_off.png); 
-                }} 
-                QPushButton:checked{{
-                        background-image: url({main.path}/icons/eco_on.png); 
+                        background-image: url({main.path}/icons/ajuste de puerta.png); 
                 }}"""
-        self.eco_Btn.setStyleSheet(ECO_Button)
-        self.eco_Btn.focusPolicy = Qt.NoFocus
+        self.puerta_Btn = QPushButton(self.BACKGROUND)
+        self.puerta_Btn.setObjectName(u"puerta_Btn")
+        self.puerta_Btn.setGeometry(QRect(312, 133, 100, 100))
+        self.puerta_Btn.setFlat(True)
+        self.puerta_Btn.setStyleSheet(PUERTA_Button)
+        self.puerta_Btn.focusPolicy = Qt.NoFocus
 
 #LED light button
         self.luz_Btn = QPushButton(self.BACKGROUND)
@@ -289,15 +285,14 @@ class Ui_form(object):
 
 #************************ Here are the labels indicating some text ***************************
 
-
-        self.ModoEco_label = QLabel(self.BACKGROUND)
-        self.ModoEco_label.setObjectName(u"ModoEco_label")
-        self.ModoEco_label.setGeometry(QRect(312, 229, 100, 12))
-        ModoECO_style=f"""
+        ControlPuerta_style=f"""
                 QLabel{{
                         font-size: 10px;
                 }}"""
-        self.ModoEco_label.setStyleSheet(ModoECO_style)
+        self.ControlPuerta_label = QLabel(self.BACKGROUND)
+        self.ControlPuerta_label.setObjectName(u"ModoEco_label")
+        self.ControlPuerta_label.setGeometry(QRect(312, 229, 100, 12))
+        self.ControlPuerta_label.setStyleSheet(ControlPuerta_style)
 
         self.Rutina_label = QLabel(self.BACKGROUND)
         self.Rutina_label.setObjectName(u"Rutina_label")
@@ -343,13 +338,13 @@ class Ui_form(object):
         self.wind_icon2.raise_()
         self.wind_icon.raise_()
         
-        self.ModoEco_label.raise_()
+        self.ControlPuerta_label.raise_()
         self.Rutina_label.raise_()
         self.LED_label.raise_()
         self.UV_label.raise_()
 
         self.rutina_Btn.raise_()
-        self.eco_Btn.raise_()
+        self.puerta_Btn.raise_()
         self.luz_Btn.raise_()
         self.uv_Btn.raise_()
         self.config_Btn.raise_()

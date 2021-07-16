@@ -33,11 +33,18 @@ class LEDWindow(QtWidgets.QMainWindow, Ui_form):
             self.status= dict()
             pass
 
-        self.OnOffButton.setChecked(self.status.get('LED_Light'))          
+        try:
+            response = requests.get(f"{main.localhost}/language").text
+            self.idioma=json.loads(response)
+        except:
+            self.idioma = main.texto
+
+        main.lightPercent=(self.status.get('LEDPWM'))
+        self.OnOffButton.setChecked(self.status.get('LED_Light'))   
         self.dialChange(self.status.get('LEDPWM'))
 
-        self.tittleGlow.setText(main.texto.get("LEDTittle"))
-        self.tittle.setText(main.texto.get("LEDTittle"))
+        self.tittleGlow.setText(self.idioma.get("LEDTittle"))
+        self.tittle.setText(self.idioma.get("LEDTittle"))
 
         self.upButton.setAutoRepeat(True)
         self.upButton.setAutoRepeatDelay(initialPressDelay)

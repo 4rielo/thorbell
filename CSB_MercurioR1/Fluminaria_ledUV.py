@@ -8,6 +8,7 @@ import time
 import threading
 import json
 import requests
+import datetime
 
 import main         #to read the lightOnOff status
 
@@ -33,16 +34,24 @@ class UVWindow(QtWidgets.QMainWindow, Ui_form):
             self.status= dict()
             print("Error getting status")
             pass
+
+        try:
+            response = requests.get(f"{main.localhost}/language").text
+            self.idioma=json.loads(response)
+        except:
+            self.idioma = main.texto
         
-        main.UV_Timer = self.status.get("UV_Timer")
+        main.UV_Timer = datetime.time.fromisoformat(self.status.get("UV_Timer"))
+        #main.UV_Timer = datetime.timedelta(main.UV_Timer)
         main.UV_TimerEnable = self.status.get("UV_TimerEnable")
-        self.UV_Timer.setTime(PySide2.QtCore.QTime(0, 10))
+
+        self.UV_Timer.setTime(PySide2.QtCore.QTime(main.UV_Timer.hour, main.UV_Timer.minute))
 
         self.OnOffButton.setChecked(self.status.get('UV_Light'))
         self.timerBtn.setChecked(self.status.get('UV_TimerEnable'))
 
-        self.tittleGlow.setText(main.texto.get("UVTittle"))
-        self.tittle.setText(main.texto.get("UVTittle"))
+        self.tittleGlow.setText(self.idioma.get("UVTittle"))
+        self.tittle.setText(self.idioma.get("UVTittle"))
 
         self.upButton.setAutoRepeat(True)
         self.upButton.setAutoRepeatDelay(initialPressDelay)
@@ -52,7 +61,7 @@ class UVWindow(QtWidgets.QMainWindow, Ui_form):
         self.downButton.setAutoRepeat(True)
         self.downButton.setAutoRepeatDelay(initialPressDelay)
         self.downButton.setAutoRepeatInterval(autoRepeatDelay)
-        self.downButton.pressed.connect(self.DownBtn_clicked)
+        self.downButton.clicked.connect(self.DownBtn_clicked)
         
         self.OnOffButton.clicked.connect(self.OnOff_clicked)
         self.timerBtn.clicked.connect(self.TimerOnOf_clicked)
@@ -74,7 +83,11 @@ class UVWindow(QtWidgets.QMainWindow, Ui_form):
         
         if(not self.downButton.isDown()):           #Soltó el pulsador, actualiza el valor del temporizador en microservicios
             try:
-                response = requests.post(f"{main.localhost}/status",params= {"UV_Timer" : main.UV_TimerEnable})
+                main.UV_Timer=main.UV_Timer.replace(
+                    hour = self.UV_Timer.time().hour(),
+                    minute = self.UV_Timer.time().minute()
+                )
+                response = requests.post(f"{main.localhost}/status",params= {"UV_Timer" : main.UV_Timer.__str__()})
             except:
                 #TODO: handling microprocess request failure
                 pass
@@ -87,9 +100,13 @@ class UVWindow(QtWidgets.QMainWindow, Ui_form):
             #incrementa 1 minuto
             self.UV_Timer.setTime(self.UV_Timer.time().addSecs(60))
             self.UV_TimerGlow.setTime(self.UV_Timer.time())
-        if(not self.downButton.isDown()):           #Soltó el pulsador, actualiza el valor del temporizador en microservicios
+        if(not self.upButton.isDown()):           #Soltó el pulsador, actualiza el valor del temporizador en microservicios
             try:
-                response = requests.post(f"{main.localhost}/status",params= {"UV_Timer" : main.UV_TimerEnable})
+                main.UV_Timer=main.UV_Timer.replace(
+                    hour = self.UV_Timer.time().hour(),
+                    minute = self.UV_Timer.time().minute()
+                )
+                response = requests.post(f"{main.localhost}/status",params= {"UV_Timer" : main.UV_Timer.__str__()})
             except:
                 #TODO: handling microprocess request failure
                 pass

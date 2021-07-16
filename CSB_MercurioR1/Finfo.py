@@ -17,6 +17,12 @@ class InfoWindow(QtWidgets.QMainWindow, Ui_form):
         self.setupUi(self)
         self.setWindowTitle("CONFIG")
 
+        try:
+            response = requests.get(f"{main.localhost}/language").text
+            self.idioma=json.loads(response)
+        except:
+            self.idioma = main.texto
+
         print("Open: " + main.texto.get("configTittle"))
         """Checks local version number. """
         try:
@@ -40,7 +46,7 @@ class InfoWindow(QtWidgets.QMainWindow, Ui_form):
 
         self.versionLabel.setText(Version)
        
-        postVenta = f"""{main.texto.get("postVenta")}\n\n{info.get("postVentaEmail")}\n{info.get("website")}"""
+        postVenta = f"""{self.idioma.get("postVenta")}\n\n{info.get("postVentaEmail")}\n{info.get("website")}"""
         self.postVentaGlow.setText(postVenta)
         self.postVenta.setText(postVenta)
 

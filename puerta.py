@@ -239,6 +239,13 @@ class PUERTA:
                     break
             
             if(not doorTimeout):                    #Aquí informa del error por timeout con un POST al microservicio
+                pwm.changeDutyCycle(0)
+                pwm.stop()
+                gpio.output(port.PA9, gpio.LOW)
+                gpio.output(port.PA10, gpio.LOW)
+
+                gpio.setcfg(port.PA8,gpio.OUTPUT)
+                gpio.output(port.PA8, gpio.LOW)                 #deshabilita el enable, para que no 
                 return "ERROR with the door"
                 pass
             #llegó abajo, ahora debe subir hasta la posición correcta

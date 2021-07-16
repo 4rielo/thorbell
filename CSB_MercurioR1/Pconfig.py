@@ -90,7 +90,7 @@ class Ui_form(object):
 #UPDATE button
         self.update_Btn = QPushButton(self.BACKGROUND)
         self.update_Btn.setObjectName(u"update_Btn")
-        self.update_Btn.setGeometry(QRect(190, 500, 100, 100))
+        self.update_Btn.setGeometry(QRect(290, 600, 100, 100))
         self.update_Btn.setCheckable(True)
         self.update_Btn.setFlat(True)
         UPDATE_Button = f"""
@@ -104,27 +104,48 @@ class Ui_form(object):
         self.update_Btn.setFocusPolicy(Qt.NoFocus)
 
 #USB button
-        self.usb_Btn = QPushButton(self.BACKGROUND)
-        self.usb_Btn.setFixedSize(76, 48)
         usb_BtnStyle = f"""
                 QPushButton {{
                         background-image: url({main.path}/icons/usb.png);
                 }}"""
+        
+        """self.usb_Btn = QPushButton(self.BACKGROUND)
+        self.usb_Btn.setFixedSize(76, 48)
         self.usb_Btn.setStyleSheet(usb_BtnStyle)
         self.usb_Btn.setFocusPolicy(Qt.NoFocus)
 
         self.usbLabel = QLabel(self.BACKGROUND)
         self.usbLabel.setFixedSize(76, 16)
-        #self.usbLabel.setAttribute(Qt.WA_TranslucentBackground)
+        #self.usbLabel.setAttribute(Qt.WA_TranslucentBackground)"""
+
+#USB button
+        language_BtnStyle = f"""
+                QPushButton {{
+                        background-image: url({main.path}/icons/idioma.png);
+                }}"""
+        self.language_Btn = QPushButton(self.BACKGROUND)
+        self.language_Btn.setFixedSize(76, 48)
+        self.language_Btn.setStyleSheet(language_BtnStyle)
+        self.language_Btn.setFocusPolicy(Qt.NoFocus)
+        self.language_Btn.setCheckable(True)
+
+        self.languageLabel = QLabel(self.BACKGROUND)
+        self.languageLabel.setFixedSize(76, 16)
+        #self.usbLabel.setAttribute(Qt.WA_TranslucentBackground)"""
+
+        #spinBox
+        self.LanguageBox = QComboBox(self.BACKGROUND)
+        self.LanguageBox.setGeometry(140,520,200,25)
+
 
 #Info Button
-        self.info_Btn = QPushButton(self.BACKGROUND)
-        self.info_Btn.setObjectName(u"info_Btn")
-        self.info_Btn.setFixedSize(76, 48)
         info_BtnStyle = f"""
                 QPushButton {{
                         background-image: url({main.path}/icons/info.png);
                 }}"""
+        self.info_Btn = QPushButton(self.BACKGROUND)
+        self.info_Btn.setObjectName(u"info_Btn")
+        self.info_Btn.setFixedSize(76, 48)
         self.info_Btn.setStyleSheet(info_BtnStyle)
         self.info_Btn.setFocusPolicy(Qt.NoFocus)
 
@@ -164,8 +185,8 @@ class Ui_form(object):
         self.BtnsLayout = QGridLayout(self.BACKGROUND)
         self.BtnsLayout.setGeometry(QRect(0, 376, 480, 86))
         self.BtnsLayout.setAlignment(Qt.AlignCenter)
-        self.BtnsLayout.addWidget(self.usb_Btn,0,0)
-        self.BtnsLayout.addWidget(self.usbLabel,1,0)
+        self.BtnsLayout.addWidget(self.language_Btn,0,0)
+        self.BtnsLayout.addWidget(self.languageLabel,1,0)
         self.BtnsLayout.addWidget(self.info_Btn,0,1)
         self.BtnsLayout.addWidget(self.infoLabel,1,1)
         self.BtnsLayout.addWidget(self.infoLabel_Glow,1,1)

@@ -18,11 +18,12 @@ import time
 import json
 import datetime
 import threading
+import os
 
 #Módulos de manejo de puertos de I/O e I2C
-import ADS1115
+#import ADS1115
 import MCP23017
-from DS3231 import DS3231
+from DS3231 import DS3231/
 from MCP23017 import MCP23017
 from puerta import PUERTA
 import OPi.GPIO as OPiGPIO                 #Para PWM en RA5 (PWM0)
@@ -82,8 +83,12 @@ while(response != "OK"):
 #################################################################################
 
 #Las direcciones sobre las que recibe solicitudes de microservicios "status"
-urls = ('/','root', '/status', 'Status','/adc','ADC', '/reboot','reboot')
-app = web.application(urls,globals())
+urls = ('/','root', 
+        '/status', 'Status',
+        '/adc','ADC', 
+        '/language','language',
+        '/reboot','reboot'
+        )
 
 #Dirección de la carpeta, donde se encuentra el archivo ejecutado
 path = __file__.replace("/statusServer.py","")
@@ -93,6 +98,9 @@ if(not path):
 #Dirección de la ubicación del archivo "status.dat"
 statusFile= f"{path}/CSB_MercurioR1/status.dat"
 
+#Dirección de la ubicación del directorio de idiomas
+languagePath = f"{path}/CSB_MercurioR1/idioma"
+
 #intenta abrir el archivo "status.dat"
 try:                 
     print("Trying to open status file")
@@ -100,7 +108,9 @@ try:
     status = json.load(f)             #y carga el último estado guardado
     f.close()                       #(cierra el archivo, no lo necesita por ahora)
     print("Status File found, reading initial status")
-except:                             #Si no econtró el arvchivo
+except:                             #Si no econtró el arvchivoa
+    uv_timer=datetime.time.min.__str__()
+    now = format(datetime.datetime.now(),"%Y/%m/%d %H:%M")
     status = {                        #genera un status inicial
         "Idioma": "es-AR", 
         
@@ -109,17 +119,17 @@ except:                             #Si no econtró el arvchivo
         
         "UV_Light": False, 
         "UV_TimerEnable": False,
-        "UV_Timer": 0, 
+        "UV_Timer": uv_timer, 
         
         "UVLEDPWM": 100, 
         
         "UV_Calendar": False, 
-        "UV_Calendar_init": format(datetime.now(),"%Y/%m/%d %H:%M"), 
-        "UV_Calendar_end": format(datetime.now(),"%Y/%m/%d %H:%M"), 
+        "UV_Calendar_init": now, 
+        "UV_Calendar_end": now, 
 
         "Rutina_Calendar": False,
-        "Rutina_Calendar_init": format(datetime.now(),"%Y/%m/%d %H:%M"), 
-        "Rutina_Calendar_end": format(datetime.now(),"%Y/%m/%d %H:%M"), 
+        "Rutina_Calendar_init": now, 
+        "Rutina_Calendar_end": now, 
 
         "PWR": False, 
 
@@ -132,16 +142,66 @@ except:                             #Si no econtró el arvchivo
             }
         }, 
         "WARNINGS": [],
-        "GMT": 0
+        "GMT": 0 
     }
     with open(statusFile, "w") as f:                   #Y lo guarda en statusFile (crea el archivo)
         json.dump(data,f)
     print("Status file not found. Creates initial ( default) status file")
 
+#reads current language
+try:                 
+    print("Trying to open language file")
+    f=open(f"{languagePath}/{status['idioma']}.dat")              #Busca el archivo statusFile, si existe, lo abre
+    idioma = json.load(f)             #y carga el último estado guardado
+    f.close()                       #(cierra el archivo, no lo necesita por ahora)
+    print("Language File found, reading initial status")
+except:                             #Si no econtró el arvchivo
+    language = {
+        "separador_de_PantallaPrincipal": "*********************",
+        "luminariaLED" : "Luminaria\nLED",
+        "luminariaUV" : "Luminaria\nUV",
+        "rutina" : "Rutina",
+        "puerta" : "Control de puerta",
+        "separador_de_PantallaInfo": "*********************",
+        "postVenta" : "Servicio Post Venta",
+        "separador_de_Pantalla_LuminariaLED": "*********************",
+        "LEDTittle" : "Luminaria LED",
+        "separador_de_Pantalla_LuminariaUV": "*********************",
+        "UVTittle" : "Luminaria UV",
+        "separador_de_Pantalla_Configuracion": "*********************",
+        "configTittle" : "Configuración",
+        "separador_de_Pantalla_Advertencia": "*********************",
+        "warningTittle" : "Advertencia" ,
+        "puerta_abierta" : "Puerta Abierta",
+        "filtro_saturado" : "Filtro Saturado",
+        "filtro_roto" : "Filtro Roto",
+        "filtro_proximo_a_saturarse" : "Filtro próximo a saturarse",
+        "ventilador_roto" : "Ventilador Roto",
+        "separador_de_Pantalla_LogIn": "*********************",
+        "loginTittle" : "Login",
+        "separador_de_Pantalla_LuminariaLED": "*********************",
+        "clockTittle": "Configuración de Fecha y Hora",
+        "horaActual" : "Hora Actual",
+        "fechaActual" : "Fecha Actual",
+        "separador_de_Pantalla_Calendario": "*********************",
+        "calendarTittle" : "Calendario",
+        "calendarUV" : "Calendario de UV",
+        "calendarRutina" : "Calendario de Rutina",
+        "calendarInit" : "Inicio",
+        "calendarEnd": "Apagado",
+        "separador_de_Pantalla_ControlDePuerta": "*********************",
+        "puertaTittle": "Posición de la puerta"
+    }
+    status.update = {'idioma' : 'es-AR'}
+    with open(f"{languagePath}/{status['idioma']}.dat", "w") as f:                   #Y lo guarda en statusFile (crea el archivo)
+        json.dump(language,f)
+    print("Language file not found. Creates initial (default) language file")
+
 #TODO: Aquí se obtiene el tiempo del reloj SPI, y se revisa si hay conexión a 
 # internet. 
 
 #################################################################################
+app = web.application(urls,globals())       #Creates server, and passes it global variables
 
 class root:
     def __init__(self):
@@ -288,6 +348,68 @@ class Status:
 
         #Finalmente, devuelve el valor de la variable status que se modificó
         return json.dumps({x: status.get(x) for x in input.keys()})
+
+class language:
+    def __init__(self):
+        global status
+
+    def GET(self):                      #requests language
+        input=web.input()
+        if(input):                      #There's a specific language request. Wants to know available languages
+            #for x in input.keys():                
+            availableLanguages = os.listdir(languagePath)
+            return json.dumps(availableLanguages)
+        
+        try:                        #By default, grabs current language
+            print("Trying to open status file")
+            f=open(f"{languagePath}/{status['idioma']}.dat")              #Busca el archivo statusFile, si existe, lo abre
+            idioma = json.load(f)             #y carga el último estado guardado
+            f.close()                       #(cierra el archivo, no lo necesita por ahora)
+            print("Language File found, reading initial status")
+        except:                             #Si no econtró el arvchivo
+            idioma = {
+                "separador_de_PantallaPrincipal": "*********************",
+                "luminariaLED" : "Luminaria\nLED",
+                "luminariaUV" : "Luminaria\nUV",
+                "rutina" : "Rutina",
+                "puerta" : "Control de puerta",
+                "separador_de_PantallaInfo": "*********************",
+                "postVenta" : "Servicio Post Venta",
+                "separador_de_Pantalla_LuminariaLED": "*********************",
+                "LEDTittle" : "Luminaria LED",
+                "separador_de_Pantalla_LuminariaUV": "*********************",
+                "UVTittle" : "Luminaria UV",
+                "separador_de_Pantalla_Configuracion": "*********************",
+                "configTittle" : "Configuración",
+                "separador_de_Pantalla_Advertencia": "*********************",
+                "warningTittle" : "Advertencia" ,
+                "puerta_abierta" : "Puerta Abierta",
+                "filtro_saturado" : "Filtro Saturado",
+                "filtro_roto" : "Filtro Roto",
+                "filtro_proximo_a_saturarse" : "Filtro próximo a saturarse",
+                "ventilador_roto" : "Ventilador Roto",
+                "separador_de_Pantalla_LogIn": "*********************",
+                "loginTittle" : "Login",
+                "separador_de_Pantalla_LuminariaLED": "*********************",
+                "clockTittle": "Configuración de Fecha y Hora",
+                "horaActual" : "Hora Actual",
+                "fechaActual" : "Fecha Actual",
+                "separador_de_Pantalla_Calendario": "*********************",
+                "calendarTittle" : "Calendario",
+                "calendarUV" : "Calendario de UV",
+                "calendarRutina" : "Calendario de Rutina",
+                "calendarInit" : "Inicio",
+                "calendarEnd": "Apagado",
+                "separador_de_Pantalla_ControlDePuerta": "*********************",
+                "puertaTittle": "Posición de la puerta"
+            }
+            status.update = {'idioma' : 'es-AR'}
+            with open(f"{languagePath}/{status['idioma']}.dat", "w") as f:                   #Y lo guarda en statusFile (crea el archivo)
+                json.dump(idioma,f)
+            print("Language file not found. Creates initial (default) language file")
+        
+        return json.dumps(idioma)       #finally, returns a json object-like string containing language info
+    
 
 class ADC:
     def __init__(self):

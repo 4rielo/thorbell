@@ -115,10 +115,7 @@ class Ui_form(object):
 #Posicion de trabajo puerta button
         posTrabajo_Button = f"""
                 QPushButton {{
-                        background-image: url({main.path}/icons/routine_off.png); 
-                }} 
-                QPushButton:pressed{{
-                        background-image: url({main.path}/icons/routine_on.png); 
+                        background-image: url({main.path}/icons/controlPuerta_trabajo.png); 
                 }}"""
         self.posTrabajoBtn = QPushButton(self.BACKGROUND)
         self.posTrabajoBtn.setGeometry(QRect(190, 366, 100, 100))
@@ -129,29 +126,23 @@ class Ui_form(object):
 #Abierta puerta button
         abrir_Button = f"""
                 QPushButton {{
-                        background-image: url({main.path}/icons/up_released.png); 
-                }} 
-                QPushButton:pressed{{
-                        background-image: url({main.path}/icons/up_pressed.png); 
+                        background-image: url({main.path}/icons/controlPuerta_abierta.png); 
                 }}"""
         self.abrirBtn = QPushButton(self.BACKGROUND)
         self.abrirBtn.setGeometry(QRect(40, 366, 100, 100))
         self.abrirBtn.setFlat(True)
-        #self.abrirBtn.setStyleSheet(abrir_Button)
+        self.abrirBtn.setStyleSheet(abrir_Button)
         self.abrirBtn.focusPolicy = Qt.NoFocus
 
 #Cerrada puerta button
         cerrar_Button = f"""
                 QPushButton {{
-                        background-image: url({main.path}/icons/down_released.png); 
-                }}
-                QPushButton:pressed {{
-                        background-image: url({main.path}/icons/down_pressed.png); 
+                        background-image: url({main.path}/icons/controlPuerta_cerrada.png); 
                 }}"""
         self.cerrarBtn = QPushButton(self.BACKGROUND)
         self.cerrarBtn.setGeometry(QRect(340, 366, 100, 100))
         self.cerrarBtn.setFlat(True)
-        #self.cerrarBtn.setStyleSheet(cerrar_Button)
+        self.cerrarBtn.setStyleSheet(cerrar_Button)
         self.cerrarBtn.focusPolicy = Qt.NoFocus
 
 

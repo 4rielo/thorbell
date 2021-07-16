@@ -21,14 +21,20 @@ class ClockWindow(QtWidgets.QMainWindow, Ui_form):
         self.setWindowTitle("CLOCK")
         self.setWindowFlags(PySide2.QtCore.Qt.FramelessWindowHint) 
         
+        try:
+            response = requests.get(f"{main.localhost}/language").text
+            self.idioma=json.loads(response)
+        except:
+            self.idioma = main.texto
+
         #Título de la pantalla de calendario
-        calendar = f"{main.texto.get('clockTittle')}"
+        calendar = f"{self.idioma.get('clockTittle')}"
         self.tittleGlow.setText(calendar)
         self.tittle.setText(calendar)
 
         #Etiquetas de inicio y fin
-        self.horaActualLbl.setText(f"{main.texto.get('horaActual')}")
-        self.fechaActualLbl.setText(f"{main.texto.get('fechaActual')}")
+        self.horaActualLbl.setText(f"{self.idioma.get('horaActual')}")
+        self.fechaActualLbl.setText(f"{self.idioma.get('fechaActual')}")
         
         #*****************Asignación de funciones según botones
 

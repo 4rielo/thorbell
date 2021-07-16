@@ -37,14 +37,19 @@ class CalendarWindow(QtWidgets.QMainWindow, Ui_form):
             self.onOffBtn.setChecked(False)
             self.onOffBtn.setText("Off")
         
-        
+        try:
+            response = requests.get(f"{main.localhost}/language").text
+            self.idioma=json.loads(response)
+        except:
+            self.idioma = main.texto
+
         #Título de la pantalla de calendario
-        calendar = f"{main.texto.get('calendarTittle')}"
+        calendar = f"{self.idioma.get('calendarTittle')}"
         self.tittleGlow.setText(calendar)
         self.tittle.setText(calendar)
 
         #Sub-Título de la pantalla de calendario - Inicializa en Calendario UV
-        calendar = f"{main.texto.get('calendarUV')}"
+        calendar = f"{self.idioma.get('calendarUV')}"
         self.subTittleGlow.setText(calendar)
         self.subTittle.setText(calendar)
 

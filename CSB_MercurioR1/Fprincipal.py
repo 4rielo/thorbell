@@ -10,7 +10,9 @@ import requests
 import json
 from datetime import datetime, date
 
+#GPIO and I2C handling
 import ADS1115 
+import OPi.GPIO as OPiGPIO                 #GPIO handling library
 
 from Pprincipal import Ui_form              #El formulario descriptivo de qué contiene ésta ventana
 from Fconfig import ConfigWindow            #Config window 
@@ -73,8 +75,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
                 "GMT": 0
             }
         #Idioma almacenado en el estado del equipo
-        with open(f"{main.path}/idioma/{self.status.get('Idioma')}.dat") as f:
-            main.texto = json.load(f)
+        try:
+            response = requests.get(f"{main.localhost}/language").text
+            self.idioma=json.loads(response)
+        except:
+            with open(f"{main.path}/idioma/{self.status.get('Idioma')}.dat") as f:
+                main.texto = json.load(f)
+            self.idioma = main.texto
+
+        #Pone los textos de los pulsadores de acuerdo al idioma elegido
+        self.LED_label.setText(self.idioma.get("luminariaLED"))
+        self.UV_label.setText(self.idioma.get("luminariaUV"))
+        self.ControlPuerta_label.setText(self.idioma.get("puerta"))
+        self.Rutina_label.setText(self.idioma.get("rutina"))
 
         #Estado inicial de las variables
         main.lightOnOff = self.status.get("LED_Light")
@@ -82,11 +95,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         main.uvOnOff = self.status.get("UV_Light")
         main.UV_Timer=self.status.get("UV_Timer")
         main.UV_TimerEnable= self.status.get("UV_TimerEnable")
-
-        #Create all sub-windows, to call on them when different buttons are clicked.
-
-        #self.horizontalSlider.valueChanged.connect(self.Dial)
-        #self.horizontalSlider_2.valueChanged.connect(self.Dial2)
 
         #Botón de configuración, cuando se clickea, conecta con "Config()""
         self.config_Btn.clicked.connect(self.Config)
@@ -116,7 +124,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         self.advertencia_Btn.clicked.connect(self.advertenciaClicked)
 
         #Botón de control de puerta
-        self.eco_Btn.clicked.connect(self.puertaClicked)
+        self.puerta_Btn.clicked.connect(self.puertaClicked)
 
         self.setWindowFlags(PySide2.QtCore.Qt.FramelessWindowHint) 
 
@@ -134,12 +142,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         self.hora.setText(currentTime)
         today=date.today().strftime("%d/%m/%Y")
         self.fecha.setText(today)
-
-        #Pone los textos de los pulsadores de acuerdo al idioma elegido
-        self.LED_label.setText(main.texto.get("luminariaLED"))
-        self.UV_label.setText(main.texto.get("luminariaUV"))
-        self.ModoEco_label.setText(main.texto.get("modoEco"))
-        self.Rutina_label.setText(main.texto.get("rutina"))
 
         #Timer counters de 100ms y 1s, para base de tiempo de ejecución. 
         self.ms100=0
@@ -175,12 +177,26 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         self.TimingTimer.timeout.connect(self.timer10ms)
         self.TimingTimer.start()
 
-        
     #FIN init
+
+    def updateLanguage(self):
+        try:
+            response = requests.get(f"{main.localhost}/language").text
+            self.idioma=json.loads(response)
+        except:
+            with open(f"{main.path}/idioma/{self.status.get('Idioma')}.dat") as f:
+                main.texto = json.load(f)
+            self.idioma = main.texto
+
+        self.LED_label.setText(self.idioma.get("luminariaLED"))
+        self.UV_label.setText(self.idioma.get("luminariaUV"))
+        self.ControlPuerta_label.setText(self.idioma.get("puerta"))
+        self.Rutina_label.setText(self.idioma.get("rutina"))
 
 
     def UpdateData(self, payload):
         self.firebaseLbl.setText(payload)
+
 #**********************************************************************************************
 # Timer de 10 ms. 
 # Aquí se lee el "status.dat", y se actualiza el estado de las salidas
@@ -392,7 +408,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
             if(main.lightOnOff != self.luz_Btn.isChecked()):
                 self.luz_Btn.toggle()
 
-            self.ledWindow = LEDWindow()            
+            self.ledWindow = LEDWindow()
+            self.ledWindow.setAttribute(PySide2.QtCore.Qt.WA_DeleteOnClose, True)
             self.ledWindow.show()
 
 #**************************************************************************************
@@ -424,6 +441,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
 
             #print("UV_Config window open")
             self.uvWindow = UVWindow()
+            self.uvWindow.setAttribute(PySide2.QtCore.Qt.WA_DeleteOnClose, True)
             self.uvWindow.show()
 #**************************************************************************************************************
 
@@ -432,6 +450,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
     def advertenciaClicked(self):
         #print("Show Advertencia")
         self.advertenciaWindow = AdvertenciaWindow()
+        self.advertenciaWindow.setAttribute(PySide2.QtCore.Qt.WA_DeleteOnClose, True)
         self.advertenciaWindow.show()
 
 #**************************************************************************************************************
@@ -440,6 +459,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
 #Ventana de control de puerta
     def puertaClicked(self):
         self.puertaWindow = PuertaWindow()
+        self.puertaWindow.setAttribute(PySide2.QtCore.Qt.WA_DeleteOnClose, True)
         self.puertaWindow.show()
 
 #**************************************************************************************************************
@@ -448,12 +468,15 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
 #Ventana de configuración
     def Config(self):
         self.configWindow = ConfigWindow()
+        self.configWindow.setAttribute(PySide2.QtCore.Qt.WA_DeleteOnClose, True)
+        self.configWindow.destroyed.connect(self.updateLanguage)
         self.configWindow.show()
 
 #**************************************************************************************************************
 #Calendar window                - Configura hora y fecha de inicio/fin de encendido de rutina o luz Uv
     def Calendar(self): 
         self.calendarWindow = CalendarWindow()
+        self.calendarWindow.setAttribute(PySide2.QtCore.Qt.WA_DeleteOnClose, True)
         self.calendarWindow.show()
 
 #**************************************************************************************************************
@@ -462,6 +485,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
 #Clock window                   - setea fecha, hora, y uso horario
     def Clock(self):
         self.clockWindow = ClockWindow()
+        self.clockWindow.setAttribute(PySide2.QtCore.Qt.WA_DeleteOnClose, True)
         self.clockWindow.show()
 
 #**************************************************************************************************************
