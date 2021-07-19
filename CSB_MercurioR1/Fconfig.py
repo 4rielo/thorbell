@@ -14,7 +14,6 @@ import requests
 from Pconfig import Ui_form
 from Finfo import InfoWindow
 from Flogin import LoginWindow
-from Flanguage import LanguageWindow
 
 class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
     def __init__(self):

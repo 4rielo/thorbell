@@ -151,7 +151,7 @@ except:                             #Si no econtró el arvchivoa
 #reads current language
 try:                 
     print("Trying to open language file")
-    f=open(f"{languagePath}/{status['idioma']}.dat")              #Busca el archivo statusFile, si existe, lo abre
+    f=open(f"{languagePath}/{status['Idioma']}.dat")              #Busca el archivo statusFile, si existe, lo abre
     idioma = json.load(f)             #y carga el último estado guardado
     f.close()                       #(cierra el archivo, no lo necesita por ahora)
     print("Language File found, reading initial status")
@@ -192,8 +192,8 @@ except:                             #Si no econtró el arvchivo
         "separador_de_Pantalla_ControlDePuerta": "*********************",
         "puertaTittle": "Posición de la puerta"
     }
-    status.update = {'idioma' : 'es-AR'}
-    with open(f"{languagePath}/{status['idioma']}.dat", "w") as f:                   #Y lo guarda en statusFile (crea el archivo)
+    status.update({'Idioma' : 'es-AR'})
+    with open(f"{languagePath}/{status['Idioma']}.dat", "w") as f:                   #Y lo guarda en statusFile (crea el archivo)
         json.dump(language,f)
     print("Language file not found. Creates initial (default) language file")
 
@@ -362,7 +362,7 @@ class language:
         
         try:                        #By default, grabs current language
             print("Trying to open status file")
-            f=open(f"{languagePath}/{status['idioma']}.dat")              #Busca el archivo statusFile, si existe, lo abre
+            f=open(f"{languagePath}/{status['Idioma']}.dat")              #Busca el archivo statusFile, si existe, lo abre
             idioma = json.load(f)             #y carga el último estado guardado
             f.close()                       #(cierra el archivo, no lo necesita por ahora)
             print("Language File found, reading initial status")
@@ -403,8 +403,8 @@ class language:
                 "separador_de_Pantalla_ControlDePuerta": "*********************",
                 "puertaTittle": "Posición de la puerta"
             }
-            status.update = {'idioma' : 'es-AR'}
-            with open(f"{languagePath}/{status['idioma']}.dat", "w") as f:                   #Y lo guarda en statusFile (crea el archivo)
+            status.update({'Idioma' : 'es-AR'})
+            with open(f"{languagePath}/{status['Idioma']}.dat", "w") as f:                   #Y lo guarda en statusFile (crea el archivo)
                 json.dump(idioma,f)
             print("Language file not found. Creates initial (default) language file")
         

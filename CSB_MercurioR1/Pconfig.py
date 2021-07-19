@@ -128,14 +128,30 @@ class Ui_form(object):
         self.language_Btn.setStyleSheet(language_BtnStyle)
         self.language_Btn.setFocusPolicy(Qt.NoFocus)
         self.language_Btn.setCheckable(True)
-
         self.languageLabel = QLabel(self.BACKGROUND)
         self.languageLabel.setFixedSize(76, 16)
         #self.usbLabel.setAttribute(Qt.WA_TranslucentBackground)"""
 
-        #spinBox
+#ComboBox
+        languageBoxStyle = f"""
+                QComboBox{{
+                        font-family: url({main.path}/fonts/Montserrat-SemiBold.ttf);
+                        font-size: 25px;
+                        color: white;
+                        background-color: darkblue;
+                        border: 2px solid darkgray;
+		    	}}
+		QComboBox QAbstractItemView{{
+                        font-family: url({main.path}/fonts/Montserrat-SemiBold.ttf);
+                        font-size: 25px;
+			background-color: rgb(20,20,75);
+			color: white;
+			selection-background-color: rgb(30,30,150);
+			selection-color: white;	
+		}}"""
         self.LanguageBox = QComboBox(self.BACKGROUND)
-        self.LanguageBox.setGeometry(140,520,200,25)
+        self.LanguageBox.setGeometry(140,520,200,35)
+        self.LanguageBox.setStyleSheet(languageBoxStyle)
 
 
 #Info Button
