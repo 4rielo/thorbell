@@ -45,7 +45,7 @@ class Ui_form(object):
                 }}
                 QLabel{{
                         font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
-                        font-size: 13px;
+                        font-size: 15px;
                         color: white;
                         qproperty-alignment: AlignCenter;
                         background: transparent;
@@ -90,7 +90,7 @@ class Ui_form(object):
 #UPDATE button
         self.update_Btn = QPushButton(self.BACKGROUND)
         self.update_Btn.setObjectName(u"update_Btn")
-        self.update_Btn.setGeometry(QRect(290, 600, 100, 100))
+        self.update_Btn.setGeometry(QRect(290, 700, 100, 100))
         self.update_Btn.setCheckable(True)
         self.update_Btn.setFlat(True)
         UPDATE_Button = f"""
@@ -118,20 +118,6 @@ class Ui_form(object):
         self.usbLabel.setFixedSize(76, 16)
         #self.usbLabel.setAttribute(Qt.WA_TranslucentBackground)"""
 
-#USB button
-        language_BtnStyle = f"""
-                QPushButton {{
-                        background-image: url({main.path}/icons/idioma.png);
-                }}"""
-        self.language_Btn = QPushButton(self.BACKGROUND)
-        self.language_Btn.setFixedSize(76, 48)
-        self.language_Btn.setStyleSheet(language_BtnStyle)
-        self.language_Btn.setFocusPolicy(Qt.NoFocus)
-        self.language_Btn.setCheckable(True)
-        self.languageLabel = QLabel(self.BACKGROUND)
-        self.languageLabel.setFixedSize(76, 16)
-        #self.usbLabel.setAttribute(Qt.WA_TranslucentBackground)"""
-
 #ComboBox
         languageBoxStyle = f"""
                 QComboBox{{
@@ -153,6 +139,19 @@ class Ui_form(object):
         self.LanguageBox.setGeometry(140,520,200,35)
         self.LanguageBox.setStyleSheet(languageBoxStyle)
 
+#Language button
+        language_BtnStyle = f"""
+                QPushButton {{
+                        background-image: url({main.path}/icons/idioma.png);
+                }}"""
+        self.language_Btn = QPushButton(self.BACKGROUND)
+        self.language_Btn.setGeometry(QRect(138,288,75,75))
+        self.language_Btn.setStyleSheet(language_BtnStyle)
+        self.language_Btn.setFocusPolicy(Qt.NoFocus)
+        self.language_Btn.setCheckable(True)
+
+        self.languageLabel = QLabel(self.BACKGROUND)
+        self.languageLabel.setGeometry(QRect(138,363,76, 20))
 
 #Info Button
         info_BtnStyle = f"""
@@ -161,53 +160,62 @@ class Ui_form(object):
                 }}"""
         self.info_Btn = QPushButton(self.BACKGROUND)
         self.info_Btn.setObjectName(u"info_Btn")
-        self.info_Btn.setFixedSize(76, 48)
+        self.info_Btn.setGeometry(QRect(266,288,75,75))
         self.info_Btn.setStyleSheet(info_BtnStyle)
         self.info_Btn.setFocusPolicy(Qt.NoFocus)
 
         self.infoLabel = QLabel(self.BACKGROUND)
-        self.infoLabel.setFixedSize(76, 16)
-        #self.infoLabel.setAttribute(Qt.WA_TranslucentBackground)
+        self.infoLabel.setGeometry(QRect(266,363,75, 20))
 
-        self.infoLabel_Glow = QLabel(self.BACKGROUND)
-        self.infoLabel_Glow.setFixedSize(76, 16)
-        #self.infoLabel_Glow.setAttribute(Qt.WA_TranslucentBackground)
         glowSize=f"""
                 QLabel{{
                         font-size: 14px;
                 }}"""
+        """self.infoLabel_Glow = QLabel(self.BACKGROUND)
+        self.infoLabel_Glow.setFixedSize(76, 16)
         self.infoLabel_Glow.setStyleSheet(glowSize)
         self.infoGlow=QGraphicsBlurEffect()
         self.infoGlow.setBlurRadius(10)
-        self.infoLabel_Glow.setGraphicsEffect(self.infoGlow)
+        self.infoLabel_Glow.setGraphicsEffect(self.infoGlow)"""
 
+#TurnOf Button
+        turnOff_BtnStyle = f"""
+                QPushButton {{
+                        background-image: url({main.path}/icons/turn_off.png);
+                }}"""
+        self.turnOff_Btn = QPushButton(self.BACKGROUND)
+        self.turnOff_Btn.setGeometry(QRect(266,400,75,75))
+        self.turnOff_Btn.setStyleSheet(turnOff_BtnStyle)
+        self.turnOff_Btn.setFocusPolicy(Qt.NoFocus)
+
+        self.turnOffLabel = QLabel(self.BACKGROUND)
+        self.turnOffLabel.setGeometry(QRect(266,475,75,20))
+
+        glowSize=f"""
+                QLabel{{
+                        font-size: 14px;
+                }}"""
+        """self.turnOffLabel_Glow = QLabel(self.BACKGROUND)
+        self.turnOffLabel_Glow.setFixedSize(76, 16)
+        self.turnOffLabel_Glow.setStyleSheet(glowSize)
+        self.turnOffGlow=QGraphicsBlurEffect()
+        self.turnOffGlow.setBlurRadius(10)
+        self.turnOffLabel_Glow.setGraphicsEffect(self.infoGlow)"""
 
 #Login Button
-        self.login_Btn = QPushButton(self.BACKGROUND)
-        self.login_Btn.setObjectName(u"login_Btn")
-        self.login_Btn.setFixedSize(76, 48)
         login_BtnStyle = f"""
                 QPushButton {{
                         background-image: url({main.path}/icons/login.png);
                 }}"""
+        self.login_Btn = QPushButton(self.BACKGROUND)
+        self.login_Btn.setObjectName(u"login_Btn")
+        self.login_Btn.setGeometry(QRect(138,400,75,75))
         self.login_Btn.setStyleSheet(login_BtnStyle)
         self.login_Btn.setFocusPolicy(Qt.NoFocus)
 
         self.loginLabel = QLabel(self.BACKGROUND)
-        self.loginLabel.setFixedSize(76, 16)
+        self.loginLabel.setGeometry(QRect(138,475,75,20))
         #self.loginLabel.setAttribute(Qt.WA_TranslucentBackground)
-
-#Buttons layout
-        self.BtnsLayout = QGridLayout(self.BACKGROUND)
-        self.BtnsLayout.setGeometry(QRect(0, 376, 480, 86))
-        self.BtnsLayout.setAlignment(Qt.AlignCenter)
-        self.BtnsLayout.addWidget(self.language_Btn,0,0)
-        self.BtnsLayout.addWidget(self.languageLabel,1,0)
-        self.BtnsLayout.addWidget(self.info_Btn,0,1)
-        self.BtnsLayout.addWidget(self.infoLabel,1,1)
-        self.BtnsLayout.addWidget(self.infoLabel_Glow,1,1)
-        self.BtnsLayout.addWidget(self.login_Btn,0,2)
-        self.BtnsLayout.addWidget(self.loginLabel,1,2)
 
 #back button
         self.return_Btn = QPushButton(self.BACKGROUND)

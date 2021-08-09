@@ -23,7 +23,7 @@ import os
 #Módulos de manejo de puertos de I/O e I2C
 #import ADS1115
 import MCP23017
-from DS3231 import DS3231/
+from DS3231 import DS3231
 from MCP23017 import MCP23017
 from puerta import PUERTA
 import OPi.GPIO as OPiGPIO                 #Para PWM en RA5 (PWM0)
@@ -239,12 +239,12 @@ class Status:
                 #TODO: currentTimeDate es el valor obtenido del RTC, NO la hora del sistema
                 timeRTC = RTC.readTimeString()
                 while(timeRTC == "ERROR"):                      #Dió error, debido a un intento fallido de acceso al puerto I2C
-                    time.sleep(0.005)                           #Espera un muy breve instante a que se desocupe
+                    time.sleep(0.002)                           #Espera un muy breve instante a que se desocupe
                     timeRTC = RTC.readTimeString()              #Y vuelve a consultar la hora
 
                 dateRTC = RTC.readDateString()
                 while(dateRTC == "ERROR"):                      #Dió error, debido a un intento fallido de acceso al puerto I2C
-                    time.sleep(0.005)                           #Espera un muy breve instante a que se desocupe
+                    time.sleep(0.002)                           #Espera un muy breve instante a que se desocupe
                     dateRTC = RTC.readDateString()              #Y vuelve a consultar la fecha
 
                 currentTime = datetime.time.fromisoformat(timeRTC)       #gets datetime object

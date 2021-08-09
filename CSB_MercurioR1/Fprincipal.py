@@ -22,6 +22,7 @@ from Fadvertencias import AdvertenciaWindow #Advertencia window (Muestra las adv
 from Fcalendar import CalendarWindow        #Calendario, setea hora de inicio y fin de rutina y/o luz UV
 from Fclock import ClockWindow              #Setea fecha, hora y uso horario
 from Fpuerta import PuertaWindow            #Menu para manipular la puerta motorizada
+from FroutineAnimation import RoutineAnimationWindow            #Animation for routine start
 
 #import FfirebaseUpload
 
@@ -102,6 +103,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         self.calendario_Btn.clicked.connect(self.Calendar)
         #Botón de reloj, cuando se clickea, conecta con "Clock()"
         self.reloj_Btn.clicked.connect(self.Clock)
+        #Botón de Rutina, conecta con "routineAnimation()"
+        self.rutina_Btn.clicked.connect(self.RoutineWindow)
       
 
         #Botón de luz LED, cuando se clickea, conecta con "LuminariaLED_clicked()"
@@ -489,6 +492,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         self.clockWindow.show()
 
 #**************************************************************************************************************
+
+#**************************************************************************************************************
+#Ventana de advertencia         - Muestra las advertencias existentes
+    def RoutineWindow(self):
+        #print("Show RoutineAnimation")
+        self.routineWindow = RoutineAnimationWindow()
+        self.routineWindow.setAttribute(PySide2.QtCore.Qt.WA_DeleteOnClose, True)
+        self.routineWindow.show()
+
+#**************************************************************************************************************
+
 
 #**************************************************************************************************************
     def presionEntradaDial(self, presion):

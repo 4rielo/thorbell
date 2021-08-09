@@ -10,6 +10,7 @@ import json
 import requests
 
 from Plogin import Ui_form
+from Fservicio import ServiceWindow
 
 class LoginWindow(QtWidgets.QMainWindow, Ui_form):
     def __init__(self):
@@ -94,5 +95,9 @@ class LoginWindow(QtWidgets.QMainWindow, Ui_form):
     def login(self):
         #TODO: check password against password list in "users.dat" File
         #and register whether a valid user tries to log in
-        
+        if(self.currentPass == "8467"):
+            self.servicieWindow = ServiceWindow()
+            self.currentPass = ""
+            self.PassLabel.setText(self.currentPass)
+            self.servicieWindow.show()
         pass

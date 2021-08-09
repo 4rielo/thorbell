@@ -14,6 +14,7 @@ import requests
 from Pconfig import Ui_form
 from Finfo import InfoWindow
 from Flogin import LoginWindow
+from Fservicio import ServiceWindow
 
 class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
     def __init__(self):
@@ -60,7 +61,7 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
         self.updateLanguage()
 
         self.infoLabel.setText("Info")
-        self.infoLabel_Glow.setText("Info")
+        #self.infoLabel_Glow.setText("Info")
 
         if(self.status.get("screenUser")):
             self.loginLabel.setText("Log Out")
@@ -85,6 +86,8 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
             currentVersion=currentVersion[:-1]
         self.versionLabel.setText("Current: " + currentVersion)
 
+        self.turnOff_Btn.clicked.connect(self.servicioWindow)
+
         self.return_Btn.clicked.connect(self.goBack)
         self.setWindowFlags(PySide2.QtCore.Qt.FramelessWindowHint) 
 
@@ -97,6 +100,8 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
 
         self.tittleGlow.setText(self.idioma.get("configTittle"))
         self.tittle.setText(self.idioma.get("configTittle"))
+        self.languageLabel.setText(self.idioma.get("idioma"))
+        self.turnOffLabel.setText(self.idioma.get("apagar"))
 
     def goBack(self):                   #Function to go back to previous menu (close this window)
         self.close()
@@ -122,6 +127,11 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
     def showInfo(self):
         self.infoWindow = InfoWindow()
         self.infoWindow.show()
+
+    def servicioWindow(self):
+        #self.servicieWindow = ServiceWindow()
+        #self.servicieWindow.show()
+        pass
 
     def login(self):            #Dependiendo de si ya se está logueado o no
         if(self.status.get("screenUser")):                  #Si se está logueado
