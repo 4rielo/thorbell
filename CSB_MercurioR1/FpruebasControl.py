@@ -43,8 +43,8 @@ class PruebasControlWindow(QtWidgets.QMainWindow, Ui_form):
         except:
             self.idioma = main.texto
 
-        self.tittleGlow.setText("Servicio")#self.idioma.get("configTittle"))
-        self.tittle.setText("Servicio")#self.idioma.get("configTittle"))
+        self.tittleGlow.setText("Pruebas de Control")#self.idioma.get("configTittle"))
+        self.tittle.setText("Pruebas de Control")#self.idioma.get("configTittle"))
 
         self.tomacorrientes_Btn.setText("Tomacorrientes")
         self.motorBajadaOnOff_Btn.setText("MotorBajada")

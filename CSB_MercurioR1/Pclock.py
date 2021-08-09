@@ -128,12 +128,12 @@ class Ui_form(object):
         self.horaEdit.setFocusPolicy(Qt.NoFocus)
         self.horaEdit.setButtonSymbols(QAbstractSpinBox.NoButtons)
 
-        self.gmtEdit = QSpinBox(self.BACKGROUND)
+        """self.gmtEdit = QSpinBox(self.BACKGROUND)
         self.gmtEdit.setGeometry(118, 460, 139, 24)
         self.gmtEdit.setButtonSymbols(QAbstractSpinBox.NoButtons)
         self.gmtEdit.setRange(-12,12)
         self.gmtEdit.setFocusPolicy(Qt.NoFocus)
-        self.gmtEdit.setPrefix("GMT:")
+        self.gmtEdit.setPrefix("GMT:")"""
 
 #TIME plus and minus buttons
         Plus_style=f"""
@@ -147,11 +147,11 @@ class Ui_form(object):
         self.horaPlusBtn.setFocusPolicy(Qt.NoFocus)
         self.horaPlusBtn.setStyleSheet(Plus_style)
 
-        self.GMTPlusBtn = QPushButton(self.BACKGROUND)
+        """self.GMTPlusBtn = QPushButton(self.BACKGROUND)
         self.GMTPlusBtn.setGeometry(263, 457, 30, 30)
         self.GMTPlusBtn.setFlat(True)    
         self.GMTPlusBtn.setFocusPolicy(Qt.NoFocus)
-        self.GMTPlusBtn.setStyleSheet(Plus_style)
+        self.GMTPlusBtn.setStyleSheet(Plus_style)"""
 
 #********************* minus Btns
         Minus_style=f"""
@@ -165,11 +165,11 @@ class Ui_form(object):
         self.horaMinusBtn.setFocusPolicy(Qt.NoFocus)
         self.horaMinusBtn.setStyleSheet(Minus_style)
 
-        self.GMTMinusBtn = QPushButton(self.BACKGROUND)
+        """self.GMTMinusBtn = QPushButton(self.BACKGROUND)
         self.GMTMinusBtn.setGeometry(90, 457, 30, 30)    
         self.GMTMinusBtn.setFlat(True)    
         self.GMTMinusBtn.setFocusPolicy(Qt.NoFocus)
-        self.GMTMinusBtn.setStyleSheet(Minus_style)
+        self.GMTMinusBtn.setStyleSheet(Minus_style)"""
 
 #**************************************************** 
 #FECHA edit
@@ -204,6 +204,25 @@ class Ui_form(object):
         self.fechaMinusBtn.setFocusPolicy(Qt.NoFocus)
         self.fechaMinusBtn.setStyleSheet(Minus_style)
 
+#************************** Guardar Btn
+        guardarStyle =f"""
+                QPushButton {{
+                        border-style: none;
+                        background-repeat: no-repeat;
+                        background-position: center center;
+                        background-image: url({main.path}/icons/login_button.png);
+                        font-family: url({main.path}/fonts/Montserrat-SemiBold.ttf);
+                        font-size: 18px;
+                        color: #1BDDD2;
+                }}
+                QPushButton:pressed {{
+                        background-image: url({main.path}/icons/login_button_pressed.png);
+                        color: #001532;
+                }}"""
+        self.guardar_Btn = QPushButton(self.BACKGROUND)
+        self.guardar_Btn.setGeometry(QRect(280, 700, 180, 55))
+        self.guardar_Btn.setFocusPolicy(Qt.NoFocus)
+        self.guardar_Btn.setStyleSheet(guardarStyle)
 #**************************************************** HERE ARE THE BUTTONS
 #back button
         self.return_Btn = QPushButton(self.BACKGROUND)

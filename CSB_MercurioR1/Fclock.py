@@ -35,6 +35,7 @@ class ClockWindow(QtWidgets.QMainWindow, Ui_form):
         #Etiquetas de inicio y fin
         self.horaActualLbl.setText(f"{self.idioma.get('horaActual')}")
         self.fechaActualLbl.setText(f"{self.idioma.get('fechaActual')}")
+        self.guardar_Btn.setText(f"{self.idioma.get('guardar')}")
         
         #*****************Asignación de funciones según botones
 
@@ -47,20 +48,20 @@ class ClockWindow(QtWidgets.QMainWindow, Ui_form):
         self.horaPlusBtn.setAutoRepeatDelay(500)
         self.horaPlusBtn.setAutoRepeatInterval(100)
 
-        self.GMTPlusBtn.clicked.connect(self.increaseGMT)
+        """self.GMTPlusBtn.clicked.connect(self.increaseGMT)
         self.GMTPlusBtn.setAutoRepeat(True)
         self.GMTPlusBtn.setAutoRepeatDelay(500)
-        self.GMTPlusBtn.setAutoRepeatInterval(100)
+        self.GMTPlusBtn.setAutoRepeatInterval(100)"""
 
         self.horaMinusBtn.clicked.connect(self.decreaseHora)
         self.horaMinusBtn.setAutoRepeat(True)
         self.horaMinusBtn.setAutoRepeatDelay(500)
         self.horaMinusBtn.setAutoRepeatInterval(100)
 
-        self.GMTMinusBtn.clicked.connect(self.decreaseGMT)
+        """self.GMTMinusBtn.clicked.connect(self.decreaseGMT)
         self.GMTMinusBtn.setAutoRepeat(True)
         self.GMTMinusBtn.setAutoRepeatDelay(500)
-        self.GMTMinusBtn.setAutoRepeatInterval(100)
+        self.GMTMinusBtn.setAutoRepeatInterval(100)"""
 
         self.fechaPlusBtn.clicked.connect(self.increaseFecha)
         self.fechaPlusBtn.setAutoRepeat(True)
@@ -74,7 +75,7 @@ class ClockWindow(QtWidgets.QMainWindow, Ui_form):
 
         #Modificación de fechas y hora de inicio y fin - Actualización del valor
         self.horaEdit.timeChanged.connect(self.updateHora)
-        self.gmtEdit.valueChanged.connect(self.updateHora)
+        """self.gmtEdit.valueChanged.connect(self.updateHora)"""
         self.fechaEdit.dateChanged.connect(self.updateFecha)
 
         #Mostrar fecha y hora actual

@@ -92,19 +92,19 @@ class Ui_form(object):
 
 #**************************************************** HERE ARE THE BUTTONS
 #Pruebas button
-        self.pruebas_Btn = QPushButton(self.BACKGROUND)
-        self.pruebas_Btn.setGeometry(QRect(150, 200, 180, 55))
-        self.pruebas_Btn.setFocusPolicy(Qt.NoFocus)
+        self.filtroBajada_Btn = QPushButton(self.BACKGROUND)
+        self.filtroBajada_Btn.setGeometry(QRect(150, 200, 180, 55))
+        self.filtroBajada_Btn.setFocusPolicy(Qt.NoFocus)
 
 #Ajustes button
-        self.ajustes_Btn = QPushButton(self.BACKGROUND)
-        self.ajustes_Btn.setGeometry(QRect(150, 350, 180, 55))
-        self.ajustes_Btn.setFocusPolicy(Qt.NoFocus)
+        self.filtroSalida_Btn = QPushButton(self.BACKGROUND)
+        self.filtroSalida_Btn.setGeometry(QRect(150, 350, 180, 55))
+        self.filtroSalida_Btn.setFocusPolicy(Qt.NoFocus)
 
 #Reparaciones Button
-        self.reparaciones_Btn = QPushButton(self.BACKGROUND)
-        self.reparaciones_Btn.setGeometry(QRect(150, 500, 180, 55))
-        self.reparaciones_Btn.setFocusPolicy(Qt.NoFocus)
+        self.motorBajada_Btn = QPushButton(self.BACKGROUND)
+        self.motorBajada_Btn.setGeometry(QRect(150, 500, 180, 55))
+        self.motorBajada_Btn.setFocusPolicy(Qt.NoFocus)
 
 #back button
         return_Button = f"""

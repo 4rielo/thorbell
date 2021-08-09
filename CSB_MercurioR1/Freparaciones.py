@@ -11,14 +11,11 @@ import json
 import requests
 
 #from CSB_MercurioR1.Pconfig import Ui_form
-from Pservicio import Ui_form
-from Fajustes import AjustesWindow
-from FpruebasControl import PruebasControlWindow
-from Freparaciones import ReparacionesWindow
+from Preparaciones import Ui_form
 
-class ServiceWindow(QtWidgets.QMainWindow, Ui_form):
+class ReparacionesWindow(QtWidgets.QMainWindow, Ui_form):
     def __init__(self):
-        super(ServiceWindow, self).__init__()
+        super(ReparacionesWindow, self).__init__()
         self.setupUi(self)
         self.setWindowTitle("CONFIG")
 
@@ -35,10 +32,6 @@ class ServiceWindow(QtWidgets.QMainWindow, Ui_form):
 
         self.updateLanguage()
 
-        self.ajustes_Btn.clicked.connect(self.pantallaAjustes)
-        self.pruebas_Btn.clicked.connect(self.pantallaPruebas)
-        self.reparaciones_Btn.clicked.connect(self.reparaciones)
-        
         self.return_Btn.clicked.connect(self.goBack)
         self.setWindowFlags(PySide2.QtCore.Qt.FramelessWindowHint) 
 
@@ -49,24 +42,13 @@ class ServiceWindow(QtWidgets.QMainWindow, Ui_form):
         except:
             self.idioma = main.texto
 
-        self.tittleGlow.setText("Servicio")#self.idioma.get("configTittle"))
-        self.tittle.setText("Servicio")#self.idioma.get("configTittle"))
+        self.tittleGlow.setText("Reparaciones")#self.idioma.get("configTittle"))
+        self.tittle.setText("Reparaciones")#self.idioma.get("configTittle"))
 
-        self.reparaciones_Btn.setText("Reparaciones")
-        self.ajustes_Btn.setText("Ajustes")
-        self.pruebas_Btn.setText("Pruebas")
+        self.filtroBajada_Btn.setText("Cambio\nFiltro de Bajada")
+        self.filtroSalida_Btn.setText("Cambio\nFiltro de Salida")
+        self.motorBajada_Btn.setText("Motor Bajada")
 
-    def pantallaAjustes(self):
-        self.ajustesWindow = AjustesWindow()
-        self.ajustesWindow.show()
-
-    def pantallaPruebas(self):
-        self.pruebasWindow = PruebasControlWindow()
-        self.pruebasWindow.show()
-
-    def reparaciones(self):
-        self.reparacionesWindow = ReparacionesWindow()
-        self.reparacionesWindow.show()
 
     def goBack(self):                   #Function to go back to previous menu (close this window)
         self.close()
