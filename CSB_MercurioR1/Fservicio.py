@@ -15,6 +15,7 @@ from Pservicio import Ui_form
 from Fajustes import AjustesWindow
 from FpruebasControl import PruebasControlWindow
 from Freparaciones import ReparacionesWindow
+from Factualizar import ActualizarWindow
 
 class ServiceWindow(QtWidgets.QMainWindow, Ui_form):
     def __init__(self):
@@ -38,7 +39,8 @@ class ServiceWindow(QtWidgets.QMainWindow, Ui_form):
         self.ajustes_Btn.clicked.connect(self.pantallaAjustes)
         self.pruebas_Btn.clicked.connect(self.pantallaPruebas)
         self.reparaciones_Btn.clicked.connect(self.reparaciones)
-        
+        self.actualizar_Btn.clicked.connect(self.actualizar)
+
         self.return_Btn.clicked.connect(self.goBack)
         self.setWindowFlags(PySide2.QtCore.Qt.FramelessWindowHint) 
 
@@ -55,6 +57,11 @@ class ServiceWindow(QtWidgets.QMainWindow, Ui_form):
         self.reparaciones_Btn.setText("Reparaciones")
         self.ajustes_Btn.setText("Ajustes")
         self.pruebas_Btn.setText("Pruebas")
+        self.actualizar_Btn.setText("Actualizar\nFirmware")
+
+    def actualizar(self):
+        self.actualizarWindow = ActualizarWindow()
+        self.actualizarWindow.show()
 
     def pantallaAjustes(self):
         self.ajustesWindow = AjustesWindow()

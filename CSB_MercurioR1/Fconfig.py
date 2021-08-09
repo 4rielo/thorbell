@@ -68,7 +68,7 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
         else: 
             self.loginLabel.setText("Log In")
 
-        self.update_Btn.clicked.connect(self.UpdateFunction)
+        #self.update_Btn.clicked.connect(self.UpdateFunction)
         self.info_Btn.clicked.connect(self.showInfo)
         self.login_Btn.clicked.connect(self.login)
         self.language_Btn.clicked.connect(self.showLanguages)
@@ -77,14 +77,14 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
 
         self.LanguageBox.currentTextChanged.connect(self.changeLanguage)
         """Checks local version number. """
-        try:
+        """try:
             currentVersion=open(main.globalPath + "/version.txt","r").readline()
         except:
             currentVersion="0.0.0"        
         
         if(currentVersion[-1]=="\n"):
             currentVersion=currentVersion[:-1]
-        self.versionLabel.setText("Current: " + currentVersion)
+        self.versionLabel.setText("Current: " + currentVersion)"""
 
         self.turnOff_Btn.clicked.connect(self.servicioWindow)
 
@@ -147,7 +147,6 @@ class ConfigWindow(QtWidgets.QMainWindow, Ui_form):
         else: 
             self.loginWindow = LoginWindow()
             self.loginWindow.show()
-        
 
     def UpdateFunction(self):
         import subprocess

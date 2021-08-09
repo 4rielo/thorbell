@@ -47,13 +47,13 @@ class Ui_form(object):
                         font-size: 18px;
                         color: #1BDDD2;
                 }}
-                QPushButton:pressed {{
+                QPushButton:checked {{
                         background-image: url({main.path}/icons/login_button_pressed.png);
                         color: #001532;
                 }}
                 QLabel {{
                         font-family: url({main.path}/fonts/Montserrat-Regular.ttf);
-                        font-size: 13px;
+                        font-size: 15px;
                         color: white;
                         qproperty-alignment: AlignCenter;
                         background: transparent;
@@ -67,7 +67,8 @@ class Ui_form(object):
 #**************************************************** Tittle
 
         self.tittle = QLabel(self.BACKGROUND)
-        self.tittle.setGeometry(QRect(0, 88, 480, 22))
+        self.tittle.setObjectName(u"tittle")
+        self.tittle.setGeometry(QRect(0, 88, 480, 44))
         #self.tittle.setAttribute(Qt.WA_TranslucentBackground)
         tittle_style=f"""
                 QLabel{{
@@ -77,7 +78,8 @@ class Ui_form(object):
         self.tittle.setStyleSheet(tittle_style)
 
         self.tittleGlow = QLabel(self.BACKGROUND)
-        self.tittleGlow.setGeometry(QRect(0, 88, 480, 22))
+        self.tittleGlow.setObjectName(u"tittleGlow")
+        self.tittleGlow.setGeometry(QRect(0, 88, 480, 44))
         #self.tittleGlow.setAttribute(Qt.WA_TranslucentBackground)
         tittleGlow_style=f"""
                 QLabel{{
@@ -90,27 +92,37 @@ class Ui_form(object):
         self.Effect.setBlurRadius(10)
         self.tittleGlow.setGraphicsEffect(self.Effect)
 
-#**************************************************** HERE ARE THE BUTTONS
-#Pruebas button
-        self.pruebas_Btn = QPushButton(self.BACKGROUND)
-        self.pruebas_Btn.setGeometry(QRect(150, 200, 180, 55))
-        self.pruebas_Btn.setFocusPolicy(Qt.NoFocus)
+#**************************************************** HERE ARE THE infoLabels
+        LabelsStyle = f"""
+                QLabel{{
+                        qproperty-alignment: AlignLeft;
+                        }}"""
 
-#Ajustes button
-        self.ajustes_Btn = QPushButton(self.BACKGROUND)
-        self.ajustes_Btn.setGeometry(QRect(150, 300, 180, 55))
-        self.ajustes_Btn.setFocusPolicy(Qt.NoFocus)
+        self.currentVersionLbl = QLabel(self.BACKGROUND)
+        self.currentVersionLbl.setGeometry(QRect(50, 180, 120, 22))
+        self.currentVersionLbl.setStyleSheet(LabelsStyle)
 
-#Reparaciones Button
-        self.reparaciones_Btn = QPushButton(self.BACKGROUND)
-        self.reparaciones_Btn.setGeometry(QRect(150, 400, 180, 55))
-        self.reparaciones_Btn.setFocusPolicy(Qt.NoFocus)
+        self.currentVersionValue = QLabel(self.BACKGROUND)
+        self.currentVersionValue.setGeometry(QRect(250, 180, 140, 22))
+        self.currentVersionValue.setStyleSheet(LabelsStyle)
 
-#Actualizar button
+        self.remoteVersionLbl = QLabel(self.BACKGROUND)
+        self.remoteVersionLbl.setGeometry(QRect(50, 210, 200, 22))
+        self.remoteVersionLbl.setStyleSheet(LabelsStyle)
+        
+        self.remoteVersionValue = QLabel(self.BACKGROUND)
+        self.remoteVersionValue.setGeometry(QRect(250, 210, 140, 22))
+        self.remoteVersionValue.setStyleSheet(LabelsStyle)
+
+        guardarStyle =f"""
+                QPushButton:pressed {{
+                        background-image: url({main.path}/icons/login_button_pressed.png);
+                        color: #001532;
+                }}"""
         self.actualizar_Btn = QPushButton(self.BACKGROUND)
-        self.actualizar_Btn.setGeometry(QRect(150, 500, 180, 55))
+        self.actualizar_Btn.setGeometry(QRect(280, 700, 180, 55))
         self.actualizar_Btn.setFocusPolicy(Qt.NoFocus)
-
+        self.actualizar_Btn.setStyleSheet(guardarStyle)
 
 #back button
         return_Button = f"""

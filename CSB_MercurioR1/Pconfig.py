@@ -87,12 +87,12 @@ class Ui_form(object):
 
 
 #**************************************************** HERE ARE THE BUTTONS
-#UPDATE button
+        """#UPDATE button
         self.update_Btn = QPushButton(self.BACKGROUND)
         self.update_Btn.setObjectName(u"update_Btn")
         self.update_Btn.setGeometry(QRect(290, 700, 100, 100))
         self.update_Btn.setCheckable(True)
-        self.update_Btn.setFlat(True)
+        self.update_Btn.setFlat(True)"""
         UPDATE_Button = f"""
                 QPushButton {{
                         background-image: url({main.path}/icons/routine_off.png); 
@@ -100,8 +100,8 @@ class Ui_form(object):
                 QPushButton:checked{{
                         background-image: url({main.path}/icons/routine_on.png); 
                 }}"""
-        self.update_Btn.setStyleSheet(UPDATE_Button)
-        self.update_Btn.setFocusPolicy(Qt.NoFocus)
+        """self.update_Btn.setStyleSheet(UPDATE_Button)
+        self.update_Btn.setFocusPolicy(Qt.NoFocus)"""
 
 #USB button
         usb_BtnStyle = f"""
@@ -230,22 +230,11 @@ class Ui_form(object):
         self.return_Btn.setStyleSheet(return_Button)
         self.return_Btn.setFocusPolicy(Qt.NoFocus)
 
-#CurrentVersion Label        
-        self.versionLabel = QLabel(self.BACKGROUND)
-        self.versionLabel.setObjectName(u"versionLabel")
-        self.versionLabel.setGeometry(QRect(10, 10, 200, 16))
-        #self.versionLabel.setAttribute(Qt.WA_TranslucentBackground)
-
-#update Label        
-        self.updateLabel = QLabel(self.BACKGROUND)
-        self.updateLabel.setObjectName(u"updateLabel")
-        self.updateLabel.setGeometry(QRect(90, 300, 300, 32))
-        #self.updateLabel.setAttribute(Qt.WA_TranslucentBackground)
 
 #**********************************************************************************
 
         self.BACKGROUND.raise_()
-        self.update_Btn.raise_()
+
         self.tittle.raise_()
 
         QMetaObject.connectSlotsByName(form)
