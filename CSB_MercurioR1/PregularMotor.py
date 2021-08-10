@@ -67,8 +67,7 @@ class Ui_form(object):
 #**************************************************** Tittle
 
         self.tittle = QLabel(self.BACKGROUND)
-        self.tittle.setObjectName(u"tittle")
-        self.tittle.setGeometry(QRect(0, 88, 480, 44))
+        self.tittle.setGeometry(QRect(0, 88, 480, 22))
         #self.tittle.setAttribute(Qt.WA_TranslucentBackground)
         tittle_style=f"""
                 QLabel{{
@@ -78,8 +77,7 @@ class Ui_form(object):
         self.tittle.setStyleSheet(tittle_style)
 
         self.tittleGlow = QLabel(self.BACKGROUND)
-        self.tittleGlow.setObjectName(u"tittleGlow")
-        self.tittleGlow.setGeometry(QRect(0, 88, 480, 44))
+        self.tittleGlow.setGeometry(QRect(0, 88, 480, 22))
         #self.tittleGlow.setAttribute(Qt.WA_TranslucentBackground)
         tittleGlow_style=f"""
                 QLabel{{
@@ -98,39 +96,98 @@ class Ui_form(object):
                         qproperty-alignment: AlignLeft;
                         }}"""
 
-        self.currentVersionLbl = QLabel(self.BACKGROUND)
-        self.currentVersionLbl.setGeometry(QRect(50, 180, 120, 22))
-        self.currentVersionLbl.setStyleSheet(LabelsStyle)
+        self.velFlujoLbl = QLabel(self.BACKGROUND)
+        self.velFlujoLbl.setGeometry(QRect(20, 150, 200, 22))
+        self.velFlujoLbl.setStyleSheet(LabelsStyle)
 
-        self.currentVersionValue = QLabel(self.BACKGROUND)
-        self.currentVersionValue.setGeometry(QRect(250, 180, 140, 22))
-        self.currentVersionValue.setStyleSheet(LabelsStyle)
+        self.flujoBajadaLbl = QLabel(self.BACKGROUND)
+        self.flujoBajadaLbl.setGeometry(QRect(20, 180, 120, 22))
+        self.flujoBajadaLbl.setStyleSheet(LabelsStyle)
 
-        self.remoteVersionLbl = QLabel(self.BACKGROUND)
-        self.remoteVersionLbl.setGeometry(QRect(50, 210, 200, 22))
-        self.remoteVersionLbl.setStyleSheet(LabelsStyle)
+        self.flujoBajadaValue = QLabel(self.BACKGROUND)
+        self.flujoBajadaValue.setGeometry(QRect(140, 180, 140, 22))
+        self.flujoBajadaValue.setStyleSheet(LabelsStyle)
+
+        self.flujoSubidaLbl = QLabel(self.BACKGROUND)
+        self.flujoSubidaLbl.setGeometry(QRect(20, 210, 200, 22))
+        self.flujoSubidaLbl.setStyleSheet(LabelsStyle)
         
-        self.remoteVersionValue = QLabel(self.BACKGROUND)
-        self.remoteVersionValue.setGeometry(QRect(250, 210, 140, 22))
-        self.remoteVersionValue.setStyleSheet(LabelsStyle)
+        self.flujoSubidaValue = QLabel(self.BACKGROUND)
+        self.flujoSubidaValue.setGeometry(QRect(140, 210, 140, 22))
+        self.flujoSubidaValue.setStyleSheet(LabelsStyle)
 
-        buttonStyle =f"""
+        self.presionFiltrosLbl = QLabel(self.BACKGROUND)
+        self.presionFiltrosLbl.setGeometry(QRect(20, 250, 200, 22))
+        self.presionFiltrosLbl.setStyleSheet(LabelsStyle)
+
+        self.presionBajadaLbl = QLabel(self.BACKGROUND)
+        self.presionBajadaLbl.setGeometry(QRect(20, 280, 120, 22))
+        self.presionBajadaLbl.setStyleSheet(LabelsStyle)
+
+        self.presionBajadaValue = QLabel(self.BACKGROUND)
+        self.presionBajadaValue.setGeometry(QRect(140, 280, 140, 22))
+        self.presionBajadaValue.setStyleSheet(LabelsStyle)
+
+        self.presionSubidaLbl = QLabel(self.BACKGROUND)
+        self.presionSubidaLbl.setGeometry(QRect(20, 310, 200, 22))
+        self.presionSubidaLbl.setStyleSheet(LabelsStyle)
+        
+        self.presionSubidaValue = QLabel(self.BACKGROUND)
+        self.presionSubidaValue.setGeometry(QRect(140, 310, 140, 22))
+        self.presionSubidaValue.setStyleSheet(LabelsStyle)
+
+        self.MotorBajadaValue = QLabel(self.BACKGROUND)
+        self.MotorBajadaValue.setGeometry(QRect(90, 580, 40, 40))
+
+        self.MotorSubidaValue = QLabel(self.BACKGROUND)
+        self.MotorSubidaValue.setGeometry(QRect(350, 580, 40, 40))
+        
+#**************************************************** HERE ARE THE BUTTONS
+# Motor de Bajada button
+        self.motorBajadaOnOff_Btn = QPushButton(self.BACKGROUND)
+        self.motorBajadaOnOff_Btn.setGeometry(QRect(20, 500, 180, 55))
+        self.motorBajadaOnOff_Btn.setFocusPolicy(Qt.NoFocus)
+        self.motorBajadaOnOff_Btn.setCheckable(True)
+
+        plus_Button = f"""
+                QPushButton {{
+                        background-image: url({main.path}/icons/up_released.png); 
+                }}
                 QPushButton:pressed {{
-                        background-image: url({main.path}/icons/login_button_pressed.png);
-                        color: #001532;
+                        background-image: url({main.path}/icons/up_pressed.png); 
                 }}"""
+        self.motorBajadaMas_Btn = QPushButton(self.BACKGROUND)
+        self.motorBajadaMas_Btn.setGeometry(QRect(140, 580, 60, 40))
+        self.motorBajadaMas_Btn.setStyleSheet(plus_Button)
+        self.motorBajadaMas_Btn.setFocusPolicy(Qt.NoFocus)
 
+        minus_Button = f"""
+                QPushButton {{
+                        background-image: url({main.path}/icons/down_released.png); 
+                }}
+                QPushButton::pressed {{
+                        background-image: url({main.path}/icons/down_pressed.png); 
+                }}"""
+        self.motorBajadaMenos_Btn = QPushButton(self.BACKGROUND)
+        self.motorBajadaMenos_Btn.setGeometry(QRect(20, 580, 60, 40))
+        self.motorBajadaMenos_Btn.setStyleSheet(minus_Button)
+        self.motorBajadaMenos_Btn.setFocusPolicy(Qt.NoFocus)
 
-        self.check_Btn = QPushButton(self.BACKGROUND)
-        self.check_Btn.setGeometry(QRect(150, 400, 180, 55))
-        self.check_Btn.setFocusPolicy(Qt.NoFocus)
-        self.check_Btn.setStyleSheet(buttonStyle)
+#Motor de Subida button
+        self.motorSubidaOnOff_Btn = QPushButton(self.BACKGROUND)
+        self.motorSubidaOnOff_Btn.setGeometry(QRect(280, 500, 180, 55))
+        self.motorSubidaOnOff_Btn.setFocusPolicy(Qt.NoFocus)
+        self.motorSubidaOnOff_Btn.setCheckable(True)
 
+        self.motorSubidaMas_Btn = QPushButton(self.BACKGROUND)
+        self.motorSubidaMas_Btn.setGeometry(QRect(400, 580, 60, 40))
+        self.motorSubidaMas_Btn.setStyleSheet(plus_Button)
+        self.motorSubidaMas_Btn.setFocusPolicy(Qt.NoFocus)
 
-        self.actualizar_Btn = QPushButton(self.BACKGROUND)
-        self.actualizar_Btn.setGeometry(QRect(280, 700, 180, 55))
-        self.actualizar_Btn.setFocusPolicy(Qt.NoFocus)
-        self.actualizar_Btn.setStyleSheet(buttonStyle)
+        self.motorSubidaMenos_Btn = QPushButton(self.BACKGROUND)
+        self.motorSubidaMenos_Btn.setGeometry(QRect(280, 580, 60, 40))
+        self.motorSubidaMenos_Btn.setStyleSheet(minus_Button)
+        self.motorSubidaMenos_Btn.setFocusPolicy(Qt.NoFocus)
 
 #back button
         return_Button = f"""
@@ -142,6 +199,7 @@ class Ui_form(object):
         self.return_Btn.setFlat(True)
         self.return_Btn.setStyleSheet(return_Button)
         self.return_Btn.setFocusPolicy(Qt.NoFocus)
+
 
 #**********************************************************************************
 

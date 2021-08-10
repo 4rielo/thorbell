@@ -14,6 +14,7 @@ import requests
 from PajustesMotores import Ui_form
 from FextremosOp import extremosOpWindow
 from FajustePID import AjustesPIDWindow
+from FregularMotor import RegularMotorWindow
 
 class AjusteMotoresWindow(QtWidgets.QMainWindow, Ui_form):
     def __init__(self):
@@ -37,6 +38,8 @@ class AjusteMotoresWindow(QtWidgets.QMainWindow, Ui_form):
         self.extremoOp1_Btn.clicked.connect(self.extremoOp1)
         self.extremoOp2_Btn.clicked.connect(self.extremoOp2)
 
+        self.motor_Btn.clicked.connect(self.regularMotor)
+
         self.PID1_Btn.clicked.connect(self.ajustePID1)
         self.PID2_Btn.clicked.connect(self.ajustePID2)
 
@@ -56,8 +59,7 @@ class AjusteMotoresWindow(QtWidgets.QMainWindow, Ui_form):
         self.PID1_Btn.setText("PID 1")
         self.PID2_Btn.setText("PID 2")
 
-        self.motor1_Btn.setText("Motor 1")
-        self.motor2_Btn.setText("Motor 2")
+        self.motor_Btn.setText("Motor")
 
         self.extremoOp1_Btn.setText("Extremos de \nOperacion 1")
         self.extremoOp2_Btn.setText("Extremos de \nOperacion 2")
@@ -81,6 +83,10 @@ class AjusteMotoresWindow(QtWidgets.QMainWindow, Ui_form):
     def ajustePID2(self):
         self.ajustePIDWindow = AjustesPIDWindow(2)
         self.ajustePIDWindow.show()
+
+    def regularMotor(self):
+        self.regularMotorWindow = RegularMotorWindow()
+        self.regularMotorWindow.show()
 
     def goBack(self):                   #Function to go back to previous menu (close this window)
         self.close()

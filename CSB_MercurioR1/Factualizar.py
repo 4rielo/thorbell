@@ -44,7 +44,8 @@ class ActualizarWindow(QtWidgets.QMainWindow, Ui_form):
             self.currentVersion=self.currentVersion[:-1]
         self.currentVersionValue.setText(self.currentVersion)
 
-        self.checkRemoteVersion()
+        #self.checkRemoteVersion()
+        self.check_Btn.clicked.connect(self.checkRemoteVersion)
 
         self.return_Btn.clicked.connect(self.goBack)
         self.setWindowFlags(PySide2.QtCore.Qt.FramelessWindowHint) 
@@ -60,10 +61,11 @@ class ActualizarWindow(QtWidgets.QMainWindow, Ui_form):
         self.tittle.setText(f"Actualizar")#self.idioma.get("configTittle"))
 
         self.actualizar_Btn.setText("Actualizar\ny Reiniciar")
+        self.check_Btn.setText("Buscar actualización")
 
         self.currentVersionLbl.setText("Versión Actual:")
-
         self.remoteVersionLbl.setText("Versión en servidor:")
+        self.remoteVersionValue.setText("Revisar servidor")
 
 
     def goBack(self):                   #Function to go back to previous menu (close this window)

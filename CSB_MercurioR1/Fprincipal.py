@@ -318,10 +318,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
                 }
             #y lo envío al servidor, para que la pantalla y app web tengan un nuevo valor
             #print(f"ADC: {self.medicionesADC}")
-            try:
-                postData = requests.post(f"{main.localhost}/adc" , params = self.medicionesADC)
-            except:
-                pass
+            
 
             """ Reinicio contadores y acumuladores a cero"""
             self.acumTmp_flujoEntrada=0
@@ -340,24 +337,39 @@ class MainWindow(QtWidgets.QMainWindow, Ui_form):
         if(self.s1>100):
             self.s1=0
 
-            #Pide la hora actual a microservicios (server en localhost:8085)
-            currentTimeDate = requests.get(f"{main.localhost}/status", params = "time").text
-            #Convierte el string con fecha y hora, en OBJETO de datetime
-            currentTimeDate=datetime.fromisoformat(currentTimeDate)
-            #Actualiza hora y fecha
-            #obtiene la hora en string para mostrar en pantalla
-            currentTime=currentTimeDate.strftime("%H:%M:%S")
+            try:
+                postData = requests.post(f"{main.localhost}/adc" , params = self.medicionesADC)
+            except:
+                pass 
+
+            try:
+                #Pide la hora actual a microservicios (server en localhost:8085)
+                currentTimeDate = requests.get(f"{main.localhost}/status", params = "time").text
+                #Convierte el string con fecha y hora, en OBJETO de datetime
+                currentTimeDate=datetime.fromisoformat(currentTimeDate)
+                #Actualiza hora y fecha
+                #obtiene la hora en string para mostrar en pantalla
+                currentTime=currentTimeDate.strftime("%H:%M:%S")
+                #obtiene la fecha en string para mostrar en pantalla
+                today=currentTimeDate.strftime("%d/%m/%Y")
+            except:
+                currentTime="ClockError"
+                today="ClockError"
+
             self.hora.setText(currentTime)
-            #obtiene la fecha en string para mostrar en pantalla
-            today=currentTimeDate.strftime("%d/%m/%Y")
+            
             self.fecha.setText(today)
         
             #La variable status contiene el estado global del equipo.
             """with open(main.usersFile) as us:
                 self.users=json.load(us)"""
             
-            #Lee el estado global del equipo
-            self.status=json.loads(requests.get(f"{main.localhost}/status").text)
+            try:
+                #Lee el estado global del equipo
+                self.status=json.loads(requests.get(f"{main.localhost}/status").text)
+            except:
+                pass
+                
             main.lightOnOff=self.status.get("LED_Light")
             main.uvOnOff=self.status.get("UV_Light")
 

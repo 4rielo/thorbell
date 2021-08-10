@@ -105,14 +105,14 @@ class Ui_form(object):
         self.PID2_Btn.setFocusPolicy(Qt.NoFocus)
 
 #Ajuste de Motores Button
-        self.motor1_Btn = QPushButton(self.BACKGROUND)
-        self.motor1_Btn.setGeometry(QRect(20, 350, 180, 55))
-        self.motor1_Btn.setFocusPolicy(Qt.NoFocus)
+        self.motor_Btn = QPushButton(self.BACKGROUND)
+        self.motor_Btn.setGeometry(QRect(150, 350, 180, 55))
+        self.motor_Btn.setFocusPolicy(Qt.NoFocus)
 
 #Ajuste de Motor2 Button
-        self.motor2_Btn = QPushButton(self.BACKGROUND)
+        """self.motor2_Btn = QPushButton(self.BACKGROUND)
         self.motor2_Btn.setGeometry(QRect(280, 350, 180, 55))
-        self.motor2_Btn.setFocusPolicy(Qt.NoFocus)
+        self.motor2_Btn.setFocusPolicy(Qt.NoFocus)"""
 
 #ajuste de ExtremosOperacion Button
         self.extremoOp1_Btn = QPushButton(self.BACKGROUND)
